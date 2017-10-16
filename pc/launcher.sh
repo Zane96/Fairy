@@ -2,8 +2,6 @@
 
 ## 杀掉旧服务
 pkill -f fairy
-## 开启新服务
-#app_process -Djava.class.path=/data/local/tmp/launcher.dex /data/local/tmp --nice-name=demigod me.ele.demigod.service.Launcher
 
 rootDir=/data/local/tmp
 appProcess=/system/bin/app_process32

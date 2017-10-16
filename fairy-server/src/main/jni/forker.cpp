@@ -14,10 +14,10 @@ static int load() {
 
     //Java文件的执行参数
     char *args[] = {"app_process",
-    "-Djava.class.path=/data/local/tmp/server.dex",
-    "/data/local/tmp",
-    "--nice-name=fairy",
-    "me.zane.fairy_service.Launcher",
+        "-Djava.class.path=/data/local/tmp/server.dex",
+        "/data/local/tmp",
+        "--nice-name=fairy",
+        "me.zane.fairy_service.Launcher",
     NULL};
 
     pid_t pid = fork();

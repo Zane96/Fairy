@@ -2,6 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'com.google.android:android:4.1.1.4'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.okio:okio:1.13.0'
 }
