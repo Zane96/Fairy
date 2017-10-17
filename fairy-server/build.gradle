@@ -34,7 +34,7 @@ task loader(type: Exec,dependsOn: build){
     def dxDir = dxDirs[0]
     executable sdkLocation+"/build-tools/"+dxDir+"/dx"
     println executable
-    args "--dex", "--output=../pc/server.dex", "build/libs/fairy-server.jar"
+    args "--dex", "--output=../pc/server.dex", "build/libs/fairy_server.jar"
 }
 
 task moveSo(type: Copy,dependsOn: loader){

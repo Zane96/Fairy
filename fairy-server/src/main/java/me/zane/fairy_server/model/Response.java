@@ -1,4 +1,4 @@
-package me.zane.fairy_server;
+package me.zane.fairy_server.model;
 
 
 import okio.Buffer;
@@ -15,15 +15,13 @@ public class Response {
     private String message;
     private Headers headers;
     private Buffer body;
-    private String timeLine; //当前response返回的最新数据的时间戳
 
-    public Response(String scheme, int code, String message, Headers headers, Buffer body, String timeLine) {
+    public Response(String scheme, int code, String message, Headers headers, Buffer body) {
         this.scheme = scheme;
         this.code = code;
         this.message = message;
         this.headers = headers;
         this.body = body;
-        this.timeLine = timeLine;
     }
 
     public String getScheme() {
@@ -66,14 +64,6 @@ public class Response {
         this.body = body;
     }
 
-    public String getTimeLine() {
-        return timeLine;
-    }
-
-    public void setTimeLine(String timeLine) {
-        this.timeLine = timeLine;
-    }
-
     //------------------------------------------------------------
 
 
@@ -82,7 +72,6 @@ public class Response {
         return "scheme: " + scheme
                 + " code: " + code
                 + " message: " + message
-                + " headers: " + headers.toString()
-                + " timeline: " + timeLine;
+                + " headers: " + headers.toString();
     }
 }

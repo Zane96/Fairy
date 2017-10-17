@@ -1,4 +1,4 @@
-package me.zane.fairy_server;
+package me.zane.fairy_server.model;
 
 import java.util.HashMap;
 

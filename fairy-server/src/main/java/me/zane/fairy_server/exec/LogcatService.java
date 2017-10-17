@@ -1,9 +1,11 @@
-package me.zane.fairy_server;
+package me.zane.fairy_server.exec;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javafx.geometry.Pos;
+import me.zane.fairy_server.exec.LogcatCall;
+import me.zane.fairy_server.model.PostBody;
+import me.zane.fairy_server.model.Request;
 
 /**
  * Created by Zane on 2017/10/16.
@@ -11,21 +13,16 @@ import javafx.geometry.Pos;
  */
 
 public class LogcatService {
-
-    private LogcatCall asyncCall;
     private ExecutorService executor;
-    private Request request;
 
-    public LogcatService(Request request) {
+    public LogcatService() {
         this.executor = Executors.newCachedThreadPool();
-        this.request = request;
     }
 
-    public void enqueue(LogcatCall.ResponseCallback callback) {
+    public void enqueue(Request request, LogcatCall.ResponseCallback callback) {
         String body = request.getBody().readUtf8();
         PostBody postBody = PostBody.parse(body);
 
-        asyncCall = new LogcatCall(postBody, callback);
-        executor.execute(asyncCall);
+        executor.execute(new LogcatCall(postBody, callback));
     }
 }

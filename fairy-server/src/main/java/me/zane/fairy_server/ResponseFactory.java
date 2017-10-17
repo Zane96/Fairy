@@ -1,5 +1,7 @@
 package me.zane.fairy_server;
 
+import me.zane.fairy_server.model.Headers;
+import me.zane.fairy_server.model.Response;
 import okio.Buffer;
 
 /**
@@ -12,22 +14,24 @@ public class ResponseFactory {
     private static int SUCCESS_CODE = 200;
     private static String SUCCESS_MESSAGE = "success";
 
-    public static Response success(Buffer body, String timeLine) {
-        return success(body, new Headers.Builder(), timeLine);
+    public static Response success(String body) {
+        return success(body, new Headers.Builder());
     }
 
-    public static Response success(Buffer body, Headers.Builder builder, String timeLine) {
-        builder.addLenient("Content-Length", String.valueOf(body.size()));
+    public static Response success(String body, Headers.Builder builder) {
+        Buffer buffer = new Buffer().writeUtf8(body);
+        builder.addLenient("Content-Length", String.valueOf(buffer.size()));
 
-        return new Response(DEFAULT_SCHEME, SUCCESS_CODE, SUCCESS_MESSAGE, builder.build(), body, timeLine);
+        return new Response(DEFAULT_SCHEME, SUCCESS_CODE, SUCCESS_MESSAGE, builder.build(), buffer);
     }
 
-    public static Response failed(int code, Buffer body, String timeLine) {
-        return failed(code, body, new Headers.Builder(), timeLine);
+    public static Response failed(int code, String body) {
+        return failed(code, body, new Headers.Builder());
     }
 
-    public static Response failed(int code, Buffer body, Headers.Builder builder, String timeLine) {
-        builder.addLenient("Content-Length", String.valueOf(body.size()));
+    public static Response failed(int code, String body, Headers.Builder builder) {
+        Buffer buffer = new Buffer().writeUtf8(body);
+        builder.addLenient("Content-Length", String.valueOf(buffer.size()));
 
         String message = "Unknow error";
         if (code >= 100 && code < 200) {
@@ -42,6 +46,6 @@ public class ResponseFactory {
             message = "Server Error";
         }
 
-        return new Response(DEFAULT_SCHEME, code, message, builder.build(), body, timeLine);
+        return new Response(DEFAULT_SCHEME, code, message, builder.build(), buffer);
     }
 }
