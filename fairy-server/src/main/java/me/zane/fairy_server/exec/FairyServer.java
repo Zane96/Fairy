@@ -42,7 +42,7 @@ public class FairyServer extends Thread{
             final Socket socket;
             try {
                 socket = serverSocket.accept();
-                ZLog.i("Client Socket accept success from: " + serverSocket.getInetAddress());
+                ZLog.i("Client Socket accept success from: " + socket.getInetAddress());
 
                 final BufferedSource source = Okio.buffer(Okio.source(socket));
                 final BufferedSink sink = Okio.buffer(Okio.sink(socket));
@@ -58,12 +58,14 @@ public class FairyServer extends Thread{
     }
 
     private void process(final Socket socket, final BufferedSource source, final BufferedSink sink) throws IOException{
-        Request request = Request.parse(source);
+        final Request request = Request.parse(source);
         service.enqueue(request, new LogcatCall.ResponseCallback() {
             @Override
             public void onCompleted(Response response) {
                 try {
+                    ZLog.d("response: " + response.toString());
                     writeResponse(sink, response);
+                    ZLog.d("finish write");
                 } catch (IOException e) {
                     ZLog.e("error in write response to socket: " + e.getMessage());
                     // TODO: 2017/10/17 ???
@@ -73,7 +75,9 @@ public class FairyServer extends Thread{
                     sink.close();
                     socket.close();
                 } catch (IOException e) {
-                    ZLog.i("error in socket and stream close: " + e.getMessage());
+                    ZLog.e("error in socket and stream close: " + e.getMessage());
+                } catch (Throwable e) {
+                    ZLog.e(e.getMessage());
                 }
             }
         });
@@ -88,6 +92,7 @@ public class FairyServer extends Thread{
                 .append(response.getMessage());
 
         sink.writeUtf8(status.toString());
+        ZLog.d("status: " + status.toString());
         sink.writeUtf8("\r\n");
 
         Headers headers = response.getHeaders();
@@ -96,12 +101,14 @@ public class FairyServer extends Thread{
             sink.writeUtf8(": ");
             sink.writeUtf8(headers.value(i));
             sink.writeUtf8("\r\n");
+            ZLog.d(headers.name(i) + " " + headers.value(i));
         }
         sink.writeUtf8("\r\n");
         sink.flush();
 
         Buffer body = response.getBody();
         if (body == null) return;
+        ZLog.d("body size: " + body.size());
         response.getBody().readAll(sink);
         sink.flush();
     }

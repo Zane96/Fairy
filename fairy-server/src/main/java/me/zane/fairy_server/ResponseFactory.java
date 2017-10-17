@@ -10,9 +10,9 @@ import okio.Buffer;
  */
 
 public class ResponseFactory {
-    private static String DEFAULT_SCHEME = "http/1.1";
+    private static String DEFAULT_SCHEME = "HTTP/1.1";
     private static int SUCCESS_CODE = 200;
-    private static String SUCCESS_MESSAGE = "success";
+    private static String SUCCESS_MESSAGE = "ok";
 
     public static Response success(String body) {
         return success(body, new Headers.Builder());

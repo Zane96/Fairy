@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define TAG "Demigod"
+#define TAG "Fairy"
 
 
 static int load() {
@@ -17,7 +17,7 @@ static int load() {
         "-Djava.class.path=/data/local/tmp/server.dex",
         "/data/local/tmp",
         "--nice-name=fairy",
-        "me.zane.fairy_service.Launcher",
+        "me.zane.fairy_server.ServerMain",
     NULL};
 
     pid_t pid = fork();
@@ -28,11 +28,11 @@ static int load() {
     //LOGD("fork");
     switch (pid) {
          case -1:
-              LOGE("cannot fork");
+              //LOGE("cannot fork");
               return -1;
          case 0:
               //child
-              LOGD("success fork");
+              //LOGD("success fork");
               break;
          default:
               //parent

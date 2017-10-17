@@ -3,6 +3,7 @@ package me.zane.fairy_server.exec;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import me.zane.fairy_server.ZLog;
 import me.zane.fairy_server.exec.LogcatCall;
 import me.zane.fairy_server.model.PostBody;
 import me.zane.fairy_server.model.Request;
@@ -21,6 +22,7 @@ public class LogcatService {
 
     public void enqueue(Request request, LogcatCall.ResponseCallback callback) {
         String body = request.getBody().readUtf8();
+        ZLog.d("body: " + body);
         PostBody postBody = PostBody.parse(body);
 
         executor.execute(new LogcatCall(postBody, callback));

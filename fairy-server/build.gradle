@@ -34,7 +34,7 @@ task loader(type: Exec,dependsOn: build){
     def dxDir = dxDirs[0]
     executable sdkLocation+"/build-tools/"+dxDir+"/dx"
     println executable
-    args "--dex", "--output=../pc/server.dex", "build/libs/fairy_server.jar"
+    args "--dex", "--output=../pc/server.dex", "build/libs/fairy-server.jar"
 }
 
 task moveSo(type: Copy,dependsOn: loader){
@@ -44,7 +44,7 @@ task moveSo(type: Copy,dependsOn: loader){
         soFile.delete()
     }
 
-    from "src/main/libs/arm64-v8a/fairy"
+    from "src/main/libs/armeabi/fairy"
     into "../pc"
     rename {String fileName ->
         fileName = "libfairy.so"

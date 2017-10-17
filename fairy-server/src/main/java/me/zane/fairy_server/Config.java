@@ -6,6 +6,5 @@ package me.zane.fairy_server;
  */
 
 public class Config {
-    public static final int SERVER_PORT = 1025;
-
+    public static final int SERVER_PORT = 10255;
 }

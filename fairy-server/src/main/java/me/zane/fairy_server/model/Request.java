@@ -3,6 +3,7 @@ package me.zane.fairy_server.model;
 
 import java.io.IOException;
 
+import me.zane.fairy_server.ZLog;
 import okio.Buffer;
 import okio.BufferedSource;
 
@@ -73,22 +74,25 @@ public class Request {
      */
     public static Request parse(BufferedSource source) throws IOException{
         String requestLine = source.readUtf8LineStrict();
+        ZLog.d(requestLine);
         String method = requestLine.substring(0, requestLine.indexOf(" "));
+        ZLog.d(method);
 
         Headers.Builder headerBuilder = new Headers.Builder();
         String headerLine;
-        //long bodySize;
+        long bodySize = 0;
         while ((headerLine = source.readUtf8LineStrict()).length() != 0) {
+            ZLog.d("headline: " + headerLine);
             headerBuilder.addLenient(headerLine);
-//            if ("Content-Length".startsWith(headerLine)) {
-//                bodySize = Long.parseLong(headerLine.substring(15).trim());
-//            }
+            if (headerLine.startsWith("Content-Length")) {
+                bodySize = Long.parseLong(headerLine.substring(15).trim());
+            }
         }
         Headers headers = headerBuilder.build();
 
         Buffer buffer = new Buffer();
-        buffer.writeAll(source);
-        //buffer.write(source, bodySize);
+        //buffer.writeAll(source);
+        buffer.write(source, bodySize);
 
         return new Request(method, headers, buffer);
     }

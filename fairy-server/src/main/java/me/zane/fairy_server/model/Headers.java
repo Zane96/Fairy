@@ -263,7 +263,7 @@ public final class Headers {
          * Add a field with the specified value without any validation. Only appropriate for headers
          * from the remote peer or cache.
          */
-        Builder addLenient(String name, String value) {
+        public Builder addLenient(String name, String value) {
             namesAndValues.add(name);
             namesAndValues.add(value.trim());
             return this;

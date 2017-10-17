@@ -41,7 +41,8 @@ public class LogcatCall implements Runnable{
     @Override
     public void run() {
         //exec shell logcat
-        Process shellProcess = null;
+        ZLog.d("start exec");
+        Process shellProcess;
         BufferedSource source = null;
         BufferedSink sink = null;
         Response response = null;
@@ -55,7 +56,11 @@ public class LogcatCall implements Runnable{
             sink.write(String.format((LOGCAT_BASE),
                     options,
                     postBody.getValue(PostBody.FILTER_KEY)).getBytes());
-            sink.flush();
+            //sink.write("logcat -t 5".getBytes());
+            sink.close();
+            ZLog.i("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
+
+            //response = execWithTime(source);
 
             if (!options.contains("-v") || options.contains("-v time") || options.contains("-v threadtime")) {
                 response = execWithTime(source);
@@ -70,13 +75,6 @@ public class LogcatCall implements Runnable{
                     source.close();
                 } catch (IOException e) {
                     ZLog.e("error in close source stream in Call: " + e.getMessage());
-                }
-            }
-            if (sink != null) {
-                try {
-                    sink.close();
-                } catch (IOException e) {
-                    ZLog.e("error in close sink stream in Call: " + e.getMessage());
                 }
             }
             callback.onCompleted(response);
@@ -115,6 +113,7 @@ public class LogcatCall implements Runnable{
         }
 
         Result result = new Result(sb.toString(), currentTimeLine);
+        ZLog.d("finish");
         return ResponseFactory.success(gson.toJson(result));
     }
 
