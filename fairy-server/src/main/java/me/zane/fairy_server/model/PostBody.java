@@ -2,6 +2,8 @@ package me.zane.fairy_server.model;
 
 import java.util.HashMap;
 
+import me.zane.fairy_server.ZLog;
+
 /**
  * eg:
  * options=-t 5 -d
@@ -23,19 +25,46 @@ public class PostBody {
         this.map = map;
     }
 
-    public static PostBody parse(String body) {
+    public static PostBody parse(String rawBody) {
+        ZLog.i("body1: " + rawBody);
+        String body = formatBody(rawBody);
+
+        ZLog.i("body2: " + body);
         HashMap<String, String> fieldMap = new HashMap<>();
         String[] fields = body.split("&");
         for (String field : fields) {
             String[] keyValue = field.split("=");
-            fieldMap.put(keyValue[0], keyValue[1]);
+            if (keyValue.length == 1) {
+                fieldMap.put(keyValue[0], "");
+            } else if (keyValue.length == 3){
+                //eg. --pid=22200
+                fieldMap.put(keyValue[0], keyValue[1] + "=" + keyValue[2]);
+            } else if (keyValue.length == 2){
+                fieldMap.put(keyValue[0], keyValue[1]);
+            }
         }
 
         return new PostBody(fieldMap);
     }
 
     public String getValue(String key) {
-        String value = map.get(key);
-        return value != null ? value : "";
+        return map.get(key);
+    }
+
+    private static String formatBody(String body) {
+        if (body.contains("+")) {
+            body = body.replace("+", " ");
+        }
+        if (body.contains("%3A")) {
+            body = body.replace("%3A", ":");
+        }
+        if (body.contains("%22")) {
+            body = body.replace("%22", "\"");
+        }
+        if (body.contains("%3D")) {
+            body = body.replace("%3D", "=");
+        }
+
+        return body;
     }
 }

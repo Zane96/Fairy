@@ -22,7 +22,6 @@ public class LogcatService {
 
     public void enqueue(Request request, LogcatCall.ResponseCallback callback) {
         String body = request.getBody().readUtf8();
-        ZLog.d("body: " + body);
         PostBody postBody = PostBody.parse(body);
 
         executor.execute(new LogcatCall(postBody, callback));

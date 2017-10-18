@@ -12,6 +12,8 @@ import me.zane.fairy_server.exec.FairyServer;
 
 public class ServerMain {
     public static void main(String[] args) {
+        Looper.prepareMainLooper();
         new FairyServer("fairy_server").start();
+        Looper.loop();
     }
 }
