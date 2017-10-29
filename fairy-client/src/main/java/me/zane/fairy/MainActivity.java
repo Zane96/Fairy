@@ -1,26 +1,52 @@
 package me.zane.fairy;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.Okio;
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView mText;
+    private DataEngine engine;
+    private StringBuilder sb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        while (true) {
-            new Object();
-        }
+        mText = (TextView) findViewById(R.id.text);
+        engine = new DataEngine();
+        sb = new StringBuilder();
+
+        engine.enqueue("", "", new DataEngine.DataCallBack() {
+            @Override
+            public void onSuccess(LogcatData date) {
+                flushInfo(date.getData());
+            }
+
+            @Override
+            public void onFailed(String error) {
+                flushInfo(error);
+            }
+        });
+    }
+
+    private void flushInfo(String info) {
+        sb.append(info).append("\n");
+        mText.setText(sb.toString());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        engine.stop();
     }
 }

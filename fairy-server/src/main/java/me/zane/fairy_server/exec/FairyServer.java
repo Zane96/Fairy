@@ -108,7 +108,6 @@ public class FairyServer extends Thread{
 
         Buffer body = response.getBody();
         if (body == null) return;
-        ZLog.d("body size: " + body.size());
         response.getBody().readAll(sink);
         sink.flush();
     }

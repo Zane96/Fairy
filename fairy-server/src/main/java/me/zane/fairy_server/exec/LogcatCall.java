@@ -21,7 +21,7 @@ import okio.Okio;
 
 public class LogcatCall implements Runnable{
     private static final String LOGCAT_BASE = "logcat -d %s %s";
-    private static final int LINE_THRESHOLD = 100;//如果读取数量超过了100，准备开始结束数据的读取
+    private static final int LINE_THRESHOLD = 200;//如果读取数量超过了阀值，准备开始结束数据的读取
 
     private Gson gson;
 
@@ -53,16 +53,16 @@ public class LogcatCall implements Runnable{
 
             //wirte (logcat [options] [filterspecs]) command
             String options = postBody.getValue(PostBody.OPTIONES_KEY);
+
             sink.write(String.format((LOGCAT_BASE),
                     options,
                     postBody.getValue(PostBody.FILTER_KEY)).getBytes());
-            //sink.write("logcat -t 5".getBytes());
             sink.close();
             ZLog.i("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
 
-            //response = execWithTime(source);
-
-            if (!options.contains("-v") || options.contains("-v time") || options.contains("-v threadtime")) {
+            if (!options.contains("-v")
+                        || options.contains("-v time")
+                        || options.contains("-v threadtime")) {
                 response = execWithTime(source);
             } else {
                 response = execWithOutTime(source);

@@ -3,8 +3,6 @@ package me.zane.fairy_server.exec;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import me.zane.fairy_server.ZLog;
-import me.zane.fairy_server.exec.LogcatCall;
 import me.zane.fairy_server.model.PostBody;
 import me.zane.fairy_server.model.Request;
 
