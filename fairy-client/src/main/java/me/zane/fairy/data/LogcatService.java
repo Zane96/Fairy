@@ -1,4 +1,4 @@
-package me.zane.fairy;
+package me.zane.fairy.data;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -15,5 +15,5 @@ public interface LogcatService {
     @POST("/")
     @FormUrlEncoded
     Observable<LogcatData> logcat(@Field("options") String options,
-                                @Field("filter") String filter);
+                                  @Field("filter") String filter);
 }

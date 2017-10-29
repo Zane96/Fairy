@@ -1,4 +1,4 @@
-package me.zane.fairy;
+package me.zane.fairy.data;
 
 /**
  * Created by Zane on 2017/10/24.

@@ -26,10 +26,10 @@ public class PostBody {
     }
 
     public static PostBody parse(String rawBody) {
-        ZLog.i("body1: " + rawBody);
+        ZLog.i("raw body: " + rawBody);
         String body = formatBody(rawBody);
 
-        ZLog.i("body2: " + body);
+        ZLog.i("format body: " + body);
         HashMap<String, String> fieldMap = new HashMap<>();
         String[] fields = body.split("&");
         for (String field : fields) {
@@ -58,11 +58,16 @@ public class PostBody {
         if (body.contains("%3A")) {
             body = body.replace("%3A", ":");
         }
+        //browser
         if (body.contains("%22")) {
             body = body.replace("%22", "\"");
         }
         if (body.contains("%3D")) {
             body = body.replace("%3D", "=");
+        }
+        //phone
+        if (body.contains("%20")) {
+            body = body.replace("%20", " ");
         }
 
         return body;

@@ -4,11 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import java.util.concurrent.CountDownLatch;
-
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
+import me.zane.fairy.data.DataEngine;
+import me.zane.fairy.data.LogcatData;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         engine = new DataEngine();
         sb = new StringBuilder();
 
-        engine.enqueue("", "", new DataEngine.DataCallBack() {
+        engine.enqueue("--pid=29244", "", new DataEngine.DataCallBack() {
             @Override
             public void onSuccess(LogcatData date) {
                 flushInfo(date.getData());

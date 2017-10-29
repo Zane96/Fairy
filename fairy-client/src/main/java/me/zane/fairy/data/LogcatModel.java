@@ -1,6 +1,9 @@
-package me.zane.fairy;
+package me.zane.fairy.data;
 
 
+import me.zane.fairy.MySharedPre;
+import me.zane.fairy.Utils;
+import me.zane.fairy.ZLog;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
