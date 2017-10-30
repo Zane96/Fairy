@@ -20,7 +20,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class LogcatModel {
-    private static final String DEFAULT_IPADDRESS = "0.0.0.0";
+    private static final String DEFAULT_IPADDRESS = "-1.0.0.0";
     private static OkHttpClient client;
     private static Retrofit.Builder builder;
     private volatile static LogcatModel instance;
