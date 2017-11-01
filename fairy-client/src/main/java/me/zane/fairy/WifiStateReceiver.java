@@ -25,7 +25,7 @@ public class WifiStateReceiver extends BroadcastReceiver{
                 if (isConnected) {
                     MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
                 } else {
-                    MySharedPre.getInstance().putIpAddress(null);
+                    MySharedPre.getInstance().putIpAddress("0.0.0.0");
                 }
             }
         }

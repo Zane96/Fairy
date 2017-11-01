@@ -3,6 +3,8 @@ package me.zane.fairy;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.Locale;
+
 /**
  * Created by Zane on 2017/10/24.
  * Email: zanebot96@gmail.com
@@ -34,12 +36,21 @@ public class MySharedPre {
         return preferences.getString("ipaddress", defaultValue);
     }
 
-    public void putTimeLine(String timeLine) {
-        editor.putString("timeline", timeLine);
+    public void putOptions(int index, String options) {
+        editor.putString(String.format("%d_options", index), options);
         editor.commit();
     }
 
-    public String getTimeLine(String defaultValue) {
-        return preferences.getString("timeline", defaultValue);
+    public String getOptions(int index, String defaultValue) {
+        return preferences.getString(String.format("%d_options", index), defaultValue);
+    }
+
+    public void putFilter(int index, String filter) {
+        editor.putString(String.format("%d_filter", index), filter);
+        editor.commit();
+    }
+
+    public String getFilter(int index, String defaultValue) {
+        return preferences.getString(String.format("%d_filter", index), defaultValue);
     }
 }
