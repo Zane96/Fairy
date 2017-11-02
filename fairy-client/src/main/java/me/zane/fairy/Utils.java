@@ -5,6 +5,7 @@ import android.net.wifi.WifiManager;
 import android.os.Environment;
 
 import java.io.File;
+import java.util.Calendar;
 
 import static android.content.Context.WIFI_SERVICE;
 
@@ -47,18 +48,44 @@ public class Utils {
             }
             //前移
             sp.putOptions(i, options);
-            sp.putOptions(i, filter);
+            sp.putFilter(i, filter);
             i++;
         }
     }
 
     public static void swapSp(int from, int to) {
         final MySharedPre sp = MySharedPre.getInstance();
+        ZLog.d(from + " " + to);
         String options = sp.getOptions(from, "");
         String filter = sp.getFilter(from, "");
         sp.putOptions(from, sp.getOptions(to, ""));
         sp.putFilter(from, sp.getFilter(to, ""));
         sp.putOptions(to, options);
         sp.putFilter(to, filter);
+    }
+
+    /**
+     * lastTimeLine + 1 millseconds == addOneMillsecond is true
+     * eg.10-26 16:40:35.584
+     * @param timeLine
+     * @return
+     */
+    public static String addOneMillsecond(String timeLine) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, Integer.valueOf(timeLine.substring(0, timeLine.indexOf("-"))));
+        calendar.set(Calendar.DATE, Integer.valueOf(timeLine.substring(timeLine.indexOf("-") + 1, timeLine.indexOf(" "))));
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeLine.substring(timeLine.indexOf(" ") + 1, timeLine.indexOf(":"))));
+        calendar.set(Calendar.MINUTE, Integer.valueOf(timeLine.substring(timeLine.indexOf(":") + 1, timeLine.lastIndexOf(":"))));
+        calendar.set(Calendar.SECOND, Integer.valueOf(timeLine.substring(timeLine.lastIndexOf(":") + 1, timeLine.indexOf("."))));
+        calendar.set(Calendar.MILLISECOND, Integer.valueOf(timeLine.substring(timeLine.indexOf(".") + 1, timeLine.length())));
+        calendar.add(Calendar.MILLISECOND, 1);
+
+        return String.format("%d-%d %d:%d:%d.%d",
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DATE),
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND),
+                calendar.get(Calendar.MILLISECOND));
     }
 }

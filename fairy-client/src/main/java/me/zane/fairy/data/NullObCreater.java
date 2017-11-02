@@ -10,11 +10,17 @@ import rx.Observable;
 
 class NullObCreater extends ObservaleCreater{
 
-    Observable<LogcatData> creat() {
-        return Observable.create(emitter -> {
+    private Observable observable;
+
+    public NullObCreater() {
+        observable = Observable.create(emitter -> {
             LogcatData data = new LogcatData();
             data.setTimeLine(DEFAULT_TIMELINE);
             emitter.onNext(data);
-        }, Emitter.BackpressureMode.LATEST);
+        }, Emitter.BackpressureMode.LATEST).share();
+    }
+
+    Observable<LogcatData> creat() {
+        return observable;
     }
 }

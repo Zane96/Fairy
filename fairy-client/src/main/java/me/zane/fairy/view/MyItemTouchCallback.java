@@ -43,7 +43,7 @@ public class MyItemTouchCallback extends ItemTouchHelper.SimpleCallback {
             }
         }
 
-        adapter.notifyItemMoved(fromPosition, toPosition);
+        adapter.notifyDataSetChanged();
         Utils.swapSp(fromPosition, toPosition);
         return true;
     }
@@ -70,7 +70,8 @@ public class MyItemTouchCallback extends ItemTouchHelper.SimpleCallback {
         //入队列
         //queue.offerLast(bean);
         adapter.remove(position);
-        adapter.notifyItemRemoved(position);
+        //adapter.notifyItemRemoved(position);
+        adapter.notifyDataSetChanged();
         Utils.moveOneSp(position);
         isSwap = true;
     }
@@ -79,6 +80,8 @@ public class MyItemTouchCallback extends ItemTouchHelper.SimpleCallback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (isSwap) {
             Toast.makeText(context, "已删除", Toast.LENGTH_SHORT).show();
+            viewHolder.itemView.setAlpha(1);
+            viewHolder.itemView.setTranslationX(0);
             isSwap = false;
         }
     }

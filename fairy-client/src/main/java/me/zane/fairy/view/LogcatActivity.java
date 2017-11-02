@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import me.zane.fairy.MySharedPre;
@@ -27,6 +28,7 @@ public class LogcatActivity extends AppCompatActivity{
     private Button mStartBtn;
     private Button mStopBtn;
     private TextView mDataText;
+    private ScrollView mScrollView;
 
     private int index;
     private String options = "";
@@ -52,20 +54,32 @@ public class LogcatActivity extends AppCompatActivity{
         mStartBtn = findViewById(R.id.btn_start_logcat);
         mStopBtn = findViewById(R.id.btn_stop_logcat);
         mDataText = findViewById(R.id.text_data_logcat);
+        mScrollView = findViewById(R.id.scrollview_logcat);
 
-        mStartBtn.setOnClickListener(v -> engine.enqueue(options, filter, new DataEngine.DataCallBack() {
-            @Override
-            public void onSuccess(LogcatData date) {
-                mDataText.append(date.getData());
-            }
+        mStartBtn.setOnClickListener(v -> {
+            mStartBtn.setEnabled(false);
+            mStopBtn.setEnabled(true);
+            engine.enqueue(options, filter, new DataEngine.DataCallBack() {
+                @Override
+                public void onSuccess(LogcatData date) {
+                    mDataText.append(date.getData());
 
-            @Override
-            public void onFailed(String error) {
-                mDataText.append(error);
-            }
-        }));
+                    mScrollView.smoothScrollTo(0, mDataText.getHeight());
+                }
 
-        mStopBtn.setOnClickListener(v -> engine.stop());
+                @Override
+                public void onFailed(String error) {
+                    mDataText.append(error);
+                }
+            });
+        });
+
+        mStopBtn.setEnabled(false);
+        mStopBtn.setOnClickListener(v -> {
+            mStartBtn.setEnabled(true);
+            mStopBtn.setEnabled(false);
+            engine.stop();
+        });
 
         if (!options.equals("")) {
             mOptionsEdit.setHint(options);
@@ -113,5 +127,11 @@ public class LogcatActivity extends AppCompatActivity{
         super.onPause();
         MySharedPre.getInstance().putOptions(index, options);
         MySharedPre.getInstance().putFilter(index, filter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        engine.stop();
     }
 }

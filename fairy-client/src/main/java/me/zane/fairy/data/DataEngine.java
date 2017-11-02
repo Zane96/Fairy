@@ -1,6 +1,7 @@
 package me.zane.fairy.data;
 
 import java.util.Calendar;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import me.zane.fairy.NullIpAddressException;
@@ -21,6 +22,7 @@ public class DataEngine {
     private Observable<Long> timer;
     private Subscription subscription;
     private ObservaleCreater observaleCreater;
+    private boolean isClose = false;
 
     public interface DataCallBack {
         void onSuccess(LogcatData date);
@@ -60,11 +62,13 @@ public class DataEngine {
                 @Override
                 public void onError(Throwable e) {
                     callBack.onFailed(e.getMessage());
+                    awaitToStop();
                 }
 
                 @Override
                 public void onNext(LogcatData logcatData) {
                     callBack.onSuccess(logcatData);
+                    awaitToStop();
                 }
             });
         } else {
@@ -79,19 +83,28 @@ public class DataEngine {
                 public void onError(Throwable e) {
                     ZLog.e(String.valueOf(e));
                     callBack.onFailed(e.getMessage());
+                    awaitToStop();
                 }
 
                 @Override
                 public void onNext(LogcatData logcatData) {
                     observaleCreater.onNext(logcatData, callBack);
+                    awaitToStop();
                 }
             });
         }
     }
 
+    private void awaitToStop() {
+        if (isClose) {
+            subscription.unsubscribe();
+            isClose = false;
+        }
+    }
+
     public void stop() {
         if (subscription != null) {
-            subscription.unsubscribe();
+            isClose = true;
         }
     }
 }

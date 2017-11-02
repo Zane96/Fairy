@@ -47,6 +47,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.setData(position);
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onClick(position);
+            }
+        });
     }
 
     @Override
@@ -87,12 +92,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         }
 
         public void setData(int position) {
-            int i = itemView.getVisibility();
-            itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onClick(position);
-                }
-            });
+
             mText.setText(datas.get(position).getCommand());
         }
     }

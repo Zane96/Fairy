@@ -64,26 +64,33 @@ public class FairyServer extends Thread{
             public void onCompleted(Response response) {
                 try {
                     ZLog.d("response: " + response.toString());
-                    writeResponse(sink, response);
+                    writeResponse(socket, sink, response);
                     ZLog.d("finish write");
                 } catch (IOException e) {
-                    ZLog.e("error in write response to socket: " + e.getMessage());
-                    // TODO: 2017/10/17 ???
+                    ZLog.e("error in write response to socket: " + e.getMessage() + socket.isClosed());
                 }
                 try {
+                    ZLog.d(socket.isClosed() + " ss1");
                     source.close();
+                    ZLog.d(socket.isClosed() + " ss2");
                     sink.close();
-                    socket.close();
+                    ZLog.d(socket.isClosed() + " ss3");
                 } catch (IOException e) {
-                    ZLog.e("error in socket and stream close: " + e.getMessage());
+                    ZLog.e("error in socket and stream close: " + e.getMessage() + socket.isClosed());
                 } catch (Throwable e) {
                     ZLog.e(e.getMessage());
+                } finally {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        ZLog.e(e.getMessage());
+                    }
                 }
             }
         });
     }
 
-    private void writeResponse(BufferedSink sink,Response response) throws IOException {
+    private void writeResponse(Socket socket, BufferedSink sink, Response response) throws IOException {
         StringBuilder status = new StringBuilder();
         status.append(response.getScheme())
                 .append(" ")
