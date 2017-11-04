@@ -44,6 +44,7 @@ public class ObservaleCreater {
         //需要timeline的feed流
         Observable<LogcatData> observable;
         //这种情况是可能是初始的第一次正常请求数据
+        ZLog.d(startTimeLine + " " + lastTimeLine + " " + isPoll);
         if (startTimeLine.equals(lastTimeLine)) {
             observable = pollObCreater.creat(options, filter);
         } else {

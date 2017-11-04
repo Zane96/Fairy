@@ -70,11 +70,8 @@ public class FairyServer extends Thread{
                     ZLog.e("error in write response to socket: " + e.getMessage() + socket.isClosed());
                 }
                 try {
-                    ZLog.d(socket.isClosed() + " ss1");
                     source.close();
-                    ZLog.d(socket.isClosed() + " ss2");
                     sink.close();
-                    ZLog.d(socket.isClosed() + " ss3");
                 } catch (IOException e) {
                     ZLog.e("error in socket and stream close: " + e.getMessage() + socket.isClosed());
                 } catch (Throwable e) {

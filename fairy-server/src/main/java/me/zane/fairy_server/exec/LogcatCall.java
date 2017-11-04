@@ -104,12 +104,17 @@ public class LogcatCall implements Runnable{
             currentTimeLine = line.substring(0, 18);//截取时间戳
             //大于阀值，开始准备结束数据读取
             if (lineNum > LINE_THRESHOLD) {
-                if (!currentTimeLine.equals(lastTimeLine)) {
+                //注意最后一行数据是 -------beginmain的情况
+                if (!currentTimeLine.equals(lastTimeLine) && !currentTimeLine.startsWith("-")) {
                     break;
                 }
             }
             sb.append(line).append("\n");
-            lastTimeLine = currentTimeLine;
+            if (!currentTimeLine.startsWith("-")) {
+                lastTimeLine = currentTimeLine;
+            } else {
+                currentTimeLine = lastTimeLine;
+            }
         }
 
         Result result = new Result(sb.toString(), currentTimeLine);

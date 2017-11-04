@@ -39,7 +39,7 @@ task loader(type: Exec,dependsOn: build){
 
 task moveSo(type: Copy,dependsOn: loader){
     //refresh the so
-    def soFile = new File(rootDir.absolutePath + "/pc/fairy")
+    def soFile = new File(rootDir.absolutePath + "/pc/libfairy.so")
     if (!soFile.delete()) {
         soFile.delete()
     }
