@@ -5,7 +5,7 @@
               android:layout_height="80dp">
 
     <ImageView
-        android:src="@drawable/icon"
+        android:src="@drawable/icon2"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
@@ -14,7 +14,6 @@
 
     <TextView
         android:id="@+id/text_main_recycle"
-        android:text="sssss"
         android:ellipsize="marquee"
         android:gravity="center"
         android:textSize="16sp"
