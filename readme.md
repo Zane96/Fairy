@@ -18,7 +18,7 @@ An Android framework for system log analysis on the Android platform.
 
 zanebot96@gmail.com
 
-![](/screentshot/icon.png)
+![](/screenshot/icon.png)
 
 ## License
 
