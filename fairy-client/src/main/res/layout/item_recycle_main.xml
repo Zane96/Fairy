@@ -15,7 +15,9 @@
     <TextView
         android:id="@+id/text_main_recycle"
         android:text="sssss"
+        android:ellipsize="marquee"
         android:gravity="center"
+        android:textSize="16sp"
         android:layout_width="0dp"
         android:layout_weight="3"
         android:layout_height="match_parent"

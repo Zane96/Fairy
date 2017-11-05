@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,8 +63,7 @@ public class LogcatActivity extends AppCompatActivity{
             engine.enqueue(options, filter, new DataEngine.DataCallBack() {
                 @Override
                 public void onSuccess(LogcatData date) {
-                    mDataText.append(date.getData());
-
+                    mDataText.append(Html.fromHtml(date.getData()));
                     mScrollView.smoothScrollTo(0, mDataText.getHeight());
                 }
 

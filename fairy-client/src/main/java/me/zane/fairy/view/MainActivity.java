@@ -9,8 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String NULL_VALUE = "command_null";
     private static final int NULL_POSITION = -1;//不用刷新item
     private RecyclerView recycleView;
-    private LinearLayout root;
     private MyAdapter adapter;
 
     private int currentPosition = NULL_POSITION;
@@ -40,11 +37,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(LogcatActivity.INDEX_KEY, position);
             startActivity(intent);
         });
-
-        MySharedPre.getInstance().putOptions(99, null);
-        String value = MySharedPre.getInstance().getOptions(99, "nullllll");
-        Toast.makeText(this, value, Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -61,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         recycleView = findViewById(R.id.recycle_main);
-        root = findViewById(R.id.root);
         adapter = new MyAdapter(this);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(this,
                                                                                              adapter,
@@ -108,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
                 MySharedPre.getInstance().putFilter(index, "");
                 MySharedPre.getInstance().putOptions(index, "");
-                Toast.makeText(this, adapter.getItemCount() + "", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);

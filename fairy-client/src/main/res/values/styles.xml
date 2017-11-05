@@ -1,11 +1,26 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="MyCustomTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/black_1</item>
+        <item name="colorPrimaryDark">@color/black_1</item>
+        <item name="colorAccent">@color/textcolor</item>
+        <item name="android:colorBackground">@color/black_2</item>
+        <item name="android:textColorPrimary">@color/textcolor</item>
+        <item name="android:textColorSecondary">@color/textcolor</item>
+        <item name="android:textColor">@color/textcolor</item>
+        <item name="colorButtonNormal">@color/black_2</item>
+        <item name="colorControlNormal">@color/black_3</item>
+    </style>
+
+    <style name="MyEditStyle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColorHint">@color/hintcolor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 
 </resources>

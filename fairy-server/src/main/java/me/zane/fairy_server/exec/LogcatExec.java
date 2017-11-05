@@ -54,7 +54,7 @@ class LogcatExec {
                 }
             }
 
-            sb.append(formatLine(format, rawLine)).append("\n");
+            sb.append(formatLine(format, rawLine));
 
             if (!currentTimeLine.startsWith("-")) {
                 lastTimeLine = currentTimeLine;
@@ -85,13 +85,19 @@ class LogcatExec {
      * @return
      */
     private String formatLine(String format, String rawLine) {
-        //-----begin或者默认格式（threadtime）情况直接返回
-        if (rawLine.startsWith("--") || format.equals("")) {
-            return rawLine;
+        //-----begin情况直接返回
+        if (rawLine.startsWith("--")) {
+            return String.format("%s\n", rawLine);
+        }
+
+        //默认格式threadtime
+        if (format.equals("")) {
+            format = "threadtime";
         }
 
         String pid;
-        String prioritySympol;
+        String priority;
+        String mark;
         String raw; //log数据
         String time;
         String date;
@@ -102,39 +108,71 @@ class LogcatExec {
         time = rawLine.substring(6, 18);
         pid = rawLine.substring(20, 24);
         tid = rawLine.substring(26, 30);
-        prioritySympol = rawLine.substring(31, rawLine.indexOf(": "));
-        ZLog.d(date + " " + time + " " + pid + " " + tid + " " + prioritySympol + " " + raw);
+        priority = rawLine.substring(31, 32);
+        mark = rawLine.substring(33, rawLine.indexOf(": "));
 
-        String line;
-        StringBuilder sb = new StringBuilder();
-        switch (format.substring(format.lastIndexOf(" ") + 1, format.length())) {
-            case "brief":
-                line = sb.append(prioritySympol).append(" ").append(pid).append(": ").append(raw).toString();
+        //包装颜色
+        String color;
+
+        switch (priority) {
+            case "V":
+                color = "#e0e0e0";
                 break;
-            case "process":
-                line = sb.append(pid).append(": ").append(raw).toString();
+            case "D":
+                color = "#ffee58";
                 break;
-            case "tag":
-                line = sb.append(prioritySympol).append(": ").append(raw).toString();
+            case "I":
+                color = "#ffa726";
                 break;
-            case "raw":
-                line = raw;
+            case "W":
+                color = "#29b6f6";
                 break;
-            case "time":
-                line = sb.append(date).append(" ").append(time)
-                               .append(" ").append(prioritySympol).append(" ")
-                               .append(pid).append(": ").append(raw).toString();
-                break;
-            case "threadtime":
-                line = sb.append(date).append(" ").append(time)
-                               .append(" ").append(prioritySympol).append(" ")
-                               .append(pid).append(" ").append(tid).append(": ").append(raw).toString();
+            case "E":
+                color = "#ef5350";
                 break;
             default:
-                line = String.format("Don't support %s", format);
+                color = "#4a148c";
+                break;
+        }
+        StringBuilder sb = new StringBuilder(String.format("<p><font color=\"%s\">", color));
+
+        switch (format.substring(format.lastIndexOf(" ") + 1, format.length())) {
+            case "brief":
+                sb.append(priority).append(" ")
+                        .append(mark).append(" ")
+                        .append(pid).append(": ")
+                        .append(raw);
+                break;
+            case "process":
+                sb.append(pid).append(": ").append(raw);
+                break;
+            case "tag":
+                sb.append(priority).append(" ")
+                        .append(mark).append(": ").append(raw);
+                break;
+            case "raw":
+                sb.append(raw);
+                break;
+            case "time":
+                sb.append(date).append(" ")
+                        .append(time).append(" ")
+                        .append(priority).append(" ")
+                        .append(mark).append(" ")
+                        .append(pid).append(": ").append(raw);
+                break;
+            case "threadtime":
+                sb.append(date).append(" ")
+                        .append(time).append(" ")
+                        .append(priority).append(" ")
+                        .append(mark).append(" ")
+                        .append(pid).append(" ")
+                        .append(tid).append(": ").append(raw);
+                break;
+            default:
+                sb.append(String.format("Don't support %s", format));
                 break;
         }
 
-        return line;
+        return sb.append("</p>").toString();
     }
 }
