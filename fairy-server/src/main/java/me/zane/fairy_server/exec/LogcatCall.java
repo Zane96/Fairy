@@ -20,7 +20,11 @@ import okio.Okio;
  */
 
 public class LogcatCall implements Runnable{
-    private static final String LOGCAT_BASE = "logcat -d %s %s";
+    /**
+     * 强制退出，强制使用threadtime格式的数据，来支持feed流
+     * threadtime — 显示日期、调用时间、优先级、标记以及发出消息的线程的 PID 和 TID。
+     */
+    private static final String LOGCAT_BASE = "logcat -d -v threadtime %s %s";
     private static final int LINE_THRESHOLD = 100;//如果读取数量超过了阀值，准备开始结束数据的读取
 
     private Gson gson;
@@ -60,13 +64,14 @@ public class LogcatCall implements Runnable{
             sink.close();
             ZLog.i("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
 
-            if (!options.contains("-v")
-                        || options.contains("-v time")
-                        || options.contains("-v threadtime")) {
-                response = execWithTime(source);
-            } else {
-                response = execWithOutTime(source);
-            }
+            response = execWithTime(source);
+//            if (!options.contains("-v")
+//                        || options.contains("-v time")
+//                        || options.contains("-v threadtime")) {
+//                response = execWithTime(source);
+//            } else {
+//                response = execWithOutTime(source);
+//            }
         } catch (IOException e) {
             response = ResponseFactory.failed(500, e.getMessage());
         } finally {

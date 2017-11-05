@@ -1,6 +1,8 @@
 package me.zane.fairy.data;
 
 /**
+ * 纯Bean类
+ * 在Result中根据-v过滤一遍，顺便过滤掉无用的timeLine
  * Created by Zane on 2017/10/24.
  * Email: zanebot96@gmail.com
  */
@@ -36,4 +38,6 @@ public class LogcatData {
     public void setTimeLine(String timeLine) {
         this.timeLine = timeLine;
     }
+
+
 }

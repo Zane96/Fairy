@@ -1,9 +1,10 @@
 //
-// Created by 徐志 on 2017/9/30.
+// Created by Zane on 2017/9/30.
 //
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/wait.h>
 #include <android/log.h>
 
 #define LOGD(...) (__android_log_print(ANDROID_LOG_DEBUG, TAG, __VA_ARGS__))
@@ -12,7 +13,16 @@
 
 #define TAG "Fairy"
 
-static int load() {
+static int server() {
+    pid_t pid = fork();
+    if (pid < 0) {
+        return -1;
+    } else if (pid == 0) {
+        LOGD("child fork");
+    } else {
+        LOGD("parent");
+        return pid;
+    }
 
     //Java文件的执行参数
     char *args[] = {"app_process",
@@ -22,38 +32,74 @@ static int load() {
         "me.zane.fairy_server.ServerMain",
     NULL};
 
-    //pid_t pid = fork();
-    //LOGD("%d pid %d", pid, getpid());
-    //pid_t ppid = fork();
-    //LOGD("%d ppid %d", ppid, getpid());
-    //if (ppid != 0) {
-      //  return 0;
-    //}
-    //LOGD("start");
-    signal(SIGCHLD, SIG_IGN);
-    pid_t pid = fork();
-    switch (pid) {
-         case -1:
-              LOGE("cannot fork");
-              return -1;
-         case 0:
-              //child
-              LOGD("%d, %d, success fork", pid, getpid());
-              break;
-         default:
-              //parent
-              LOGD("%d, %d, parent", pid, getpid());
-              return pid;
+    LOGD("exec");
+    //吊起来就不会返回
+    return execvp(args[0], args);
+}
+
+//守护服务进程
+static void signal_handler(int signal) {
+    LOGD("handle %d %d", signal, getpid());
+    if (signal == SIGCHLD) {
+        int status;
+        pid_t pid;
+        for (;;) {
+            pid = waitpid(-1, &status, 0);
+            LOGD("pid %d", pid);
+            if (pid == -1) {
+               return;
+            }
+        }
+    }
+}
+
+static int loadDaemon() {
+    sigset_t new_set;
+    sigemptyset(&new_set);
+
+    //先fork一次
+    int i = server();
+    LOGD("num %d", i);
+    if (i <= 0) {
+        return -1;
     }
 
-    return execvp(args[0], args);
+    for (;;) {
+        //等待信号量，阻塞
+        LOGD("wait1");
+        sigsuspend(&new_set);
+        LOGD("wait2");
+        //pause();
+        LOGD("fork again");
+        if (server() <= 0) {
+            break;
+        }
+    }
 }
 
 //在shell脚本中已经kill掉了旧进程
 //这里不再判断是否还存在旧进程
 int main(int argc, char **argv) {
     LOGD("%d %s", argc, argv[0]);
+    //注册SIGCHLD的信号处理函数
+    signal(SIGCHLD, signal_handler);
 
-    return load();
+    //fork出第一个sys内陷的进程
+    switch (fork()) {
+        case -1:
+            perror("cannot fork");
+            return -1;
+        case 0:
+            LOGD("fork daemon");
+            break;
+        default:
+            LOGD("grandfather1");
+            //sleep(10);
+            LOGD("grandfather2");
+            //_exit(0);
+            for(;;){}
+    }
+
+    return loadDaemon();
 }
 
