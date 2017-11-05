@@ -1,20 +1,19 @@
 package me.zane.fairy_server.exec;
 
-import com.google.gson.Gson;
-
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import me.zane.fairy_server.ResponseFactory;
 import me.zane.fairy_server.ZLog;
 import me.zane.fairy_server.model.PostBody;
 import me.zane.fairy_server.model.Response;
-import me.zane.fairy_server.model.Result;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 
 /**
- * 执行shell logcat，并回调结果
+ * 准备回调的数据，进行回调，中间层（发起者）
  * Created by Zane on 2017/10/16.
  * Email: zanebot96@gmail.com
  */
@@ -25,9 +24,8 @@ public class LogcatCall implements Runnable{
      * threadtime — 显示日期、调用时间、优先级、标记以及发出消息的线程的 PID 和 TID。
      */
     private static final String LOGCAT_BASE = "logcat -d -v threadtime %s %s";
-    private static final int LINE_THRESHOLD = 100;//如果读取数量超过了阀值，准备开始结束数据的读取
 
-    private Gson gson;
+    private LogcatExec exec;
 
     public interface ResponseCallback {
         void onCompleted(Response response);
@@ -39,7 +37,7 @@ public class LogcatCall implements Runnable{
     public LogcatCall(PostBody postBody, ResponseCallback callback) {
         this.callback = callback;
         this.postBody = postBody;
-        gson = new Gson();
+        exec = new LogcatExec();
     }
 
     @Override
@@ -56,7 +54,11 @@ public class LogcatCall implements Runnable{
             sink = Okio.buffer(Okio.sink(shellProcess.getOutputStream()));
 
             //wirte (logcat [options] [filterspecs]) command
-            String options = postBody.getValue(PostBody.OPTIONES_KEY);
+            String rawOptions = postBody.getValue(PostBody.OPTIONES_KEY);
+            String format = extractFormat(rawOptions);
+
+            String options = rawOptions.replace(format, "");
+            ZLog.d("rawOptions: " + rawOptions + " format: " + format + " options: " + options);
 
             sink.write(String.format((LOGCAT_BASE),
                     options,
@@ -64,7 +66,7 @@ public class LogcatCall implements Runnable{
             sink.close();
             ZLog.i("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
 
-            response = execWithTime(source);
+            response = exec.execWithTime(source, format);
 //            if (!options.contains("-v")
 //                        || options.contains("-v time")
 //                        || options.contains("-v threadtime")) {
@@ -88,71 +90,54 @@ public class LogcatCall implements Runnable{
     }
 
     /**
-     * the dataline with date eg.10-17 11:54:47.550
-     * @param source
+     * 在options中提取 -v [format]
+     * @param rawOptions
      * @return
      */
-    private Response execWithTime(BufferedSource source) throws IOException{
-        int lineNum = 0;
-        String lastTimeLine = "";
-        String currentTimeLine = "";
-        StringBuilder sb = new StringBuilder();
-
-        while (true) {
-            lineNum++;
-            String line = source.readUtf8Line();
-            if (line == null) {
-                break;
-            }
-
-            ZLog.d("logcat data: " + line);
-            currentTimeLine = line.substring(0, 18);//截取时间戳
-            //大于阀值，开始准备结束数据读取
-            if (lineNum > LINE_THRESHOLD) {
-                //注意最后一行数据是 -------beginmain的情况
-                if (!currentTimeLine.equals(lastTimeLine) && !currentTimeLine.startsWith("-")) {
-                    break;
-                }
-            }
-            sb.append(line).append("\n");
-            if (!currentTimeLine.startsWith("-")) {
-                lastTimeLine = currentTimeLine;
-            } else {
-                currentTimeLine = lastTimeLine;
-            }
+    private String extractFormat(String rawOptions) {
+        String format = "";
+        if (!rawOptions.contains("-v")) {
+            return format;
         }
 
-        Result result = new Result(sb.toString(), currentTimeLine);
-        ZLog.d("finish");
-        return ResponseFactory.success(gson.toJson(result));
-    }
+        Pattern p = Pattern.compile("-v\\s[a-z]*");
+        Matcher m = p.matcher(rawOptions);
 
-    /**
-     * the dataline without date eg.10-17 11:54:47.550
-     * so it can be stop write data when dataline num is more than ${LINE_THRESHOLD}
-     * @param source
-     * @return
-     */
-    private Response execWithOutTime(BufferedSource source) throws IOException{
-        int lineNum = 0;
-        StringBuilder sb = new StringBuilder();
-
-        while (true) {
-            lineNum++;
-            if (lineNum > LINE_THRESHOLD) {
-                break;
-            }
-
-            String line = source.readUtf8Line();
-            if (line == null) {
-                break;
-            }
-
-            ZLog.d("logcat data: " + line);
-            sb.append(line).append("\n");
+        while (m.find()) {
+            format = rawOptions.substring(m.start(), m.end());
         }
 
-        Result result = new Result(sb.toString(), ""); //时间戳为空
-        return ResponseFactory.success(gson.toJson(result));
+        return format;
     }
+
+
+
+//    /**
+//     * the dataline without date eg.10-17 11:54:47.550
+//     * so it can be stop write data when dataline num is more than ${LINE_THRESHOLD}
+//     * @param source
+//     * @return
+//     */
+//    private Response execWithOutTime(BufferedSource source) throws IOException{
+//        int lineNum = 0;
+//        StringBuilder sb = new StringBuilder();
+//
+//        while (true) {
+//            lineNum++;
+//            if (lineNum > LINE_THRESHOLD) {
+//                break;
+//            }
+//
+//            String line = source.readUtf8Line();
+//            if (line == null) {
+//                break;
+//            }
+//
+//            ZLog.d("logcat data: " + line);
+//            sb.append(line).append("\n");
+//        }
+//
+//        Result result = new Result(sb.toString(), ""); //时间戳为空
+//        return ResponseFactory.success(gson.toJson(result));
+//    }
 }
