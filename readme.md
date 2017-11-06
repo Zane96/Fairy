@@ -2,17 +2,25 @@
 
 An Android framework for system log analysis on the Android platform.
 
-![](/screenshot/Screenshot_1.png)
+Fairy is a easy debug tool for using `adb logcat`command on your Android phone instead of on your PC.
 
-![](/screenshot/Screenshot_2.png)
+You can scan the system log informatio anywhere with your Android phone.
+
+![](/screenshot/Screenshot_1.png)![](/screenshot/Screenshot_2.png)
 
 ## Getting Start
 
 1. Download the `project`.
 2. Cd [project path]/pc in the terminal.
 3. Configured adb environment In the terminal.
-4. Run pusher.sh by `sh`command in terminal.
+4. Run pusher.sh with `sh pusher.sh`command in terminal.
 5. Install the APK in the [project path]/pc
+
+## TODO
+
++ Fit Android low-end mobile phone.Some low-end mobile phone like MI2 and MI3 may kill the Fairy-Server when USB is break up.
++ Add log grep feature.
++ Optimize the view to display log.
 
 ## FAQ
 
