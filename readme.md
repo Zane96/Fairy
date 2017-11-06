@@ -10,7 +10,7 @@ You can scan the system log information anywhere with your Android phone.
 
 ## Getting Start
 
-There is two ways to choose.
+There are two ways to choose.
 
 + Download
 
