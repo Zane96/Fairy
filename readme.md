@@ -6,7 +6,7 @@ Fairy is a easy debug tool for using `adb logcat`command on your Android phone i
 
 You can scan the system log informatio anywhere with your Android phone.
 
-![](/screenshot/Screenshot_1.png)![](/screenshot/Screenshot_2.png)
+![](/screenshot/Screenshot_1.png)              ![](/screenshot/Screenshot_2.png)
 
 ## Getting Start
 
