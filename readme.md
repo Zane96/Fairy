@@ -2,9 +2,9 @@
 
 An Android framework for system log analysis on the Android platform.
 
-Fairy is a easy debug tool for using [adb logcat](https://developer.android.com/studio/command-line/logcat.html?hl=zh-cn#outputFormat) command on your Android phone instead of on your PC.
+Fairy is an easy debug tool for using [adb logcat](https://developer.android.com/studio/command-line/logcat.html?hl=zh-cn#outputFormat) command on your Android phone instead of on your PC.
 
-You can scan the system log informatio anywhere with your Android phone.
+You can scan the system log information anywhere with your Android phone.
 
 ​                          ![](/screenshot/Screenshot_1.png)              ![](/screenshot/Screenshot_2.png)
 
@@ -35,6 +35,7 @@ Fairy default use armeabi .so.
 - Optimize the view to display log.
 - Extract an access layer to provide the `logcat` ability.
 - Data persistence by SQL.
+- Add floating window to display data.
 
 ## FAQ
 
