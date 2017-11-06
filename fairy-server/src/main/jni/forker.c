@@ -66,9 +66,7 @@ static int loadDaemon() {
 
     for (;;) {
         //等待信号量，阻塞
-        LOGD("wait1");
         sigsuspend(&new_set);
-        LOGD("wait2");
         //pause();
         LOGD("fork again");
         if (server() <= 0) {
@@ -93,9 +91,7 @@ int main(int argc, char **argv) {
             LOGD("fork daemon");
             break;
         default:
-            LOGD("grandfather1");
             //sleep(10);
-            LOGD("grandfather2");
             //_exit(0);
             for(;;){}
     }

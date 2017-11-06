@@ -4,12 +4,12 @@
         <item name="colorPrimary">@color/black_1</item>
         <item name="colorPrimaryDark">@color/black_1</item>
         <item name="colorAccent">@color/textcolor</item>
-        <item name="android:colorBackground">@color/black_2</item>
         <item name="android:textColorPrimary">@color/textcolor</item>
         <item name="android:textColorSecondary">@color/textcolor</item>
         <item name="android:textColor">@color/textcolor</item>
         <item name="colorButtonNormal">@color/black_2</item>
         <item name="colorControlNormal">@color/black_3</item>
+        <item name="android:windowBackground">@color/black_2</item>
     </style>
 
     <style name="MyEditStyle">

@@ -1,13 +1,5 @@
 # Created by https://www.gitignore.io/api/android
 
-### Android ###
-# Built application files
-*.apk
-*.ap_
-
-# Files for the Dalvik VM
-*.dex
-
 # Java class files
 *.class
 
