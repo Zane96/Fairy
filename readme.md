@@ -10,11 +10,21 @@ You can scan the system log informatio anywhere with your Android phone.
 
 ## Getting Start
 
++ Download
+
 1. Download the `project`.
 2. Cd [project path]/pc in the terminal.
 3. Configured adb environment In the terminal.
 4. Run pusher.sh with `sh pusher.sh`command in terminal.
 5. Install the APK in the [project path]/pc
+
++ Import
+
+1. Import project in AndroidStudio.
+2. Run `./gradlew -p fairy-server runService`.
+3. Run fairy-client module or install APK directly.
+
+Fairy default use armeabi .so.
 
 ## TODO
 
