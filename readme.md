@@ -34,6 +34,7 @@ Fairy default use armeabi .so.
 - Add log grep feature.
 - Optimize the view to display log.
 - Extract an access layer to provide the `logcat` ability.
+- Data persistence by SQL.
 
 ## FAQ
 
