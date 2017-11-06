@@ -79,7 +79,7 @@ public class LogcatCall implements Runnable{
                     options,
                     postBody.getValue(PostBody.FILTER_KEY)).getBytes());
             sink.close();
-            ZLog.i("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
+            ZLog.d("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
 
             response = exec.execWithTime(source, format);
 //            if (!options.contains("-v")

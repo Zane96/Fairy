@@ -41,10 +41,10 @@ public class PostBody {
     }
 
     public static PostBody parse(String rawBody) {
-        ZLog.i("raw body: " + rawBody);
+        ZLog.d("raw body: " + rawBody);
         String body = formatBody(rawBody);
 
-        ZLog.i("format body: " + body);
+        ZLog.d("format body: " + body);
         HashMap<String, String> fieldMap = new HashMap<>();
         String[] fields = body.split("&");
         for (String field : fields) {

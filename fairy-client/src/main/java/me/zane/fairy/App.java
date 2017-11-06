@@ -30,6 +30,7 @@ public class App extends Application{
     public void onCreate() {
         super.onCreate();
         instance = this;
+        ZLog.setDebug(false);
         ZLog.d("ip: " + Utils.getIpAddress());
         MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
     }

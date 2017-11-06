@@ -9,6 +9,7 @@
         <item name="android:textColor">@color/textcolor</item>
         <item name="colorButtonNormal">@color/black_2</item>
         <item name="colorControlNormal">@color/black_3</item>
+        <item name="android:windowBackground">@color/black_2</item>
     </style>
 
     <style name="MyEditStyle">
