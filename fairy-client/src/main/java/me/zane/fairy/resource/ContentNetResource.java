@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.data;
+package me.zane.fairy.resource;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 
 import java.util.concurrent.TimeUnit;
 
 import me.zane.fairy.NullIpAddressException;
 import me.zane.fairy.ZLog;
+import me.zane.fairy.api.LogcatData;
+import me.zane.fairy.api.LogcatModel;
+import me.zane.fairy.api.ObservaleCreater;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -28,7 +34,7 @@ import rx.Subscription;
  * Email: zanebot96@gmail.com
  */
 
-public class DataEngine {
+public class ContentNetResource {
     private static final int TIME_INTERVAL = 500; //millseconds
 
     private Observable<Long> timer;
@@ -36,14 +42,21 @@ public class DataEngine {
     private ObservaleCreater observaleCreater;
     private boolean isClose = false;
 
+    private final MutableLiveData<String> data;
+
     public interface DataCallBack {
         void onSuccess(LogcatData date);
         void onFailed(String error);
     }
 
-    public DataEngine() {
+    public ContentNetResource() {
         timer = Observable.interval(500, TimeUnit.MILLISECONDS);
         observaleCreater = new ObservaleCreater();
+        data = new MutableLiveData<>();
+    }
+
+    public LiveData<String> getData() {
+        return data;
     }
 
     /**
@@ -73,13 +86,15 @@ public class DataEngine {
 
                 @Override
                 public void onError(Throwable e) {
-                    callBack.onFailed(e.getMessage());
+                    //callBack.onFailed(e.getMessage());
+                    data.setValue(e.getMessage());
                     awaitToStop();
                 }
 
                 @Override
                 public void onNext(LogcatData logcatData) {
-                    callBack.onSuccess(logcatData);
+                    //callBack.onSuccess(logcatData);
+                    data.setValue(logcatData.getData());
                     awaitToStop();
                 }
             });
@@ -94,13 +109,15 @@ public class DataEngine {
                 @Override
                 public void onError(Throwable e) {
                     ZLog.e(String.valueOf(e));
-                    callBack.onFailed(e.getMessage());
+                    //callBack.onFailed(e.getMessage());
+                    data.setValue(e.getMessage());
                     awaitToStop();
                 }
 
                 @Override
                 public void onNext(LogcatData logcatData) {
                     observaleCreater.onNext(logcatData, callBack);
+                    data.setValue(logcatData.getData());
                     awaitToStop();
                 }
             });

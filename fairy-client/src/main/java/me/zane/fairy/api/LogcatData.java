@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.data;
+package me.zane.fairy.api;
 
 /**
  * Created by Zane on 2017/10/24.
@@ -24,11 +24,11 @@ public class LogcatData {
 
     /**
      * data : --------- beginning of main
-     10-24 16:02:50.621 11262 11271 I DataEngine   : body2: options=-t 5&filter=&timeline=
-     10-24 16:02:50.639 11262 11273 D DataEngine   : start exec
+     10-24 16:02:50.621 11262 11271 I ContentNetResource   : body2: options=-t 5&filter=&timeline=
+     10-24 16:02:50.639 11262 11273 D ContentNetResource   : start exec
      10-24 16:02:50.639  1492  1852 E Parcel  : Reading a NULL string not supported here.
-     10-24 16:02:50.640 11262 11271 I DataEngine   : Client Socket accept success from: /192.168.0.105
-     10-24 16:02:50.720 11262 11273 I DataEngine   : exec logcat command: logcat -d -t 5
+     10-24 16:02:50.640 11262 11271 I ContentNetResource   : Client Socket accept success from: /192.168.0.105
+     10-24 16:02:50.720 11262 11273 I ContentNetResource   : exec logcat command: logcat -d -t 5
 
      * timeLine : 10-24 16:02:50.720
      */

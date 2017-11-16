@@ -13,22 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.data;
+package me.zane.fairy.api;
 
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import rx.Emitter;
 import rx.Observable;
 
 /**
- * Created by Zane on 2017/10/24.
+ * Created by Zane on 2017/10/30.
  * Email: zanebot96@gmail.com
  */
 
-public interface LogcatService {
+class NullObCreater extends ObservaleCreater{
 
-    @POST("/")
-    @FormUrlEncoded
-    Observable<LogcatData> logcat(@Field("options") String options,
-                                  @Field("filter") String filter);
+    private Observable observable;
+
+    public NullObCreater() {
+        observable = Observable.create(emitter -> {
+            LogcatData data = new LogcatData();
+            data.setTimeLine(DEFAULT_TIMELINE);
+            emitter.onNext(data);
+        }, Emitter.BackpressureMode.LATEST).share();
+    }
+
+    Observable<LogcatData> creat() {
+        return observable;
+    }
 }

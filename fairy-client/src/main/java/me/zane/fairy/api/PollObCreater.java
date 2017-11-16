@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.data;
+package me.zane.fairy.api;
 
 import me.zane.fairy.Utils;
 import rx.Observable;

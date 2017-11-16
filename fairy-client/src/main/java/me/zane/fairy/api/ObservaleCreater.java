@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.data;
+package me.zane.fairy.api;
 
 import me.zane.fairy.Utils;
 import me.zane.fairy.ZLog;
+import me.zane.fairy.resource.ContentNetResource;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by Zane on 2017/10/30.
@@ -55,7 +55,7 @@ public class ObservaleCreater {
      * @param filter
      * @return
      */
-    Observable<LogcatData> creatObservable(String options, String filter) {
+    public Observable<LogcatData> creatObservable(String options, String filter) {
         //需要timeline的feed流
         Observable<LogcatData> observable;
         //这种情况是可能是初始的第一次正常请求数据
@@ -97,7 +97,7 @@ public class ObservaleCreater {
      * @param logcatData
      * @param callBack
      */
-    void onNext(LogcatData logcatData, DataEngine.DataCallBack callBack) {
+    public void onNext(LogcatData logcatData, ContentNetResource.DataCallBack callBack) {
         ZLog.d(logcatData.getTimeLine() + " timeline");
         //如果轮训的时候数据为空，那么返回的时间戳也是空
         if (!logcatData.getTimeLine().equals(DEFAULT_TIMELINE)
@@ -105,7 +105,7 @@ public class ObservaleCreater {
             lastTimeLine = logcatData.getTimeLine();
             //取消新数据的空数据轮训状态
             isPoll = false;
-            callBack.onSuccess(logcatData);
+            //callBack.onSuccess(logcatData);
         }
 
         if (logcatData.getTimeLine().equals("")) {

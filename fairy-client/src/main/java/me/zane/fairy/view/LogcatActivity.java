@@ -19,7 +19,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +27,8 @@ import android.widget.TextView;
 
 import me.zane.fairy.MySharedPre;
 import me.zane.fairy.R;
-import me.zane.fairy.data.DataEngine;
-import me.zane.fairy.data.LogcatData;
+import me.zane.fairy.resource.ContentNetResource;
+
 
 /**
  * Created by Zane on 2017/10/29.
@@ -50,7 +49,7 @@ public class LogcatActivity extends AppCompatActivity{
     private String options = "";
     private String filter = "";
 
-    private DataEngine engine;
+    private ContentNetResource engine;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +62,7 @@ public class LogcatActivity extends AppCompatActivity{
 
         options = MySharedPre.getInstance().getOptions(index, "");
         filter = MySharedPre.getInstance().getFilter(index, "");
-        engine = new DataEngine();
+        engine = new ContentNetResource();
 
         mOptionsEdit = findViewById(R.id.edit_options_logcat);
         mFilterEdit = findViewById(R.id.edit_filter_logcat);
@@ -75,18 +74,18 @@ public class LogcatActivity extends AppCompatActivity{
         mStartBtn.setOnClickListener(v -> {
             mStartBtn.setEnabled(false);
             mStopBtn.setEnabled(true);
-            engine.enqueue(options, filter, new DataEngine.DataCallBack() {
-                @Override
-                public void onSuccess(LogcatData date) {
-                    mDataText.append(Html.fromHtml(date.getData()));
-                    mScrollView.smoothScrollTo(0, mDataText.getHeight());
-                }
-
-                @Override
-                public void onFailed(String error) {
-                    mDataText.append(error);
-                }
-            });
+//            engine.enqueue(options, filter, new ContentNetResource.DataCallBack() {
+//                @Override
+//                public void onSuccess(LogcatData date) {
+//                    mDataText.append(Html.fromHtml(date.getData()));
+//                    mScrollView.smoothScrollTo(0, mDataText.getHeight());
+//                }
+//
+//                @Override
+//                public void onFailed(String error) {
+//                    mDataText.append(error);
+//                }
+//            });
         });
 
         mStopBtn.setEnabled(false);
