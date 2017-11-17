@@ -62,21 +62,19 @@ public class ContentNetService {
 
     /**
      * Logcat without any args
-     * @param callBack
      * @throws NullIpAddressException
      */
-    public void enqueue(DataCallBack callBack) throws NullIpAddressException {
-        enqueue("", "", callBack);
+    public void enqueue() throws NullIpAddressException {
+        enqueue("", "");
     }
 
     /**
      * 按模式进行分发
      * @param options
      * @param filter
-     * @param callBack
      * @throws NullIpAddressException
      */
-    public void enqueue(final String options, String filter, DataCallBack callBack) {
+    public void enqueue(final String options, String filter) {
         if (options.contains("-m") || options.contains("--max-count")) {
             //不需要轮训，也不需要timeline的feed流
             subscription = LogcatModel.getInstance().logcat(options, filter).subscribe(new Subscriber<LogcatData>() {
@@ -117,7 +115,7 @@ public class ContentNetService {
 
                 @Override
                 public void onNext(LogcatData logcatData) {
-                    observaleCreater.onNext(logcatData, callBack);
+                    observaleCreater.onNext(logcatData);
                     data.setValue(new ApiResponse<String>(logcatData.getData()));
                     awaitToStop();
                 }

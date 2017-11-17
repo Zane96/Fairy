@@ -21,6 +21,7 @@ public abstract class MergeResource<LocalType, NetType> {
 
     public MergeResource(AppExecutors executors) {
         this.executors = executors;
+        initData();
     }
 
     @MainThread
@@ -30,7 +31,7 @@ public abstract class MergeResource<LocalType, NetType> {
         }
     }
 
-    public void fetchData() {
+    private void initData() {
         LiveData<LocalType> dbSource = loadFromDb();
         result.addSource(dbSource, dbData -> {
             if (dbData != null) {
@@ -39,21 +40,19 @@ public abstract class MergeResource<LocalType, NetType> {
             //remove first or it will throw exception when add different observer in same source
             result.removeSource(dbSource);
             if (shouldFetch(dbData)) {
-                fetchFromNet(dbSource);
+                fetchFromNet(true);
             } else {
                 result.addSource(dbSource, this::setValue);
             }
         });
     }
 
-    /**
-     *
-     * @param dbSource
-     */
-    private void fetchFromNet(final LiveData<LocalType> dbSource) {
+    public void fetchFromNet(boolean isInit) {
         LiveData<ApiResponse<NetType>> netSource = loadFromNet();
         result.addSource(netSource, netData -> {
-            result.removeSource(netSource);
+            if (isInit) {
+                result.removeSource(netSource);
+            }
             //load in db
             executors.getDiskIO().execute(() -> {
                 saveInLocal(netData.getBody());
@@ -69,6 +68,11 @@ public abstract class MergeResource<LocalType, NetType> {
 //                result.addSource(dbSource, newData -> result.setValue(newData));
 //            }
         });
+    }
+
+    public void stopFetchFromNet() {
+        LiveData<ApiResponse<NetType>> netSource = loadFromNet();
+        result.removeSource(netSource);
     }
 
     public LiveData<LocalType> asLiveData() {

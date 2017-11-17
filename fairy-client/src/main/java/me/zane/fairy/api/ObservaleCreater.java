@@ -96,7 +96,7 @@ public class ObservaleCreater {
      * @param logcatData
      * @param callBack
      */
-    public void onNext(LogcatData logcatData, ContentNetService.DataCallBack callBack) {
+    public void onNext(LogcatData logcatData) {
         ZLog.d(logcatData.getTimeLine() + " timeline");
         //如果轮训的时候数据为空，那么返回的时间戳也是空
         if (!logcatData.getTimeLine().equals(DEFAULT_TIMELINE)
