@@ -37,4 +37,7 @@ public interface LogcatDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateLogcatContent(LogcatContent content);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertLogcatContent(LogcatContent content);
 }

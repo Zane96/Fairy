@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import me.zane.fairy.MySharedPre;
 import me.zane.fairy.R;
-import me.zane.fairy.resource.ContentNetResource;
+import me.zane.fairy.api.ContentNetService;
 
 
 /**
@@ -49,7 +49,7 @@ public class LogcatActivity extends AppCompatActivity{
     private String options = "";
     private String filter = "";
 
-    private ContentNetResource engine;
+    private ContentNetService engine;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class LogcatActivity extends AppCompatActivity{
 
         options = MySharedPre.getInstance().getOptions(index, "");
         filter = MySharedPre.getInstance().getFilter(index, "");
-        engine = new ContentNetResource();
+        engine = new ContentNetService();
 
         mOptionsEdit = findViewById(R.id.edit_options_logcat);
         mFilterEdit = findViewById(R.id.edit_filter_logcat);
@@ -74,7 +74,7 @@ public class LogcatActivity extends AppCompatActivity{
         mStartBtn.setOnClickListener(v -> {
             mStartBtn.setEnabled(false);
             mStopBtn.setEnabled(true);
-//            engine.enqueue(options, filter, new ContentNetResource.DataCallBack() {
+//            engine.enqueue(options, filter, new ContentNetService.DataCallBack() {
 //                @Override
 //                public void onSuccess(LogcatData date) {
 //                    mDataText.append(Html.fromHtml(date.getData()));

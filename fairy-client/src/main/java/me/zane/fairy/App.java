@@ -35,7 +35,7 @@ public class App extends Application{
         MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
     }
 
-    public static Context getInstance() {
+    public static Application getInstance() {
         return instance;
     }
 }

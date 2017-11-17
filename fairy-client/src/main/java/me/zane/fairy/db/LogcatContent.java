@@ -18,27 +18,16 @@ public class LogcatContent {
     static final String TABLE_NAME = "logcat_content";
     static final String CONTENT_ID = "content_id";
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey
     @ColumnInfo(name = CONTENT_ID)
     private int contentId;
 
     @ColumnInfo(name = "content")
     private String content;
 
-    public LogcatContent(int id, int contentId, String content) {
-        this.id = id;
+    public LogcatContent(int contentId, String content) {
         this.contentId = contentId;
         this.content = content;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getContentId() {
@@ -59,8 +48,7 @@ public class LogcatContent {
 
     @Override
     public String toString() {
-        return "id: " + id +
-                       " contentId: " + contentId +
+        return "contentId: " + contentId +
                        " content: " + content;
     }
 }
