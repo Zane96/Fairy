@@ -8,6 +8,7 @@ import android.support.annotation.WorkerThread;
 import java.util.Objects;
 
 import me.zane.fairy.ZLog;
+import me.zane.fairy.vo.LogcatContent;
 
 /**
  * merge both of net and local source
@@ -34,8 +35,11 @@ public abstract class MergeResource<LocalType, NetType> {
 
     public void initData() {
         LiveData<LocalType> dbSource = loadFromDb();
+        ZLog.d(loadFromNet() + " net1");
+        ZLog.d(loadFromNet() + " net2");
         result.removeSource(loadFromNet());
         result.addSource(dbSource, dbData -> {
+            ZLog.d("db 1----------------" + dbData.toString());
             if (dbData != null) {
                 setValue(dbData);
             }
@@ -51,18 +55,20 @@ public abstract class MergeResource<LocalType, NetType> {
 
     private void fetchFromNet() {
         LiveData<ApiResponse<NetType>> netSource = loadFromNet();
-        ZLog.d(netSource + " net1");
         result.addSource(netSource, netData -> {
+            ZLog.d("net 1--------------" + netData.getBody().toString());
             if (netData == null) {
                 return;
             }
             //load in db
             executors.getDiskIO().execute(() -> {
                 if (netData.isSuccussful()) {
+                    ZLog.d("save in db-----------------");
                     saveInLocal(netData.getBody());
                     executors.getMainExecutor().execute(() -> {
                         LiveData<LocalType> dbSource = loadFromDb();
                         result.addSource(dbSource, newData -> {
+                            ZLog.d("db 2----------------" + newData.toString());
                             setValue(newData);
                             result.removeSource(dbSource);
                         });
@@ -75,8 +81,7 @@ public abstract class MergeResource<LocalType, NetType> {
     }
 
     public void stopFetchFromNet() {
-        LiveData<ApiResponse<NetType>> netSource = loadFromNet();
-        result.removeSource(netSource);
+        result.removeSource(loadFromNet());
     }
 
     public LiveData<LocalType> asLiveData() {

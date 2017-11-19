@@ -19,21 +19,24 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     private ContentNetService service;
     private int id = -1;
 
-    private ContentMergeSource(AppExecutors executors, LogcatDao logcatDao, ContentNetService service) {
+    private ContentMergeSource(AppExecutors executors, LogcatDao logcatDao) {
         super(executors);
         this.logcatDao = logcatDao;
-        this.service = service;
     }
 
-    public static ContentMergeSource getInstance(AppExecutors executors, LogcatDao logcatDao, ContentNetService service) {
+    public static ContentMergeSource getInstance(AppExecutors executors, LogcatDao logcatDao) {
         if (instance == null) {
             synchronized (ContentMergeSource.class) {
                 if (instance == null) {
-                    instance = new ContentMergeSource(executors, logcatDao, service);
+                    instance = new ContentMergeSource(executors, logcatDao);
                 }
             }
         }
         return instance;
+    }
+
+    public void setService(ContentNetService service) {
+        this.service = service;
     }
 
     public void setId(int id) {

@@ -43,7 +43,7 @@ public class ContentNetService {
     private ObservaleCreater observaleCreater;
     private boolean isClose = false;
 
-    private final MutableLiveData<ApiResponse<String>> data;
+    private MutableLiveData<ApiResponse<String>> data;
 
     public interface DataCallBack {
         void onSuccess(LogcatData date);
@@ -108,7 +108,6 @@ public class ContentNetService {
                 @Override
                 public void onError(Throwable e) {
                     ZLog.e(String.valueOf(e));
-                    //callBack.onFailed(e.getMessage());
                     data.setValue(new ApiResponse<>(e));
                     awaitToStop();
                 }

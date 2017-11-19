@@ -94,7 +94,6 @@ public class ObservaleCreater {
     /**
      *
      * @param logcatData
-     * @param callBack
      */
     public void onNext(LogcatData logcatData) {
         ZLog.d(logcatData.getTimeLine() + " timeline");

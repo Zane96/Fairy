@@ -22,12 +22,12 @@ public class LogcatContentRepository {
     private final AppExecutors executors;
 
     private LogcatContentRepository(AppExecutors executors) {
-        service = new ContentNetService();
-        source = ContentMergeSource.getInstance(executors, LogcatDatabase.getInstance().logcatDao(), service);
+        source = ContentMergeSource.getInstance(executors, LogcatDatabase.getInstance().logcatDao());
         this.executors = executors;
     }
 
     public static LogcatContentRepository getInstance(@NonNull AppExecutors executors) {
+        service = new ContentNetService();
         if (instance == null) {
             synchronized (LogcatContentRepository.class) {
                 if (instance == null) {
@@ -40,18 +40,19 @@ public class LogcatContentRepository {
 
     public LiveData<LogcatContent> getLogcatContent(int id) {
         source.setId(id);
+        source.setService(service);
         source.initData();
         return source.asLiveData();
     }
 
     public void fetchData(int id, String options, String filter) {
-        source.setId(id);
+        //source.setId(id);
         service.enqueue(options, filter);
     }
 
     public void stopFetch() {
-        source.stopFetchFromNet();
         service.stop();
+        source.stopFetchFromNet();
     }
 
     public void insertContent(LogcatContent content) {
