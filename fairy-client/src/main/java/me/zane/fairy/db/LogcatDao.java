@@ -10,6 +10,9 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
+import me.zane.fairy.vo.LogcatContent;
+import me.zane.fairy.vo.LogcatItem;
+
 /**
  * Created by Zane on 2017/11/16.
  * Email: zanebot96@gmail.com
@@ -40,4 +43,7 @@ public interface LogcatDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertLogcatContent(LogcatContent content);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertIfNotExits(LogcatContent content);
 }

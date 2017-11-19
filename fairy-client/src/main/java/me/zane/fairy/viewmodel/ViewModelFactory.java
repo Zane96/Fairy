@@ -1,14 +1,14 @@
 package me.zane.fairy.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
 
 import me.zane.fairy.App;
 import me.zane.fairy.repository.RepositoryInjection;
+import me.zane.fairy.view.content.LogcatContentViewModel;
+import me.zane.fairy.view.item.LogcatItemViewModel;
 
 /**
  * Created by Zane on 2017/11/17.

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.view;
+package me.zane.fairy.view.item;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +25,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import me.zane.fairy.R;
+import me.zane.fairy.databinding.ItemRecycleMainBinding;
+import me.zane.fairy.vo.LogcatItem;
 
 /**
  * Created by Zane on 2017/10/31.
@@ -35,7 +37,7 @@ import me.zane.fairy.R;
  */
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
-    private List<ItemBean> datas;
+    private List<LogcatItem> datas;
     private LayoutInflater inflater;
     private Context context;
     private OnClickListener listener;
@@ -78,7 +80,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         Collections.swap(datas, from, to);
     }
 
-    ItemBean get(int position) {
+    LogcatItem get(int position) {
         return datas.get(position);
     }
 
@@ -86,29 +88,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         datas.remove(position);
     }
 
-    void add(ItemBean bean) {
+    void add(LogcatItem bean) {
         datas.add(bean);
+        notifyItemInserted(datas.size());
     }
 
-    void add(int position, ItemBean bean) {
+    void add(int position, LogcatItem bean) {
         datas.add(position, bean);
     }
 
-    void addAll(List<ItemBean> beans) {
+    void addAll(List<LogcatItem> beans) {
+        datas.clear();
         datas.addAll(datas.size(), beans);
+        notifyDataSetChanged();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         private TextView mText;
+        private ItemRecycleMainBinding binding;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            mText = itemView.findViewById(R.id.text_main_recycle);
+            binding = DataBindingUtil.bind(itemView);
         }
 
         public void setData(int position) {
-
-            mText.setText(datas.get(position).getCommand());
+            binding.setItem(datas.get(position));
         }
     }
 }

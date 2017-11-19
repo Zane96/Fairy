@@ -18,6 +18,8 @@ package me.zane.fairy;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
+
 /**
  * Created by Zane on 2017/10/24.
  * Email: zanebot96@gmail.com
@@ -30,9 +32,10 @@ public class App extends Application{
     public void onCreate() {
         super.onCreate();
         instance = this;
-        ZLog.setDebug(false);
+        ZLog.setDebug(true);
         ZLog.d("ip: " + Utils.getIpAddress());
         MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
+        Stetho.initializeWithDefaults(this);
     }
 
     public static Application getInstance() {

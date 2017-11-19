@@ -7,6 +7,8 @@ import android.support.annotation.WorkerThread;
 
 import java.util.Objects;
 
+import me.zane.fairy.ZLog;
+
 /**
  * merge both of net and local source
  * make local source to be the single data provider
@@ -21,7 +23,6 @@ public abstract class MergeResource<LocalType, NetType> {
 
     public MergeResource(AppExecutors executors) {
         this.executors = executors;
-        initData();
     }
 
     @MainThread
@@ -31,42 +32,45 @@ public abstract class MergeResource<LocalType, NetType> {
         }
     }
 
-    private void initData() {
+    public void initData() {
         LiveData<LocalType> dbSource = loadFromDb();
+        result.removeSource(loadFromNet());
         result.addSource(dbSource, dbData -> {
             if (dbData != null) {
                 setValue(dbData);
             }
-            //remove first or it will throw exception when add different observer in same source
+            //remove first or it will throw exception when add different observer in a same source
             result.removeSource(dbSource);
             if (shouldFetch(dbData)) {
-                fetchFromNet(true);
+                fetchFromNet();
             } else {
                 result.addSource(dbSource, this::setValue);
             }
         });
     }
 
-    public void fetchFromNet(boolean isInit) {
+    private void fetchFromNet() {
         LiveData<ApiResponse<NetType>> netSource = loadFromNet();
+        ZLog.d(netSource + " net1");
         result.addSource(netSource, netData -> {
-            if (isInit) {
-                result.removeSource(netSource);
+            if (netData == null) {
+                return;
             }
             //load in db
             executors.getDiskIO().execute(() -> {
-                saveInLocal(netData.getBody());
-                executors.getMainExecutor().execute(() -> result.addSource(loadFromDb(), this::setValue));
+                if (netData.isSuccussful()) {
+                    saveInLocal(netData.getBody());
+                    executors.getMainExecutor().execute(() -> {
+                        LiveData<LocalType> dbSource = loadFromDb();
+                        result.addSource(dbSource, newData -> {
+                            setValue(newData);
+                            result.removeSource(dbSource);
+                        });
+                    });
+                } else {
+                    result.postValue(castNetToLocal(netData.getBody()));
+                }
             });
-//            if (netData.isSuccussful()) {
-//                //load in db
-//                executors.getDiskIO().execute(() -> {
-//                    saveInLocal(netData.getBody());
-//                    executors.getMainExecutor().execute(() -> result.addSource(loadFromDb(), result::setValue));
-//                });
-//            } else {
-//                result.addSource(dbSource, newData -> result.setValue(newData));
-//            }
         });
     }
 
@@ -108,4 +112,14 @@ public abstract class MergeResource<LocalType, NetType> {
      */
     @WorkerThread
     public abstract LiveData<ApiResponse<NetType>> loadFromNet();
+
+    /**
+     * Only when net is not successful will use this method to cast NetType to LocalType
+     * Because it will return Throwable's message instand of real data. So we have no need to
+     * save error message in the Local db.
+     * @param netType
+     * @return
+     */
+    @MainThread
+    public abstract LocalType castNetToLocal(NetType netType);
 }

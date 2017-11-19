@@ -1,23 +1,35 @@
 package me.zane.fairy.db;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.migration.Migration;
+import android.support.annotation.NonNull;
 
 import me.zane.fairy.App;
+import me.zane.fairy.vo.LogcatContent;
+import me.zane.fairy.vo.LogcatItem;
 
 /**
  * Created by Zane on 2017/11/16.
  * Email: zanebot96@gmail.com
  */
 
-@Database(entities = {LogcatItem.class, LogcatContent.class}, version = 1)
+@Database(entities = {LogcatItem.class, LogcatContent.class}, version = 2)
 public abstract class LogcatDatabase extends RoomDatabase{
     private static final class SingletonHolder {
         private static final LogcatDatabase instance = Room.databaseBuilder(App.getInstance(),
                                                                     LogcatDatabase.class,
-                                                                    "Logcat.db").build();
+                                                                    "Logcat.db").fallbackToDestructiveMigration().build();
     }
+
+//    static final Migration MIGRATION_1_2 = new Migration() {
+//        @Override
+//        public void migrate(@NonNull SupportSQLiteDatabase database) {
+//
+//        }
+//    };
 
     public static LogcatDatabase getInstance() {
         return SingletonHolder.instance;

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.view;
+package me.zane.fairy.view.item;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
 
 import me.zane.fairy.Utils;
+import me.zane.fairy.view.item.MyAdapter;
+import me.zane.fairy.viewmodel.ViewModelFactory;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by Zane on 2017/10/31.
@@ -33,34 +39,51 @@ public class MyItemTouchCallback extends ItemTouchHelper.SimpleCallback {
     private MyAdapter adapter;
     private Context context;
     private boolean isSwap = false;
+    private PublishSubject<Integer> removeObservable;
+//    private OnSwapListener swapListener;
+//
+//    public interface OnSwapListener {
+//        void swap(int fromPosition, int toPosition);
+//    }
+//
+//    public void setOnSwapListener(OnSwapListener swapListener) {
+//        this.swapListener = swapListener;
+//    }
 
     public MyItemTouchCallback(Context context, MyAdapter adapter, int dragDirs, int swipeDirs) {
         super(dragDirs, swipeDirs);
         //queue = new ArrayDeque<>(3);
         this.adapter = adapter;
         this.context = context;
+        removeObservable = PublishSubject.create();
+    }
+
+    public PublishSubject<Integer> getRemoveObservable() {
+        return removeObservable;
     }
 
     //拖拽移动
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        int fromPosition = viewHolder.getAdapterPosition();
-        int toPosition = target.getAdapterPosition();
+//        int fromPosition = viewHolder.getAdapterPosition();
+//        int toPosition = target.getAdapterPosition();
+//
+//        if (fromPosition < toPosition) {
+//            //分别把中间所有的 item 的位置重新交换
+//            for (int i = fromPosition; i < toPosition; i++) {
+//                adapter.swap(i, i + 1);
+//            }
+//        } else {
+//            for (int i = fromPosition; i > toPosition; i--) {
+//                adapter.swap(i, i - 1);
+//            }
+//        }
+//
+//        if (swapListener != null) {
+//            swapListener.swap(fromPosition, toPosition);
+//        }
 
-        if (fromPosition < toPosition) {
-            //分别把中间所有的 item 的位置重新交换
-            for (int i = fromPosition; i < toPosition; i++) {
-                adapter.swap(i, i + 1);
-            }
-        } else {
-            for (int i = fromPosition; i > toPosition; i--) {
-                adapter.swap(i, i - 1);
-            }
-        }
-
-        adapter.notifyDataSetChanged();
-        Utils.swapSp(fromPosition, toPosition);
-        return true;
+        return false;
     }
 
 
@@ -81,13 +104,7 @@ public class MyItemTouchCallback extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-
-        //入队列
-        //queue.offerLast(bean);
-        adapter.remove(position);
-        //adapter.notifyItemRemoved(position);
-        adapter.notifyDataSetChanged();
-        Utils.moveOneSp(position);
+        removeObservable.onNext(position);
         isSwap = true;
     }
 

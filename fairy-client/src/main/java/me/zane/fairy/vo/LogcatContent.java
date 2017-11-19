@@ -1,9 +1,11 @@
-package me.zane.fairy.db;
+package me.zane.fairy.vo;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
+
+import me.zane.fairy.vo.LogcatItem;
 
 /**
  * Created by Zane on 2017/11/16.
@@ -15,8 +17,8 @@ import android.arch.persistence.room.PrimaryKey;
                                                                  childColumns = "content_id",
                                                                  onDelete = ForeignKey.CASCADE)})
 public class LogcatContent {
-    static final String TABLE_NAME = "logcat_content";
-    static final String CONTENT_ID = "content_id";
+    public static final String TABLE_NAME = "logcat_content";
+    public static final String CONTENT_ID = "content_id";
 
     @PrimaryKey
     @ColumnInfo(name = CONTENT_ID)

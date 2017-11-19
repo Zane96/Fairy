@@ -1,62 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:padding="8dp"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<layout>
+    <data>
+        <import type="android.text.Html"/>
+        <variable
+            name="logcatContent"
+            type="me.zane.fairy.vo.LogcatContent"/>
+    </data>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:padding="8dp"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
 
-        <TextView
-            android:text="logcat"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
-
-        <EditText
-            android:id="@+id/edit_options_logcat"
-            android:hint="[options]"
-            style="@style/MyEditStyle"/>
-
-        <EditText
-            android:id="@+id/edit_filter_logcat"
-            android:hint="[filterspecs]"
-            style="@style/MyEditStyle"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
-        <Button
-            android:id="@+id/btn_start_logcat"
-            android:text="开始刷新"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
-
-        <Button
-            android:id="@+id/btn_stop_logcat"
-            android:text="停止刷新"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollview_logcat"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/text_data_logcat"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </ScrollView>
+            android:layout_height="40dp">
 
-</LinearLayout>
+            <TextView
+                android:text="logcat"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+            <EditText
+                android:id="@+id/edit_options_logcat"
+                android:hint="[options]"
+                style="@style/MyEditStyle"/>
+
+            <EditText
+                android:id="@+id/edit_filter_logcat"
+                android:hint="[filterspecs]"
+                style="@style/MyEditStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+            <Button
+                android:id="@+id/btn_start_logcat"
+                android:text="开始刷新"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/btn_stop_logcat"
+                android:text="停止刷新"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollview_logcat"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_data_logcat"
+                android:text="@{logcatContent.content == null ? logcatContent.content : Html.fromHtml(logcatContent.content)}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </ScrollView>
+
+    </LinearLayout>
+</layout>

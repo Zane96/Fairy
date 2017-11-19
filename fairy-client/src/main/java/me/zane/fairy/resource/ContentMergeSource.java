@@ -1,9 +1,11 @@
 package me.zane.fairy.resource;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 
+import me.zane.fairy.ZLog;
 import me.zane.fairy.api.ContentNetService;
-import me.zane.fairy.db.LogcatContent;
+import me.zane.fairy.vo.LogcatContent;
 import me.zane.fairy.db.LogcatDao;
 
 /**
@@ -24,9 +26,9 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     }
 
     public static ContentMergeSource getInstance(AppExecutors executors, LogcatDao logcatDao, ContentNetService service) {
-        if (instance != null) {
+        if (instance == null) {
             synchronized (ContentMergeSource.class) {
-                if (instance != null) {
+                if (instance == null) {
                     instance = new ContentMergeSource(executors, logcatDao, service);
                 }
             }
@@ -56,12 +58,25 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
         if (checkId()) {
             return logcatDao.queryLogcatContent(id);
         }
-        return null;
+        return new MutableLiveData<>();
     }
 
     @Override
     public LiveData<ApiResponse<String>> loadFromNet() {
         return service.getData();
+    }
+
+    @Override
+    public LogcatContent castNetToLocal(String s) {
+        return new LogcatContent(-1, s);
+    }
+
+    public void insertLogcatContent(LogcatContent content) {
+        logcatDao.insertLogcatContent(content);
+    }
+
+    public void insertIfNotExits(LogcatContent content) {
+        logcatDao.insertIfNotExits(content);
     }
 
     private boolean checkId() {

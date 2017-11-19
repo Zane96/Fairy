@@ -7,7 +7,7 @@ import java.util.List;
 
 import me.zane.fairy.db.LogcatDao;
 import me.zane.fairy.db.LogcatDatabase;
-import me.zane.fairy.db.LogcatItem;
+import me.zane.fairy.vo.LogcatItem;
 import me.zane.fairy.resource.AppExecutors;
 
 /**
@@ -27,9 +27,9 @@ public class LogcatItemRepository {
     }
 
     public static LogcatItemRepository getInstance(@NonNull AppExecutors executors) {
-        if (instance != null) {
+        if (instance == null) {
             synchronized (LogcatItemRepository.class) {
-                if (instance != null) {
+                if (instance == null) {
                     instance = new LogcatItemRepository(executors);
                 }
             }

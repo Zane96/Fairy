@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Fairy</string>
+    <string name="logcat">logcat %s %s</string>
 </resources>
