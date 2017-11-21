@@ -2,9 +2,22 @@
 <layout>
     <data>
         <import type="android.text.Html"/>
+
         <variable
             name="logcatContent"
             type="me.zane.fairy.vo.LogcatContent"/>
+
+        <variable
+            name="options"
+            type="String"/>
+
+        <variable
+            name="filter"
+            type="String"/>
+
+        <variable
+            name="isStartFetch"
+            type="Boolean"/>
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,12 +40,12 @@
 
             <EditText
                 android:id="@+id/edit_options_logcat"
-                android:hint="[options]"
+                android:hint="@{options}"
                 style="@style/MyEditStyle"/>
 
             <EditText
                 android:id="@+id/edit_filter_logcat"
-                android:hint="[filterspecs]"
+                android:hint="@{filter}"
                 style="@style/MyEditStyle"/>
         </LinearLayout>
 
@@ -44,6 +57,7 @@
             <Button
                 android:id="@+id/btn_start_logcat"
                 android:text="开始刷新"
+                android:enabled="@{!isStartFetch}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
@@ -51,6 +65,7 @@
             <Button
                 android:id="@+id/btn_stop_logcat"
                 android:text="停止刷新"
+                android:enabled="@{isStartFetch}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
@@ -63,7 +78,7 @@
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/text_data_logcat"
-                android:text="@{logcatContent.content == null ? logcatContent.content : Html.fromHtml(logcatContent.content)}"
+                android:text="@{logcatContent.content}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </ScrollView>

@@ -48,37 +48,6 @@ public class Utils {
         return (ipAddress & 0xff) + "." + (ipAddress>>8 & 0xff) + "." + (ipAddress>>16 & 0xff) + "." + (ipAddress >> 24 & 0xff);
     }
 
-    public static void moveOneSp(int startPosition) {
-        final String NULL_VALUE = "command_null";
-        MySharedPre sp = MySharedPre.getInstance();
-        int i = startPosition;
-        while (true) {
-            int next = i + 1;
-            String options = sp.getOptions(next, NULL_VALUE);
-            String filter = sp.getFilter(next, NULL_VALUE);
-            if (options.equals(NULL_VALUE) || filter.equals(NULL_VALUE)) {
-                sp.putFilter(i, null);
-                sp.putOptions(i, null);
-                break;
-            }
-            //前移
-            sp.putOptions(i, options);
-            sp.putFilter(i, filter);
-            i++;
-        }
-    }
-
-    public static void swapSp(int from, int to) {
-        final MySharedPre sp = MySharedPre.getInstance();
-        ZLog.d(from + " " + to);
-        String options = sp.getOptions(from, "");
-        String filter = sp.getFilter(from, "");
-        sp.putOptions(from, sp.getOptions(to, ""));
-        sp.putFilter(from, sp.getFilter(to, ""));
-        sp.putOptions(to, options);
-        sp.putFilter(to, filter);
-    }
-
     /**
      * lastTimeLine + 1 millseconds == addOneMillsecond is true
      * eg.10-26 16:40:35.584

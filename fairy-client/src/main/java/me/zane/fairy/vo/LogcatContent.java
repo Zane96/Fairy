@@ -27,9 +27,13 @@ public class LogcatContent {
     @ColumnInfo(name = "content")
     private String content;
 
+//    @ColumnInfo(name = "timeline")
+//    private String timeLine;
+
     public LogcatContent(int contentId, String content) {
         this.contentId = contentId;
         this.content = content;
+        //this.timeLine = timeLine;
     }
 
     public int getContentId() {
@@ -47,10 +51,19 @@ public class LogcatContent {
     public void setContent(String content) {
         this.content = content;
     }
+//
+//    public String getTimeLine() {
+//        return timeLine;
+//    }
+//
+//    public void setTimeLine(String timeLine) {
+//        this.timeLine = timeLine;
+//    }
 
     @Override
     public String toString() {
         return "contentId: " + contentId +
-                       " content: " + content;
+                       " content: " + content +
+                       " timeLine: " + "";
     }
 }

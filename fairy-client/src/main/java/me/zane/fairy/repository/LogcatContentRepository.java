@@ -27,6 +27,7 @@ public class LogcatContentRepository {
     }
 
     public static LogcatContentRepository getInstance(@NonNull AppExecutors executors) {
+        ZLog.d("new service------------");
         service = new ContentNetService();
         if (instance == null) {
             synchronized (LogcatContentRepository.class) {
@@ -39,20 +40,20 @@ public class LogcatContentRepository {
     }
 
     public LiveData<LogcatContent> getLogcatContent(int id) {
-        source.setId(id);
-        source.setService(service);
+        source.init(id, service);
         source.initData();
         return source.asLiveData();
     }
 
-    public void fetchData(int id, String options, String filter) {
-        //source.setId(id);
+    public void fetchData(String options, String filter) {
+        source.fetchFromNet();
         service.enqueue(options, filter);
     }
 
     public void stopFetch() {
         service.stop();
-        source.stopFetchFromNet();
+        source.stopFetch();
+        executors.getDiskIO().execute(source::replaceDbData);
     }
 
     public void insertContent(LogcatContent content) {

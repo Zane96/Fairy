@@ -1,8 +1,5 @@
 package me.zane.fairy.resource;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 /**
  * Created by Zane on 2017/11/17.
  * Email: zanebot96@gmail.com

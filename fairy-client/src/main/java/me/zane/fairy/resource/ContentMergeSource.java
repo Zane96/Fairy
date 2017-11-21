@@ -3,21 +3,22 @@ package me.zane.fairy.resource;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import me.zane.fairy.ZLog;
 import me.zane.fairy.api.ContentNetService;
-import me.zane.fairy.vo.LogcatContent;
 import me.zane.fairy.db.LogcatDao;
+import me.zane.fairy.vo.LogcatContent;
 
 /**
+ * 可以做成单列的，插拔id, service就行了
  * Created by Zane on 2017/11/17.
  * Email: zanebot96@gmail.com
  */
 
 public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     private static volatile ContentMergeSource instance;
-    private LogcatDao logcatDao;
+    private final LogcatDao logcatDao;
     private ContentNetService service;
     private int id = -1;
+    private StringBuilder sb;
 
     private ContentMergeSource(AppExecutors executors, LogcatDao logcatDao) {
         super(executors);
@@ -35,12 +36,14 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
         return instance;
     }
 
-    public void setService(ContentNetService service) {
+    public void init(int id, ContentNetService service) {
+        this.id = id;
         this.service = service;
+        sb = new StringBuilder();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void replaceDbData() {
+        logcatDao.updateLogcatContent(new LogcatContent(id, sb.toString()));
     }
 
     @Override
@@ -49,10 +52,11 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     }
 
     @Override
-    public void saveInLocal(String result) {
+    public void appendResult(String result) {
         if (checkId()) {
-            LogcatContent content = new LogcatContent(id, result);
-            logcatDao.updateLogcatContent(content);
+            if (!result.equals("")) {
+                sb.append(result);
+            }
         }
     }
 
@@ -71,7 +75,12 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
 
     @Override
     public LogcatContent castNetToLocal(String s) {
-        return new LogcatContent(-1, s);
+        return new LogcatContent(id, s);
+    }
+
+    @Override
+    public String castLocalToNet(LogcatContent content) {
+        return content.getContent();
     }
 
     public void insertLogcatContent(LogcatContent content) {

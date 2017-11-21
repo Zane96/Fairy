@@ -103,7 +103,6 @@ public class ObservaleCreater {
             lastTimeLine = logcatData.getTimeLine();
             //取消新数据的空数据轮训状态
             isPoll = false;
-            //callBack.onSuccess(logcatData);
         }
 
         if (logcatData.getTimeLine().equals("")) {

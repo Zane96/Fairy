@@ -51,21 +51,30 @@ public class MySharedPre {
         return preferences.getString("ipaddress", defaultValue);
     }
 
-    public void putOptions(int index, String options) {
-        editor.putString(String.format("%d_options", index), options);
+    public void putIsStartFetch(int id, boolean isStart) {
+        editor.putBoolean(String.valueOf(id), isStart);
         editor.commit();
     }
 
-    public String getOptions(int index, String defaultValue) {
-        return preferences.getString(String.format("%d_options", index), defaultValue);
+    public Boolean getIsStartFetch(int id) {
+        return preferences.getBoolean(String.valueOf(id), false);
     }
 
-    public void putFilter(int index, String filter) {
-        editor.putString(String.format("%d_filter", index), filter);
-        editor.commit();
-    }
-
-    public String getFilter(int index, String defaultValue) {
-        return preferences.getString(String.format("%d_filter", index), defaultValue);
-    }
+//    public void putOptions(int index, String options) {
+//        editor.putString(String.format("%d_options", index), options);
+//        editor.commit();
+//    }
+//
+//    public String getOptions(int index, String defaultValue) {
+//        return preferences.getString(String.format("%d_options", index), defaultValue);
+//    }
+//
+//    public void putFilter(int index, String filter) {
+//        editor.putString(String.format("%d_filter", index), filter);
+//        editor.commit();
+//    }
+//
+//    public String getFilter(int index, String defaultValue) {
+//        return preferences.getString(String.format("%d_filter", index), defaultValue);
+//    }
 }

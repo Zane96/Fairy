@@ -40,15 +40,6 @@ public class MyItemTouchCallback extends ItemTouchHelper.SimpleCallback {
     private Context context;
     private boolean isSwap = false;
     private PublishSubject<Integer> removeObservable;
-//    private OnSwapListener swapListener;
-//
-//    public interface OnSwapListener {
-//        void swap(int fromPosition, int toPosition);
-//    }
-//
-//    public void setOnSwapListener(OnSwapListener swapListener) {
-//        this.swapListener = swapListener;
-//    }
 
     public MyItemTouchCallback(Context context, MyAdapter adapter, int dragDirs, int swipeDirs) {
         super(dragDirs, swipeDirs);

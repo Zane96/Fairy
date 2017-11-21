@@ -37,7 +37,7 @@ import me.zane.fairy.viewmodel.ViewModelFactory;
 import me.zane.fairy.vo.LogcatItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class ItemActivity extends AppCompatActivity {
     private static final String NULL_VALUE = "command_null";
     private static final int NULL_POSITION = -1;//不用刷新item
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recycleView);
 
         adapter.setOnClickListener(position -> {
-            Intent intent = new Intent(MainActivity.this, LogcatActivity.class);
+            Intent intent = new Intent(ItemActivity.this, LogcatActivity.class);
             LogcatItem item = adapter.get(position);
             intent.putExtra(LogcatActivity.OPTIONS, item.getOptions());
             intent.putExtra(LogcatActivity.INDEX_KEY, item.getId());

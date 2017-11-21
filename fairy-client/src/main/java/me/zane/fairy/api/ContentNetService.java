@@ -45,11 +45,6 @@ public class ContentNetService {
 
     private MutableLiveData<ApiResponse<String>> data;
 
-    public interface DataCallBack {
-        void onSuccess(LogcatData date);
-        void onFailed(String error);
-    }
-
     public ContentNetService() {
         timer = Observable.interval(500, TimeUnit.MILLISECONDS);
         observaleCreater = new ObservaleCreater();
@@ -107,7 +102,7 @@ public class ContentNetService {
 
                 @Override
                 public void onError(Throwable e) {
-                    ZLog.e(String.valueOf(e));
+                    ZLog.e(String.valueOf(e) + " " + Thread.currentThread().getName());
                     data.setValue(new ApiResponse<>(e));
                     awaitToStop();
                 }
@@ -115,7 +110,7 @@ public class ContentNetService {
                 @Override
                 public void onNext(LogcatData logcatData) {
                     observaleCreater.onNext(logcatData);
-                    data.setValue(new ApiResponse<String>(logcatData.getData()));
+                    data.setValue(new ApiResponse<>(logcatData.getData()));
                     awaitToStop();
                 }
             });

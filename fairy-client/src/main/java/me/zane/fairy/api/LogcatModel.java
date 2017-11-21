@@ -45,7 +45,7 @@ public class LogcatModel {
 
     static {
         client = new OkHttpClient.Builder()
-                         .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                         //.addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                          .cache(new Cache(Utils.getDiskCacheDir("logcat"), 10 * 1024 * 1024))
                          .build();
         builder = new Retrofit.Builder()

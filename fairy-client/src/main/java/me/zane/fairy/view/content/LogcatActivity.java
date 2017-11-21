@@ -17,14 +17,19 @@ package me.zane.fairy.view.content;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.persistence.room.InvalidationTracker;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
 
+import java.util.Set;
+
+import me.zane.fairy.MySharedPre;
 import me.zane.fairy.R;
 import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
@@ -52,6 +57,8 @@ public class LogcatActivity extends AppCompatActivity{
     private int id;
     private LogcatItem logcatItem;
 
+    private boolean isStartFetch = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,35 +70,33 @@ public class LogcatActivity extends AppCompatActivity{
         logcatItem = new LogcatItem(id, options, filter);
 
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatContentViewModel.class);
-        viewModel.insertIfNotExits(new LogcatContent(id, "fairy init"));
+
+        viewModel.insertIfNotExits(new LogcatContent(id, "init fairy"));
         viewModel.getData(id).observe(this, content -> {
             binding.setLogcatContent(content);
-            binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight());
-            ZLog.d(content.getContent());
+            new Handler().postDelayed(() -> binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight()), 100);
         });
 
+        isStartFetch = viewModel.isStartFetch(id);
         initView();
     }
 
     private void initView() {
-        if (!options.equals("")) {
-            binding.editOptionsLogcat.setHint(options);
-        }
-
-        if (!filter.equals("")) {
-            binding.editFilterLogcat.setHint(filter);
-        }
+        binding.setOptions(options);
+        binding.setFilter(filter);
+        binding.setIsStartFetch(isStartFetch);
 
         binding.btnStartLogcat.setOnClickListener(v -> {
-            binding.btnStartLogcat.setEnabled(false);
-            binding.btnStopLogcat.setEnabled(true);
-            viewModel.fetch(id, options, filter);
+            isStartFetch = true;
+            binding.setIsStartFetch(true);
+            viewModel.setStartFetch(id, true);
+            viewModel.fetch(options, filter);
         });
 
-        binding.btnStopLogcat.setEnabled(false);
         binding.btnStopLogcat.setOnClickListener(v -> {
-            binding.btnStartLogcat.setEnabled(true);
-            binding.btnStopLogcat.setEnabled(false);
+            isStartFetch = false;
+            binding.setIsStartFetch(false);
+            viewModel.setStartFetch(id, false);
             viewModel.stopFetch();
         });
 

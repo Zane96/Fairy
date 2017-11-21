@@ -17,6 +17,7 @@ package me.zane.fairy.api;
 
 import rx.Emitter;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Zane on 2017/10/30.
@@ -32,7 +33,7 @@ class NullObCreater extends ObservaleCreater{
             LogcatData data = new LogcatData();
             data.setTimeLine(DEFAULT_TIMELINE);
             emitter.onNext(data);
-        }, Emitter.BackpressureMode.LATEST).share();
+        }, Emitter.BackpressureMode.LATEST).observeOn(AndroidSchedulers.mainThread()).share();
     }
 
     Observable<LogcatData> creat() {
