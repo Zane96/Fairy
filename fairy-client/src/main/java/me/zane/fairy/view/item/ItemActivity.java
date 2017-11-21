@@ -38,9 +38,6 @@ import me.zane.fairy.vo.LogcatItem;
 
 
 public class ItemActivity extends AppCompatActivity {
-    private static final String NULL_VALUE = "command_null";
-    private static final int NULL_POSITION = -1;//不用刷新item
-
     private MyAdapter adapter;
     private LiveData<List<LogcatItem>> observer;
     private LogcatItemViewModel viewModel;
