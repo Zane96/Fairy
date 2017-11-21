@@ -15,18 +15,12 @@
  */
 package me.zane.fairy.view.item;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
 
-import me.zane.fairy.Utils;
-import me.zane.fairy.view.item.MyAdapter;
-import me.zane.fairy.viewmodel.ViewModelFactory;
-import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**

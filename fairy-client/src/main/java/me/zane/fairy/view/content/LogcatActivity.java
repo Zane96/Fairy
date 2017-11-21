@@ -26,9 +26,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.Set;
 
+import me.zane.fairy.Config;
 import me.zane.fairy.MySharedPre;
 import me.zane.fairy.R;
 import me.zane.fairy.ZLog;
@@ -73,6 +76,7 @@ public class LogcatActivity extends AppCompatActivity{
 
         viewModel.insertIfNotExits(new LogcatContent(id, "init fairy"));
         viewModel.getData(id).observe(this, content -> {
+            ZLog.d("obse: " + content.toString());
             binding.setLogcatContent(content);
             new Handler().postDelayed(() -> binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight()), 100);
         });
@@ -138,5 +142,21 @@ public class LogcatActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.logcat_bar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear_logcat_bar:
+                viewModel.clearContent(new LogcatContent(id, Config.CLEAR_SIGNAL));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -13,32 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.resource;
+package me.zane.fairy;
 
 /**
- * Created by Zane on 2017/11/17.
+ * Created by Zane on 2017/11/21.
  * Email: zanebot96@gmail.com
  */
 
-public class ApiResponse<T> {
-    private final boolean isSuccess;
-    private final T body;
-
-    public ApiResponse(Throwable e) {
-        isSuccess = false;
-        body = (T) e.getMessage();
-    }
-
-    public ApiResponse(T response) {
-        isSuccess = true;
-        body = response;
-    }
-
-    public boolean isSuccussful() {
-        return isSuccess;
-    }
-
-    public T getBody() {
-        return body;
-    }
+public class Config {
+    public static final String CLEAR_SIGNAL = "clear_signal";
 }

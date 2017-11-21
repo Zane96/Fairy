@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 Zane.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.zane.fairy.resource;
 
 import android.arch.lifecycle.LiveData;
@@ -21,13 +36,10 @@ public abstract class MergeResource<LocalType, NetType> {
     private final AppExecutors executors;
     private MediatorLiveData<LocalType> result;
 
-    public MergeResource(AppExecutors executors) {
+    MergeResource(AppExecutors executors) {
         this.executors = executors;
     }
 
-    /**
-     * Resource is singlton, but
-     */
     @MainThread
     public void initData() {
         result = new MediatorLiveData<>();
@@ -36,6 +48,7 @@ public abstract class MergeResource<LocalType, NetType> {
             executors.getMainExecutor().execute(() -> {
                 result.addSource(dbSource, dbData -> {
                     result.removeSource(dbSource);
+                    ZLog.d("db------" + dbData.toString());
                     setValue(dbData);
                     appendResult(castLocalToNet(dbData));
                 });
@@ -46,8 +59,24 @@ public abstract class MergeResource<LocalType, NetType> {
     @MainThread
     public void fetchFromNet() {
         result.addSource(loadFromNet(), netData -> {
+            ZLog.d("net----------" + netData.getBody().toString());
             setValue(castNetToLocal(netData.getBody()));
             appendResult(netData.getBody());
+        });
+    }
+
+    @MainThread
+    public void clearContent() {
+        //observe data
+        executors.getDiskIO().execute(() -> {
+            LiveData<LocalType> dbSource = loadFromDb();
+            executors.getMainExecutor().execute(() -> {
+                result.addSource(dbSource, dbData -> {
+                    clearSaveData();
+                    result.removeSource(dbSource);
+                    setValue(dbData);
+                });
+            });
         });
     }
 
@@ -59,52 +88,44 @@ public abstract class MergeResource<LocalType, NetType> {
     }
 
     @MainThread
-    public void stopFetch() {
-        result.removeSource(loadFromNet());
-    }
-
-    @MainThread
     public LiveData<LocalType> asLiveData() {
         return result;
     }
 
     /**
-     * if you only want load data from local/net(cache), you can return false/true dirctly
-     * You can judge the data from Local DB to fetch or not fetch the data from Net
-     * @param data
-     * @return
+     * clear the save data in StringBuilder
      */
     @MainThread
-    public abstract boolean shouldFetch(LocalType data);
+    protected abstract void clearSaveData();
 
     /**
      * append the data in StringBuilder
      * @param result
      */
     @WorkerThread
-    public abstract void appendResult(NetType result);
+    protected abstract void appendResult(NetType result);
 
     /**
      * load the data from db
      * @return
      */
     @WorkerThread
-    public abstract LiveData<LocalType> loadFromDb();
+    protected abstract LiveData<LocalType> loadFromDb();
 
     /**
-     * load the data from net
+     * get the livedata from net
      * @return
      */
-    @WorkerThread
-    public abstract LiveData<ApiResponse<NetType>> loadFromNet();
+    @MainThread
+    protected abstract LiveData<ApiResponse<NetType>> loadFromNet();
 
     /**
      * @param netType
      * @return
      */
     @MainThread
-    public abstract LocalType castNetToLocal(NetType netType);
+    protected abstract LocalType castNetToLocal(NetType netType);
 
     @MainThread
-    public abstract NetType castLocalToNet(LocalType localType);
+    protected abstract NetType castLocalToNet(LocalType localType);
 }

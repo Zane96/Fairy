@@ -22,9 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 import me.zane.fairy.NullIpAddressException;
 import me.zane.fairy.ZLog;
-import me.zane.fairy.api.LogcatData;
-import me.zane.fairy.api.LogcatModel;
-import me.zane.fairy.api.ObservaleCreater;
 import me.zane.fairy.resource.ApiResponse;
 import rx.Observable;
 import rx.Subscriber;

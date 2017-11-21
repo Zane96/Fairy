@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 Zane.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.zane.fairy.resource;
 
 import android.arch.lifecycle.LiveData;
@@ -8,7 +23,6 @@ import me.zane.fairy.db.LogcatDao;
 import me.zane.fairy.vo.LogcatContent;
 
 /**
- * 可以做成单列的，插拔id, service就行了
  * Created by Zane on 2017/11/17.
  * Email: zanebot96@gmail.com
  */
@@ -20,25 +34,14 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     private int id = -1;
     private StringBuilder sb;
 
-    private ContentMergeSource(AppExecutors executors, LogcatDao logcatDao) {
+    public ContentMergeSource(AppExecutors executors, LogcatDao logcatDao, ContentNetService service) {
         super(executors);
         this.logcatDao = logcatDao;
-    }
-
-    public static ContentMergeSource getInstance(AppExecutors executors, LogcatDao logcatDao) {
-        if (instance == null) {
-            synchronized (ContentMergeSource.class) {
-                if (instance == null) {
-                    instance = new ContentMergeSource(executors, logcatDao);
-                }
-            }
-        }
-        return instance;
-    }
-
-    public void init(int id, ContentNetService service) {
-        this.id = id;
         this.service = service;
+    }
+
+    public void init(int id) {
+        this.id = id;
         sb = new StringBuilder();
     }
 
@@ -46,13 +49,14 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
         logcatDao.updateLogcatContent(new LogcatContent(id, sb.toString()));
     }
 
+
     @Override
-    public boolean shouldFetch(LogcatContent data) {
-        return true;
+    protected void clearSaveData() {
+        sb.delete(0, sb.toString().length());
     }
 
     @Override
-    public void appendResult(String result) {
+    protected void appendResult(String result) {
         if (checkId()) {
             if (!result.equals("")) {
                 sb.append(result);
@@ -61,7 +65,7 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     }
 
     @Override
-    public LiveData<LogcatContent> loadFromDb() {
+    protected LiveData<LogcatContent> loadFromDb() {
         if (checkId()) {
             return logcatDao.queryLogcatContent(id);
         }
@@ -69,26 +73,18 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     }
 
     @Override
-    public LiveData<ApiResponse<String>> loadFromNet() {
+    protected LiveData<ApiResponse<String>> loadFromNet() {
         return service.getData();
     }
 
     @Override
-    public LogcatContent castNetToLocal(String s) {
+    protected LogcatContent castNetToLocal(String s) {
         return new LogcatContent(id, s);
     }
 
     @Override
-    public String castLocalToNet(LogcatContent content) {
+    protected String castLocalToNet(LogcatContent content) {
         return content.getContent();
-    }
-
-    public void insertLogcatContent(LogcatContent content) {
-        logcatDao.insertLogcatContent(content);
-    }
-
-    public void insertIfNotExits(LogcatContent content) {
-        logcatDao.insertIfNotExits(content);
     }
 
     private boolean checkId() {
