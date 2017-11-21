@@ -35,6 +35,12 @@ Fairy default use armeabi .so
 - ~Data persistence by SQL.~
 - Add floating window to display data.
 
+## About More
+
+I have completed the code refactoring in this release (`v1.1.0-alpha`) with [Android Architecture Components](https://developer.android.google.cn/topic/libraries/architecture/guide.html)
+
+![aritecture](/screenshot/aritecture.png)
+
 ## FAQ
 
 zanebot96@gmail.com
