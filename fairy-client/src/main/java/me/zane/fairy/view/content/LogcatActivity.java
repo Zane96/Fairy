@@ -64,18 +64,20 @@ public class LogcatActivity extends AppCompatActivity{
     }
 
     private void init() {
+        //绑定
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatContentViewModel.class);
         binding.setModel(viewModel);
+        viewModel.init(id, binding);
+
         viewModel.onFilterChanged(filter);
         viewModel.onOptionsChanged(options);
-        viewModel.setBinding(binding);
         viewModel.insertIfNotExits(new LogcatContent(id, "init fairy"));
-        viewModel.getData(id).observe(this, content -> {
+        viewModel.getData().observe(this, content -> {
             binding.setLogcatContent(content);
             new Handler().postDelayed(() -> binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight()), 100);
         });
 
-        viewModel.setStartFetch(id, viewModel.isStartFetch(id));
+        viewModel.setStartFetch(viewModel.isStartFetch());
     }
 
     @Override

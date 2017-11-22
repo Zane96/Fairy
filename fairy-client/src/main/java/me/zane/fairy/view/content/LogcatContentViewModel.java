@@ -47,8 +47,9 @@ public class LogcatContentViewModel extends AndroidViewModel{
     }
 
     //---------------------------------action binding---------------------------------
-    void setBinding(ActivityLogcatBinding binding) {
+    void init(int id, ActivityLogcatBinding binding) {
         this.binding = binding;
+        this.id = id;
     }
 
     public void onOptionsChanged(CharSequence s) {
@@ -70,18 +71,16 @@ public class LogcatContentViewModel extends AndroidViewModel{
     }
 
     //---------------------------------toView------------------------------------
-    boolean isStartFetch(int id) {
-        this.id = id;
+    boolean isStartFetch() {
         return MySharedPre.getInstance().getIsStartFetch(id);
     }
 
-    void setStartFetch(int id, boolean startFetch) {
-        this.id = id;
+    void setStartFetch(boolean startFetch) {
         isStartFetch.set(startFetch);
         MySharedPre.getInstance().putIsStartFetch(id, startFetch);
     }
 
-    LiveData<LogcatContent> getData(int id) {
+    LiveData<LogcatContent> getData() {
         return repository.getLogcatContent(id);
     }
 
