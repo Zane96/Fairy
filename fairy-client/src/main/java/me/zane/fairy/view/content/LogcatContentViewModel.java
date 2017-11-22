@@ -50,6 +50,7 @@ public class LogcatContentViewModel extends AndroidViewModel{
     void init(int id, ActivityLogcatBinding binding) {
         this.binding = binding;
         this.id = id;
+        insertIfNotExits(new LogcatContent(id, "init fairy"));
     }
 
     public void onOptionsChanged(CharSequence s) {
@@ -84,11 +85,7 @@ public class LogcatContentViewModel extends AndroidViewModel{
         return repository.getLogcatContent(id);
     }
 
-    void insertContent(LogcatContent content) {
-        repository.insertContent(content);
-    }
-
-    void insertIfNotExits(LogcatContent content) {
+    private void insertIfNotExits(LogcatContent content) {
         repository.insertIfNotExits(content);
     }
 

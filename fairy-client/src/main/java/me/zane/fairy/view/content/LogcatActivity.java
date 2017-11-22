@@ -71,7 +71,6 @@ public class LogcatActivity extends AppCompatActivity{
 
         viewModel.onFilterChanged(filter);
         viewModel.onOptionsChanged(options);
-        viewModel.insertIfNotExits(new LogcatContent(id, "init fairy"));
         viewModel.getData().observe(this, content -> {
             binding.setLogcatContent(content);
             new Handler().postDelayed(() -> binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight()), 100);
