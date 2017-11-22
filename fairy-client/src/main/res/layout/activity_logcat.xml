@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="android.text.Html"/>
-
         <variable
             name="logcatContent"
             type="me.zane.fairy.vo.LogcatContent"/>
 
         <variable
-            name="options"
-            type="String"/>
-
-        <variable
-            name="filter"
-            type="String"/>
-
-        <variable
-            name="isStartFetch"
-            type="Boolean"/>
+            name="model"
+            type="me.zane.fairy.view.content.LogcatContentViewModel"/>
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
+    <LinearLayout android:orientation="vertical"
                   android:padding="8dp"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
@@ -40,12 +29,14 @@
 
             <EditText
                 android:id="@+id/edit_options_logcat"
-                android:hint="@{options}"
+                android:onTextChanged="@{(s, start, before, count) -> model.onOptionsChanged(s)}"
+                android:hint="@{model.options}"
                 style="@style/MyEditStyle"/>
 
             <EditText
                 android:id="@+id/edit_filter_logcat"
-                android:hint="@{filter}"
+                android:onTextChanged="@{(s, start, before, count) -> model.onFilterChanged(s)}"
+                android:hint="@{model.filter}"
                 style="@style/MyEditStyle"/>
         </LinearLayout>
 
@@ -57,7 +48,8 @@
             <Button
                 android:id="@+id/btn_start_logcat"
                 android:text="开始刷新"
-                android:enabled="@{!isStartFetch}"
+                android:enabled="@{!model.isStartFetch}"
+                android:onClick="@{() -> model.onStartFetch()}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
@@ -65,7 +57,8 @@
             <Button
                 android:id="@+id/btn_stop_logcat"
                 android:text="停止刷新"
-                android:enabled="@{isStartFetch}"
+                android:onClick="@{() -> model.onStopFetch()}"
+                android:enabled="@{model.isStartFetch}"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
@@ -82,6 +75,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </ScrollView>
-
     </LinearLayout>
 </layout>

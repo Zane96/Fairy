@@ -18,9 +18,12 @@ package me.zane.fairy.view.content;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import me.zane.fairy.MySharedPre;
+import me.zane.fairy.ZLog;
+import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.repository.LogcatContentRepository;
 import me.zane.fairy.vo.LogcatContent;
 
@@ -31,15 +34,42 @@ import me.zane.fairy.vo.LogcatContent;
 
 public class LogcatContentViewModel extends AndroidViewModel{
     private final LogcatContentRepository repository;
-    private boolean isStartFetch = false;
     private int id;
+    private ActivityLogcatBinding binding;
+
+    public final ObservableField<String> filter = new ObservableField<>();
+    public final ObservableField<String> options = new ObservableField<>();
+    public final ObservableField<Boolean> isStartFetch = new ObservableField<>();
 
     public LogcatContentViewModel(@NonNull Application application, LogcatContentRepository repository) {
         super(application);
         this.repository = repository;
     }
 
-    //--------------------------destory normally----------------
+    //---------------------------------action binding---------------------------------
+    void setBinding(ActivityLogcatBinding binding) {
+        this.binding = binding;
+    }
+
+    public void onOptionsChanged(CharSequence s) {
+        options.set(s.toString());
+    }
+
+    public void onFilterChanged(CharSequence s) {
+        filter.set(s.toString());
+    }
+
+    public void onStartFetch() {
+        isStartFetch.set(true);
+        repository.fetchData(options.get(), filter.get());
+    }
+
+    public void onStopFetch() {
+        isStartFetch.set(false);
+        repository.stopFetch();
+    }
+
+    //---------------------------------toView------------------------------------
     boolean isStartFetch(int id) {
         this.id = id;
         return MySharedPre.getInstance().getIsStartFetch(id);
@@ -47,19 +77,12 @@ public class LogcatContentViewModel extends AndroidViewModel{
 
     void setStartFetch(int id, boolean startFetch) {
         this.id = id;
+        isStartFetch.set(startFetch);
         MySharedPre.getInstance().putIsStartFetch(id, startFetch);
     }
 
     LiveData<LogcatContent> getData(int id) {
         return repository.getLogcatContent(id);
-    }
-
-    void fetch(String options, String filter) {
-        repository.fetchData(options, filter);
-    }
-
-    void stopFetch() {
-        repository.stopFetch();
     }
 
     void insertContent(LogcatContent content) {
@@ -75,11 +98,11 @@ public class LogcatContentViewModel extends AndroidViewModel{
     }
 
     /**
-     * as same as onDestory()
+     * as same as onDestory(), but it won't be trigger when destory abnormal
      */
     @Override
     protected void onCleared() {
-        setStartFetch(id, isStartFetch);
-        stopFetch();
+        repository.stopFetch();
+        MySharedPre.getInstance().putIsStartFetch(id, false);
     }
 }

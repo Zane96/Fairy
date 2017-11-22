@@ -52,7 +52,6 @@ public class ItemActivity extends AppCompatActivity {
         initView();
 
         observer.observe(this, items -> {
-            ZLog.d(items + " items");
             adapter.addAll(items);
         });
 

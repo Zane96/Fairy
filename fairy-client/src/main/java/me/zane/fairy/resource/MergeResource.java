@@ -66,6 +66,11 @@ public abstract class MergeResource<LocalType, NetType> {
     }
 
     @MainThread
+    public void stopFetchFromNet() {
+        result.removeSource(loadFromNet());
+    }
+
+    @MainThread
     public void clearContent() {
         //observe data
         executors.getDiskIO().execute(() -> {

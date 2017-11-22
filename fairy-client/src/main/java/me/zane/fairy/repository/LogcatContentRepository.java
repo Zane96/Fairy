@@ -71,6 +71,7 @@ public class LogcatContentRepository {
 
     public void stopFetch() {
         service.stop();
+        source.stopFetchFromNet();
         executors.getDiskIO().execute(source::replaceDbData);
     }
 

@@ -16,6 +16,8 @@
 package me.zane.fairy.binding;
 
 import android.databinding.BindingAdapter;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 
 import me.zane.fairy.R;
@@ -46,6 +48,7 @@ public class EditBindingAdapter {
                 break;
             default:
                 ZLog.e("no match");
+                break;
         }
     }
 }

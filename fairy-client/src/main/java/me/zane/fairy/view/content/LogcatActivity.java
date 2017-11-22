@@ -15,24 +15,16 @@
  */
 package me.zane.fairy.view.content;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.arch.persistence.room.InvalidationTracker;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Set;
-
 import me.zane.fairy.Config;
-import me.zane.fairy.MySharedPre;
 import me.zane.fairy.R;
 import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
@@ -58,9 +50,6 @@ public class LogcatActivity extends AppCompatActivity{
     private String options;
     private String filter;
     private int id;
-    private LogcatItem logcatItem;
-
-    private boolean isStartFetch = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,78 +59,23 @@ public class LogcatActivity extends AppCompatActivity{
         id = getIntent().getIntExtra(INDEX_KEY, -1);
         options = getIntent().getStringExtra(OPTIONS);
         filter = getIntent().getStringExtra(FILTER);
-        logcatItem = new LogcatItem(id, options, filter);
 
+        init();
+    }
+
+    private void init() {
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatContentViewModel.class);
-
+        binding.setModel(viewModel);
+        viewModel.onFilterChanged(filter);
+        viewModel.onOptionsChanged(options);
+        viewModel.setBinding(binding);
         viewModel.insertIfNotExits(new LogcatContent(id, "init fairy"));
         viewModel.getData(id).observe(this, content -> {
-            ZLog.d("obse: " + content.toString());
             binding.setLogcatContent(content);
             new Handler().postDelayed(() -> binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight()), 100);
         });
 
-        isStartFetch = viewModel.isStartFetch(id);
-        initView();
-    }
-
-    private void initView() {
-        binding.setOptions(options);
-        binding.setFilter(filter);
-        binding.setIsStartFetch(isStartFetch);
-
-        binding.btnStartLogcat.setOnClickListener(v -> {
-            isStartFetch = true;
-            binding.setIsStartFetch(true);
-            viewModel.setStartFetch(id, true);
-            viewModel.fetch(options, filter);
-        });
-
-        binding.btnStopLogcat.setOnClickListener(v -> {
-            isStartFetch = false;
-            binding.setIsStartFetch(false);
-            viewModel.setStartFetch(id, false);
-            viewModel.stopFetch();
-        });
-
-        LogcatItemViewModel itemViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatItemViewModel.class);
-        binding.editOptionsLogcat.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                options = s.toString();
-                logcatItem.setOptions(options);
-                itemViewModel.updateItem(logcatItem);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        binding.editFilterLogcat.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter = s.toString();
-                logcatItem.setFilter(filter);
-                itemViewModel.updateItem(logcatItem);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        viewModel.setStartFetch(id, viewModel.isStartFetch(id));
     }
 
     @Override
@@ -158,5 +92,12 @@ public class LogcatActivity extends AppCompatActivity{
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LogcatItemViewModel itemViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatItemViewModel.class);
+        itemViewModel.updateItem(new LogcatItem(id, binding.getModel().options.get(), binding.getModel().filter.get()));
     }
 }
