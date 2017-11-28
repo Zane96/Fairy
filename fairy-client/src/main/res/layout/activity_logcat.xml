@@ -64,7 +64,7 @@
                 android:layout_height="match_parent"/>
         </LinearLayout>
 
-        <ScrollView
+        <me.zane.fairy.TouchStopScrollView
             android:id="@+id/scrollview_logcat"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
@@ -74,6 +74,6 @@
                 android:text="@{logcatContent.content}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </ScrollView>
+        </me.zane.fairy.TouchStopScrollView>
     </LinearLayout>
 </layout>

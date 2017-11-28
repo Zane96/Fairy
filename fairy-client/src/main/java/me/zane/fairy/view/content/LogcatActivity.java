@@ -73,7 +73,11 @@ public class LogcatActivity extends AppCompatActivity{
         viewModel.onOptionsChanged(options);
         viewModel.getData().observe(this, content -> {
             binding.setLogcatContent(content);
-            new Handler().postDelayed(() -> binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight()), 100);
+            new Handler().postDelayed(() -> {
+                if (binding.scrollviewLogcat.isSmoothScrollingEnabled()) {
+                    binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight());
+                }
+            }, 100);
         });
 
         viewModel.setStartFetch(viewModel.isStartFetch());
