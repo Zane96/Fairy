@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -51,6 +52,8 @@ public class LogcatActivity extends AppCompatActivity{
     private String filter;
     private int id;
 
+    private boolean isFirstLoad = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +74,12 @@ public class LogcatActivity extends AppCompatActivity{
 
         viewModel.onFilterChanged(filter);
         viewModel.onOptionsChanged(options);
+
+        binding.scrollviewLogcat.setSmoothScrollingEnabled(true);
         viewModel.getData().observe(this, content -> {
+            content.setFirst(isFirstLoad);
+            isFirstLoad = false;
             binding.setLogcatContent(content);
-            new Handler().postDelayed(() -> {
-                if (binding.scrollviewLogcat.isSmoothScrollingEnabled()) {
-                    binding.scrollviewLogcat.smoothScrollTo(0, binding.textDataLogcat.getHeight());
-                }
-            }, 100);
         });
 
         viewModel.setStartFetch(viewModel.isStartFetch());

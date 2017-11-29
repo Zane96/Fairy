@@ -18,7 +18,8 @@ package me.zane.fairy.repository;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-import me.zane.fairy.api.ContentNetService;
+import me.zane.fairy.api.LiveNetService;
+import me.zane.fairy.api.ServiceProvider;
 import me.zane.fairy.db.LogcatDao;
 import me.zane.fairy.db.LogcatDatabase;
 import me.zane.fairy.resource.AppExecutors;
@@ -33,7 +34,7 @@ import me.zane.fairy.vo.LogcatContent;
 public class LogcatContentRepository {
     private static volatile LogcatContentRepository instance;
     private static ContentMergeSource source;
-    private static ContentNetService service;
+    private static LiveNetService service;
     private static final LogcatDao logcatDao;
     private final AppExecutors executors;
 
@@ -46,7 +47,7 @@ public class LogcatContentRepository {
     }
 
     public static LogcatContentRepository getInstance(@NonNull AppExecutors executors) {
-        service = new ContentNetService();
+        service = ServiceProvider.provideLiveService();
         source = new ContentMergeSource(executors, logcatDao, service);
         if (instance == null) {
             synchronized (LogcatContentRepository.class) {

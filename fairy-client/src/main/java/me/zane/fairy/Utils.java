@@ -15,9 +15,12 @@
  */
 package me.zane.fairy;
 
+import android.content.Context;
+import android.graphics.Point;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.util.Calendar;
@@ -30,6 +33,19 @@ import static android.content.Context.WIFI_SERVICE;
  */
 
 public class Utils {
+
+    public static float fromDPtoPix(Context context, int dp) {
+        return context.getResources().getDisplayMetrics().density * dp;
+    }
+
+    public static int getScreenWidth(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Point size = new Point();
+        windowManager.getDefaultDisplay().getSize(size);
+
+        return size.x;
+    }
+
     public static File getDiskCacheDir(String uniqueName) {
         String cachePath;
         if(!"mounted".equals(Environment.getExternalStorageState()) && Environment.isExternalStorageRemovable()) {

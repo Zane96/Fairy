@@ -42,6 +42,8 @@ public class LogcatContent {
     @ColumnInfo(name = "content")
     private String content;
 
+    private boolean isFirst;
+
     public LogcatContent(int contentId, String content) {
         this.contentId = contentId;
         this.content = content;
@@ -61,6 +63,14 @@ public class LogcatContent {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(boolean first) {
+        isFirst = first;
     }
 
     @Override

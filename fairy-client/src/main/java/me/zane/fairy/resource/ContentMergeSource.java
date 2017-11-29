@@ -18,7 +18,7 @@ package me.zane.fairy.resource;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
-import me.zane.fairy.api.ContentNetService;
+import me.zane.fairy.api.LiveNetService;
 import me.zane.fairy.db.LogcatDao;
 import me.zane.fairy.vo.LogcatContent;
 
@@ -30,11 +30,11 @@ import me.zane.fairy.vo.LogcatContent;
 public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     private static volatile ContentMergeSource instance;
     private final LogcatDao logcatDao;
-    private ContentNetService service;
+    private LiveNetService service;
     private int id = -1;
     private StringBuilder sb;
 
-    public ContentMergeSource(AppExecutors executors, LogcatDao logcatDao, ContentNetService service) {
+    public ContentMergeSource(AppExecutors executors, LogcatDao logcatDao, LiveNetService service) {
         super(executors);
         this.logcatDao = logcatDao;
         this.service = service;
@@ -48,7 +48,6 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     public void replaceDbData() {
         logcatDao.updateLogcatContent(new LogcatContent(id, sb.toString()));
     }
-
 
     @Override
     protected void clearSaveData() {

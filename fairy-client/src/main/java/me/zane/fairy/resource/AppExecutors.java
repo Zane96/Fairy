@@ -29,13 +29,13 @@ import java.util.concurrent.Executors;
 
 public class AppExecutors {
     private Executor mainExecutor;
-    private Executor netIO;
     private Executor diskIO;
+    private Executor fastTask;
 
     private AppExecutors() {
         mainExecutor = new MainExecutor();
-        netIO = Executors.newFixedThreadPool(3);
         diskIO = Executors.newSingleThreadExecutor();
+        fastTask = Executors.newCachedThreadPool();
     }
 
     private static final class SingletonHolder {
@@ -50,13 +50,11 @@ public class AppExecutors {
         return mainExecutor;
     }
 
-    public Executor getNetIO() {
-        return netIO;
-    }
-
     public Executor getDiskIO() {
         return diskIO;
     }
+
+    public Executor getFastTask() {return fastTask;}
 
     private static class MainExecutor implements Executor {
         private Handler handler = new Handler(Looper.getMainLooper());

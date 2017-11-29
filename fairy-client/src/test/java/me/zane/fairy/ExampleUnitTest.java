@@ -22,7 +22,7 @@ public class ExampleUnitTest {
 //        assertEquals("-t \"10-26 16:40:35.666\"", oldTime);
 //        String newOptions = options.replace(oldTime, String.format("-t \"%s\"", timeLine));
 //        assertEquals("-t \"10-26 16:40:35.584\" -d", newOptions);
-        //assertEquals("10-26 16:40:36.000", ContentNetService.getInstance().currentTimeLine("10-26 16:40:35.999"));
+        //assertEquals("10-26 16:40:36.000", LiveNetService.getInstance().currentTimeLine("10-26 16:40:35.999"));
 
         assertEquals("-v threadtime", extractOptions("-v threadtime -t \"11-5 8:2:21.121\""));
     }

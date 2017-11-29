@@ -16,11 +16,19 @@
 package me.zane.fairy.binding;
 
 import android.databinding.BindingAdapter;
+import android.os.Handler;
 import android.text.Html;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import java.util.concurrent.Executor;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
+import me.zane.fairy.resource.AppExecutors;
+import me.zane.fairy.vo.LogcatContent;
 
 /**
  * Created by Zane on 2017/11/20.
@@ -28,22 +36,60 @@ import me.zane.fairy.R;
  */
 
 public class TextBindingAdapter {
-    @BindingAdapter("android:text")
-    public static void append(TextView view, CharSequence s) {
-        switch (view.getId()) {
-            case R.id.text_data_logcat:
-                if (s != null) {
-                    if (s.equals(Config.CLEAR_SIGNAL)) {
-                        view.setText("clear data");
-                    } else if (!s.equals("")) {
-                        view.append(Html.fromHtml(s.toString()));
-                    }
-                }
-                break;
-            default:
-                view.setText(s);
-                break;
+    @BindingAdapter("render")
+    public static void append(TextView view, LogcatContent content) {
+        if (content != null) {
+            CharSequence s = content.getContent();
+            if (s.equals(Config.CLEAR_SIGNAL)) {
+                view.setText("clear data");
+            } else if (!s.equals("")) {
+                TextRender.renderText(view, s, content.isFirst());
+            }
         }
     }
 
+    /**
+     * 多线程渲染
+     * Created by Zane on 2017/11/29.
+     * Email: zanebot96@gmail.com
+     */
+
+    public static class TextRender {
+        private static final Executor renderExecutors;
+        private static final Executor mainEecutors;
+        private static final Handler handler;
+
+        private TextRender() {}
+
+        static {
+            renderExecutors = AppExecutors.getInstance().getFastTask();
+            mainEecutors = AppExecutors.getInstance().getMainExecutor();
+            handler = new Handler();
+        }
+
+        static void renderText(TextView textView, CharSequence rawText, boolean isFirst) {
+            View rootView = textView.getRootView();
+            ProgressBar progressBar = rootView.findViewById(R.id.progressbar_logcat);
+            ScrollView scrollView = rootView.findViewById(R.id.scrollview_logcat);
+            progressBar.setVisibility(View.VISIBLE);
+
+            renderExecutors.execute(() -> {
+                CharSequence text = Html.fromHtml(rawText.toString());
+                mainEecutors.execute(() -> {
+                    if (isFirst) {
+                        textView.setText(text);
+                    } else {
+                        textView.append(text);
+                    }
+                    progressBar.setVisibility(View.GONE);
+
+                    handler.postDelayed(() -> {
+                        if (scrollView.isSmoothScrollingEnabled()) {
+                            scrollView.smoothScrollTo(0, textView.getHeight());
+                        }
+                    }, 200);
+                });
+            });
+        }
+    }
 }

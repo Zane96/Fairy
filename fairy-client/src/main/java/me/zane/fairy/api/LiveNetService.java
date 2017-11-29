@@ -32,9 +32,7 @@ import rx.Subscription;
  * Email: zanebot96@gmail.com
  */
 
-public class ContentNetService {
-    private static final int TIME_INTERVAL = 500; //millseconds
-
+public class LiveNetService {
     private Observable<Long> timer;
     private Subscription subscription;
     private ObservaleCreater observaleCreater;
@@ -42,7 +40,7 @@ public class ContentNetService {
 
     private MutableLiveData<ApiResponse<String>> data;
 
-    public ContentNetService() {
+    LiveNetService() {
         timer = Observable.interval(500, TimeUnit.MILLISECONDS);
         observaleCreater = new ObservaleCreater();
         data = new MutableLiveData<>();
@@ -53,39 +51,27 @@ public class ContentNetService {
     }
 
     /**
-     * Logcat without any args
-     * @throws NullIpAddressException
-     */
-    public void enqueue() throws NullIpAddressException {
-        enqueue("", "");
-    }
-
-    /**
      * 按模式进行分发
      * @param options
      * @param filter
-     * @throws NullIpAddressException
      */
-    public void enqueue(final String options, String filter) {
+    public void enqueue(final String options, final String filter) {
         if (options.contains("-m") || options.contains("--max-count")) {
             //不需要轮训，也不需要timeline的feed流
             subscription = LogcatModel.getInstance().logcat(options, filter).subscribe(new Subscriber<LogcatData>() {
                 @Override
                 public void onCompleted() {
-
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    //callBack.onFailed(e.getMessage());
                     data.setValue(new ApiResponse<>(e));
                     awaitToStop();
                 }
 
                 @Override
                 public void onNext(LogcatData logcatData) {
-                    //callBack.onSuccess(logcatData);
-                    data.setValue(new ApiResponse<String>(logcatData.getData()));
+                    data.setValue(new ApiResponse<>(logcatData.getData()));
                     awaitToStop();
                 }
             });
@@ -94,7 +80,6 @@ public class ContentNetService {
             subscription = timer.flatMap((Long aLong) -> observaleCreater.creatObservable(options, filter)).subscribe(new Subscriber<LogcatData>() {
                 @Override
                 public void onCompleted() {
-
                 }
 
                 @Override
