@@ -18,10 +18,8 @@ package me.zane.fairy.view.content;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
 
