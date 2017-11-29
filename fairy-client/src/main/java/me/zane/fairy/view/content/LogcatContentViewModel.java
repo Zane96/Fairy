@@ -18,11 +18,12 @@ package me.zane.fairy.view.content;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import me.zane.fairy.MySharedPre;
-import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.repository.LogcatContentRepository;
 import me.zane.fairy.vo.LogcatContent;
@@ -41,15 +42,20 @@ public class LogcatContentViewModel extends AndroidViewModel{
     public final ObservableField<String> options = new ObservableField<>();
     public final ObservableField<Boolean> isStartFetch = new ObservableField<>();
 
+    private final MutableLiveData<Boolean> isStartLiveData = new MutableLiveData<>();
+    private final LiveData<LogcatContent> contentLiveData;
+
     public LogcatContentViewModel(@NonNull Application application, LogcatContentRepository repository) {
         super(application);
         this.repository = repository;
+        contentLiveData = Transformations.switchMap(isStartLiveData, isStart -> repository.getLogcatContent(id));
     }
 
     //---------------------------------action binding---------------------------------
     void init(int id, ActivityLogcatBinding binding) {
         this.binding = binding;
         this.id = id;
+        isStartLiveData.setValue(true);
         insertIfNotExits(new LogcatContent(id, "init fairy"));
     }
 
@@ -82,7 +88,7 @@ public class LogcatContentViewModel extends AndroidViewModel{
     }
 
     LiveData<LogcatContent> getData() {
-        return repository.getLogcatContent(id);
+        return contentLiveData;
     }
 
     private void insertIfNotExits(LogcatContent content) {

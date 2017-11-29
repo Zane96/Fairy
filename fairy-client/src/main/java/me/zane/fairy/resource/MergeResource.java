@@ -34,15 +34,15 @@ import me.zane.fairy.ZLog;
 
 public abstract class MergeResource<LocalType, NetType> {
     private final AppExecutors executors;
-    private MediatorLiveData<LocalType> result;
+    private final MediatorLiveData<LocalType> result;
 
     MergeResource(AppExecutors executors) {
         this.executors = executors;
+        result = new MediatorLiveData<>();
     }
 
     @MainThread
     public void initData() {
-        result = new MediatorLiveData<>();
         executors.getDiskIO().execute(() -> {
             LiveData<LocalType> dbSource = loadFromDb();
             executors.getMainExecutor().execute(() -> {

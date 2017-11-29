@@ -76,6 +76,7 @@ public class LogcatActivity extends AppCompatActivity{
         viewModel.onOptionsChanged(options);
 
         binding.scrollviewLogcat.setSmoothScrollingEnabled(true);
+        ZLog.i(viewModel.getData() + " data");
         viewModel.getData().observe(this, content -> {
             content.setFirst(isFirstLoad);
             isFirstLoad = false;
