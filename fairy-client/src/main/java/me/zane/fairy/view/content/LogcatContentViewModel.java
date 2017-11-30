@@ -16,6 +16,7 @@
 package me.zane.fairy.view.content;
 
 import android.app.Application;
+import android.arch.core.util.Function;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -24,6 +25,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import me.zane.fairy.MySharedPre;
+import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.repository.LogcatContentRepository;
 import me.zane.fairy.vo.LogcatContent;
@@ -40,22 +42,23 @@ public class LogcatContentViewModel extends AndroidViewModel{
 
     public final ObservableField<String> filter = new ObservableField<>();
     public final ObservableField<String> options = new ObservableField<>();
+    public final ObservableField<String> grep = new ObservableField<>();
     public final ObservableField<Boolean> isStartFetch = new ObservableField<>();
 
-    private final MutableLiveData<Boolean> isStartLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> isStartLiveData = new MutableLiveData<>();
     private final LiveData<LogcatContent> contentLiveData;
 
     public LogcatContentViewModel(@NonNull Application application, LogcatContentRepository repository) {
         super(application);
         this.repository = repository;
-        contentLiveData = Transformations.switchMap(isStartLiveData, isStart -> repository.getLogcatContent(id));
+        contentLiveData = Transformations.switchMap(isStartLiveData, grep -> repository.getLogcatContent(id, grep));
     }
 
     //---------------------------------action binding---------------------------------
-    void init(int id, ActivityLogcatBinding binding) {
+    void init(int id, String grep, ActivityLogcatBinding binding) {
         this.binding = binding;
         this.id = id;
-        isStartLiveData.setValue(true);
+        isStartLiveData.setValue(grep);
         insertIfNotExits(new LogcatContent(id, "init fairy"));
     }
 
@@ -65,6 +68,12 @@ public class LogcatContentViewModel extends AndroidViewModel{
 
     public void onFilterChanged(CharSequence s) {
         filter.set(s.toString());
+    }
+
+    public void onGrepChanged(CharSequence s) {
+        grep.set(s.toString());
+        //replace the data from repository (grep or not grep)
+        isStartLiveData.setValue(s.toString());
     }
 
     public void onStartFetch() {

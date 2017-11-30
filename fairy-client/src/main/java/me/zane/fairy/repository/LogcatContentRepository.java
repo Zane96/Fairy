@@ -17,6 +17,7 @@ package me.zane.fairy.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.ArrayMap;
 
 import me.zane.fairy.api.LiveNetService;
 import me.zane.fairy.api.ServiceProvider;
@@ -59,10 +60,17 @@ public class LogcatContentRepository {
         return instance;
     }
 
-    public LiveData<LogcatContent> getLogcatContent(int id) {
+    /**
+     * 向上层抛出LiveData
+     * 根据grep来决策是否过滤数据
+     * @param id
+     * @param grep
+     * @return
+     */
+    public LiveData<LogcatContent> getLogcatContent(int id, String grep) {
         source.init(id);
         source.initData();
-        return source.asLiveData();
+        return DataCreator.creat(source.asLiveData(), grep);
     }
 
     public void fetchData(String options, String filter) {
@@ -89,5 +97,25 @@ public class LogcatContentRepository {
             logcatDao.updateLogcatContent(content);
             source.clearContent();
         });
+    }
+
+    private static class DataCreator {
+        private static final ArrayMap<String, LiveData<LogcatContent>> dataCache;
+
+        static {
+            dataCache = new ArrayMap<>();
+        }
+
+        static LiveData<LogcatContent> creat (LiveData<LogcatContent> rawData, String grep) {
+            if (grep.equals("")) {
+                return rawData;
+            }
+            LiveData<LogcatContent> grepData = dataCache.get(grep);
+            if (grepData == null) {
+                grepData = GrepFilter.grepData(rawData, grep);
+                dataCache.put(grep, grepData);
+            }
+            return grepData;
+        }
     }
 }

@@ -31,13 +31,19 @@
             <EditText
                 android:id="@+id/edit_options_logcat"
                 android:onTextChanged="@{(s, start, before, count) -> model.onOptionsChanged(s)}"
-                android:hint="@{model.options}"
+                app:judgehint="@{model.options}"
                 style="@style/MyEditStyle"/>
 
             <EditText
                 android:id="@+id/edit_filter_logcat"
                 android:onTextChanged="@{(s, start, before, count) -> model.onFilterChanged(s)}"
-                android:hint="@{model.filter}"
+                app:judgehint="@{model.filter}"
+                style="@style/MyEditStyle"/>
+
+            <EditText
+                android:id="@+id/edit_grep_logcat"
+                android:onTextChanged="@{(s, start, before, count) -> model.onGrepChanged(s)}"
+                app:judgehint="@{model.grep}"
                 style="@style/MyEditStyle"/>
         </LinearLayout>
 

@@ -25,6 +25,10 @@ public class ExampleUnitTest {
         //assertEquals("10-26 16:40:36.000", LiveNetService.getInstance().currentTimeLine("10-26 16:40:35.999"));
 
         assertEquals("-v threadtime", extractOptions("-v threadtime -t \"11-5 8:2:21.121\""));
+
+        String rawString = "<p>sss</p><p>bbb</p>";
+        String[] strs = rawString.split("<p>");
+        assertEquals("sss", strs[2]);
     }
 
     private String extractOptions(String rawOptions) {

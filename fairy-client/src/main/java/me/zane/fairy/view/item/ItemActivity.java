@@ -84,6 +84,7 @@ public class ItemActivity extends AppCompatActivity {
             intent.putExtra(LogcatActivity.OPTIONS, item.getOptions());
             intent.putExtra(LogcatActivity.INDEX_KEY, item.getId());
             intent.putExtra(LogcatActivity.FILTER, item.getFilter());
+            intent.putExtra(LogcatActivity.GREP, item.getGrep());
             startActivity(intent);
         });
     }
@@ -98,7 +99,7 @@ public class ItemActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_main_bar:
-                viewModel.insertItem(new LogcatItem(0, "", ""));
+                viewModel.insertItem(new LogcatItem(0, "", "", ""));
                 break;
         }
         return super.onOptionsItemSelected(item);
