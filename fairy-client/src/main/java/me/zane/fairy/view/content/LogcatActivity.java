@@ -80,7 +80,6 @@ public class LogcatActivity extends AppCompatActivity{
         viewModel.onGrepChanged(grep);
 
         binding.scrollviewLogcat.setSmoothScrollingEnabled(true);
-        ZLog.i(viewModel.getData() + " data");
         viewModel.getData().observe(this, content -> {
             content.setFirst(isFirstLoad);
             isFirstLoad = false;

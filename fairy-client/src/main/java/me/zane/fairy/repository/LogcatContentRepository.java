@@ -63,14 +63,16 @@ public class LogcatContentRepository {
     /**
      * 向上层抛出LiveData
      * 根据grep来决策是否过滤数据
-     * @param id
      * @param grep
      * @return
      */
-    public LiveData<LogcatContent> getLogcatContent(int id, String grep) {
+    public LiveData<LogcatContent> getLogcatContent(String grep) {
+        return DataCreator.creat(source.asLiveData(), grep);
+    }
+
+    public void fetchFromData(int id) {
         source.init(id);
         source.initData();
-        return DataCreator.creat(source.asLiveData(), grep);
     }
 
     public void fetchData(String options, String filter) {

@@ -51,15 +51,16 @@ public class LogcatContentViewModel extends AndroidViewModel{
     public LogcatContentViewModel(@NonNull Application application, LogcatContentRepository repository) {
         super(application);
         this.repository = repository;
-        contentLiveData = Transformations.switchMap(isStartLiveData, grep -> repository.getLogcatContent(id, grep));
+        contentLiveData = Transformations.switchMap(isStartLiveData, repository::getLogcatContent);
     }
 
     //---------------------------------action binding---------------------------------
     void init(int id, String grep, ActivityLogcatBinding binding) {
         this.binding = binding;
         this.id = id;
-        isStartLiveData.setValue(grep);
         insertIfNotExits(new LogcatContent(id, "init fairy"));
+        repository.fetchFromData(id);
+        isStartLiveData.setValue(grep);
     }
 
     public void onOptionsChanged(CharSequence s) {
