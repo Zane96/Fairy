@@ -28,7 +28,7 @@ import me.zane.fairy.vo.LogcatItem;
  * Email: zanebot96@gmail.com
  */
 
-@Database(entities = {LogcatItem.class, LogcatContent.class}, version = 3)
+@Database(entities = {LogcatItem.class, LogcatContent.class}, version = 4)
 public abstract class LogcatDatabase extends RoomDatabase{
     private static final class SingletonHolder {
         private static final LogcatDatabase instance = Room.databaseBuilder(App.getInstance(),

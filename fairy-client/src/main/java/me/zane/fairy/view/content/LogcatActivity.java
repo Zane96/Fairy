@@ -44,12 +44,14 @@ public class LogcatActivity extends AppCompatActivity{
     public static final String INDEX_KEY = "index_key";
     public static final String OPTIONS = "options";
     public static final String FILTER = "filter";
+    public static final String GREP = "grrp";
 
     private ActivityLogcatBinding binding;
     private LogcatContentViewModel viewModel;
 
     private String options;
     private String filter;
+    private String grep;
     private int id;
 
     private boolean isFirstLoad = true;
@@ -62,6 +64,7 @@ public class LogcatActivity extends AppCompatActivity{
         id = getIntent().getIntExtra(INDEX_KEY, -1);
         options = getIntent().getStringExtra(OPTIONS);
         filter = getIntent().getStringExtra(FILTER);
+        grep = getIntent().getStringExtra(GREP);
 
         init();
     }
@@ -70,10 +73,11 @@ public class LogcatActivity extends AppCompatActivity{
         //绑定
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatContentViewModel.class);
         binding.setModel(viewModel);
-        viewModel.init(id, binding);
+        viewModel.init(id, grep, binding);
 
         viewModel.onFilterChanged(filter);
         viewModel.onOptionsChanged(options);
+        viewModel.onGrepChanged(grep);
 
         binding.scrollviewLogcat.setSmoothScrollingEnabled(true);
         ZLog.i(viewModel.getData() + " data");
@@ -106,6 +110,6 @@ public class LogcatActivity extends AppCompatActivity{
     protected void onStop() {
         super.onStop();
         LogcatItemViewModel itemViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatItemViewModel.class);
-        itemViewModel.updateItem(new LogcatItem(id, binding.getModel().options.get(), binding.getModel().filter.get()));
+        itemViewModel.updateItem(new LogcatItem(id, binding.getModel().options.get(), binding.getModel().filter.get(), binding.getModel().grep.get()));
     }
 }

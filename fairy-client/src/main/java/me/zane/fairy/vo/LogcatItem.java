@@ -37,10 +37,14 @@ public class LogcatItem {
     @ColumnInfo(name = "logcat_filter")
     private String filter;
 
-    public LogcatItem(int id, String options, String filter) {
+    @ColumnInfo(name = "logcat_grep")
+    private String grep;
+
+    public LogcatItem(int id, String options, String filter, String grep) {
         this.id = id;
         this.options = options;
         this.filter = filter;
+        this.grep = grep;
     }
 
     public int getId() {
@@ -67,10 +71,19 @@ public class LogcatItem {
         this.filter = filter;
     }
 
+    public String getGrep() {
+        return grep;
+    }
+
+    public void setGrep(String grep) {
+        this.grep = grep;
+    }
+
     @Override
     public String toString() {
         return "id: " + id +
                        " options: " + options +
-                       " filter: " + filter;
+                       " filter: " + filter +
+                       " grep: " + grep;
     }
 }

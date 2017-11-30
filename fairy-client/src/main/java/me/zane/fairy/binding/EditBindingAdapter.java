@@ -29,7 +29,7 @@ import me.zane.fairy.ZLog;
  */
 
 public class EditBindingAdapter {
-    @BindingAdapter("android:hint")
+    @BindingAdapter("judgehint")
     public static void setHint(EditText view, CharSequence hint) {
         switch (view.getId()) {
             case R.id.edit_options_logcat:
@@ -45,6 +45,13 @@ public class EditBindingAdapter {
                     filter = hint.toString();
                 }
                 view.setHint(filter);
+                break;
+            case R.id.edit_grep_logcat:
+                String grep = "[grep]";
+                if (!hint.equals("")) {
+                    grep = hint.toString();
+                }
+                view.setHint(grep);
                 break;
             default:
                 ZLog.e("no match");
