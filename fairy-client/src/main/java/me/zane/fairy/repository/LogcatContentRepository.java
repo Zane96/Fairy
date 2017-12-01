@@ -16,6 +16,7 @@
 package me.zane.fairy.repository;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.support.annotation.NonNull;
 import android.util.ArrayMap;
 
@@ -66,8 +67,8 @@ public class LogcatContentRepository {
      * @param grep
      * @return
      */
-    public LiveData<LogcatContent> getLogcatContent(String grep) {
-        return DataCreator.creat(source.asLiveData(), grep);
+    public LiveData<LogcatContent> getLogcatContent(int id, String grep) {
+        return DataCreator.creat(id, source.asLiveData(), grep);
     }
 
     public void fetchFromData(int id) {
@@ -102,22 +103,27 @@ public class LogcatContentRepository {
     }
 
     private static class DataCreator {
-        private static final ArrayMap<String, LiveData<LogcatContent>> dataCache;
+        private static final LogcatContent clearCache = new LogcatContent(0, "");
 
-        static {
-            dataCache = new ArrayMap<>();
-        }
 
-        static LiveData<LogcatContent> creat (LiveData<LogcatContent> rawData, String grep) {
+        static LiveData<LogcatContent> creat (int id, LiveData<LogcatContent> rawData, String grep) {
+            /**
+             * ${rawData}变量是Source中的MediatorLiveData
+             */
+            MediatorLiveData<LogcatContent> rawMediaData = (MediatorLiveData) rawData;
             if (grep.equals("")) {
+                writeClearCache(id, GrepFilter.RAW_SIGNAL);
+                rawMediaData.setValue(clearCache);
                 return rawData;
             }
-            LiveData<LogcatContent> grepData = dataCache.get(grep);
-            if (grepData == null) {
-                grepData = GrepFilter.grepData(rawData, grep);
-                dataCache.put(grep, grepData);
-            }
-            return grepData;
+            writeClearCache(id, GrepFilter.GREP_SIGNAL);
+            rawMediaData.setValue(clearCache);
+            return GrepFilter.grepData(rawData, grep);
+        }
+
+        private static void writeClearCache(int id, String content) {
+            clearCache.setContentId(id);
+            clearCache.setContent(content);
         }
     }
 }
