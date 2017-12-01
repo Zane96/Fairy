@@ -16,9 +16,14 @@
 package me.zane.fairy.view.item;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,12 +47,11 @@ public class ItemActivity extends AppCompatActivity {
     private LiveData<List<LogcatItem>> observer;
     private LogcatItemViewModel viewModel;
     private MyItemTouchCallback itemTouchCallback;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
         initView();
 
