@@ -1,5 +1,12 @@
 package me.zane.fairy;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
+import android.os.Handler;
+import android.os.Looper;
+
 import org.junit.Test;
 
 import java.util.regex.Matcher;
@@ -29,6 +36,95 @@ public class ExampleUnitTest {
         String rawString = "<p>sss</p><p>bbb</p>";
         String[] strs = rawString.split("<p>");
         assertEquals("sss", strs[2]);
+
+//        Holder holder = new Holder();
+//        holder.start();
+//        holder.creat("").observe(this, str -> {
+//            ZLog.i(str);
+//        });
+
+    }
+
+    class Holder{
+        MediatorLiveData<String> data;
+        MutableLiveData<String> rawData = new MutableLiveData<>();
+        LiveData<String> grepData;
+        MutableLiveData<Boolean> transData = new MutableLiveData<>();
+        String grep = "";
+
+        public Holder() {
+            data = new MediatorLiveData<>();
+            data.addSource(rawData, str -> {
+                data.setValue(str);
+            });
+            transData.setValue(false);
+        }
+
+        public void start() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 15; i++) {
+                        int finalI = i;
+                        if (i == 5) {
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                data.removeSource(rawData);
+                                rawData.setValue("grep");
+                                grepData = Transformations.map(rawData, str -> {
+                                    return str + " " + grep;
+                                });
+
+                                data.addSource(grepData, str -> {
+                                    data.setValue(str);
+                                });
+                            });
+                            transData.postValue(true);
+                            grep = " 222";
+                        }
+                        if (i == 6) {
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                data.removeSource(grepData);
+                                rawData.setValue("raw");
+                                data.addSource(rawData, str -> {
+                                    data.setValue(str);
+                                });
+                            });
+
+                            transData.postValue(false);
+                        }
+                        if (i == 10) {
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                data.removeSource(rawData);
+                                rawData.setValue("grep");
+                                grepData = Transformations.map(rawData, str -> {
+                                    return str + " " + grep;
+                                });
+
+                                data.addSource(grepData, str -> {
+                                    data.setValue(str);
+                                });
+                            });
+                            transData.postValue(true);
+                            grep = " 333";
+                        }
+                        if (i != 5 && i != 6 && i != 10) {
+                            rawData.postValue("sb: " + i);
+                        }
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+        }
+
+        public LiveData<String> creat(String grep) {
+            return Transformations.switchMap(transData, boo -> {
+                return data;
+            });
+        }
     }
 
     private String extractOptions(String rawOptions) {

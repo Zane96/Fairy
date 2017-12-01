@@ -46,12 +46,11 @@ public class LogcatContentViewModel extends AndroidViewModel{
     public final ObservableField<Boolean> isStartFetch = new ObservableField<>();
 
     private final MutableLiveData<String> isStartLiveData = new MutableLiveData<>();
-    private final LiveData<LogcatContent> contentLiveData;
+    private LiveData<LogcatContent> contentLiveData;
 
     public LogcatContentViewModel(@NonNull Application application, LogcatContentRepository repository) {
         super(application);
         this.repository = repository;
-        contentLiveData = Transformations.switchMap(isStartLiveData, repository::getLogcatContent);
     }
 
     //---------------------------------action binding---------------------------------
@@ -59,6 +58,7 @@ public class LogcatContentViewModel extends AndroidViewModel{
         this.binding = binding;
         this.id = id;
         insertIfNotExits(new LogcatContent(id, "init fairy"));
+        contentLiveData = Transformations.switchMap(isStartLiveData, grepData -> repository.getLogcatContent(id, grepData));
         repository.fetchFromData(id);
         isStartLiveData.setValue(grep);
     }
