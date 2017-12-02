@@ -18,8 +18,8 @@ import retrofit2.http.PUT;
  */
 
 class GrepFilter {
-    static final String RAW_SIGNAL = "raw content--------------\r";
-    static final String GREP_SIGNAL = "grep content--------------\r";
+    static final String RAW_SIGNAL = "raw content--------------\n";
+    static final String GREP_SIGNAL = "grep content--------------\n";
 
     @MainThread
     static LiveData<LogcatContent> grepData(LiveData<LogcatContent> rawData, String grep) {

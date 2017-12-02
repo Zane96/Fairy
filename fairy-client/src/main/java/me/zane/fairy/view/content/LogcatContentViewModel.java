@@ -79,11 +79,13 @@ public class LogcatContentViewModel extends AndroidViewModel{
 
     public void onStartFetch() {
         isStartFetch.set(true);
+        MySharedPre.getInstance().putIsStartFetch(id, true);
         repository.fetchData(options.get(), filter.get());
     }
 
     public void onStopFetch() {
         isStartFetch.set(false);
+        MySharedPre.getInstance().putIsStartFetch(id, false);
         repository.stopFetch();
     }
 
