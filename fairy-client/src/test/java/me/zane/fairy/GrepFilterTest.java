@@ -17,7 +17,7 @@ public class GrepFilterTest {
     @Test
     public void testGrepData() {
         //GrepFilter grepFilter = Mockito.mock(GrepFilter.class);
-        Gr grepFilter = new GrepFilter();
+        GrepFilter grepFilter = new GrepFilter();
         String grep = "android";
         String rawContent =
                 "<p><font color=\"#ffa726\">ASS2222AS1ADDAFDAF11}</p>" +
