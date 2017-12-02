@@ -5,6 +5,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.MainThread;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import me.zane.fairy.vo.LogcatContent;
 import retrofit2.http.PUT;
 
@@ -26,10 +29,47 @@ class GrepFilter {
                 return logcatData;
             }
 
-            // TODO: 2017/11/30 grep logic
-            String grepContent = content;
-            logcatData.setContent(grepContent);
+
+            if (content != null) {
+                logcatData.setContent(parseHtml(content,grep));
+            }
+
             return logcatData;
+
         });
     }
+
+    private static String parseHtml(String rawContent, String grep) {
+        Pattern pattern = Pattern.compile("(<(p)><font(\\s[^\\t\\n\\r\\>]+)?>([^<>])*" + grep + "([^<>])*<\\/p>)+?");
+        Matcher matcher = pattern.matcher(rawContent);
+        StringBuilder stringBuilder = new StringBuilder();
+        while (matcher.find()) {
+            stringBuilder.append(matcher.group());
+        }
+        return stringBuilder.toString();
+    }
+
+    //    private static String parseHtml(String rawContent, String grep) {
+//        Pattern pattern = Pattern.compile("<p>(.*?)</p>");
+//        Matcher matcher = pattern.matcher(rawContent);
+//        Pattern filterPattern = Pattern.compile(".*"+grep+".*");
+//        StringBuilder stringBuilder = new StringBuilder();
+//        while (matcher.find()) {
+//            if (filterPattern.matcher(matcher.group()).matches()) {
+//                stringBuilder.append(matcher.group());
+//            }
+//        }
+//        return stringBuilder.toString();
+//    }
+
+    public String parseHtml1(String rawContent,String grep) {
+        Pattern pattern = Pattern.compile("(<(p)><font(\\s[^\\t\\n\\r\\>]+)?>([^<>])*" + grep + "([^<>])*<\\/p>)+?");
+        Matcher matcher = pattern.matcher(rawContent);
+        StringBuilder stringBuilder = new StringBuilder();
+        while (matcher.find()) {
+            stringBuilder.append(matcher.group());
+        }
+        return stringBuilder.toString();
+    }
+
 }
