@@ -116,7 +116,6 @@ public class LogcatContentRepository {
                 rawMediaData.setValue(clearCache);
                 return rawData;
             }
-            writeClearCache(id, GrepFilter.GREP_SIGNAL);
             rawMediaData.setValue(clearCache);
             return GrepFilter.grepData(rawData, grep);
         }
