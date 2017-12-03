@@ -16,14 +16,9 @@
 package me.zane.fairy.view.item;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.zane.fairy.R;
-import me.zane.fairy.ZLog;
 import me.zane.fairy.view.content.LogcatActivity;
 import me.zane.fairy.viewmodel.ViewModelFactory;
 import me.zane.fairy.vo.LogcatItem;

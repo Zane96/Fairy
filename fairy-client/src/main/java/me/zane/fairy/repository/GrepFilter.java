@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 package me.zane.fairy.repository;
+
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.support.annotation.MainThread;
 
@@ -23,7 +23,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import me.zane.fairy.vo.LogcatContent;
-import retrofit2.http.PUT;
 
 /**
  * Grep进行过滤

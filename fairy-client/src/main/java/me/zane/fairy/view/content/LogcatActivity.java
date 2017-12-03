@@ -18,17 +18,13 @@ package me.zane.fairy.view.content;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
-import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.view.item.LogcatItemViewModel;
 import me.zane.fairy.viewmodel.ViewModelFactory;

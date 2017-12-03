@@ -15,15 +15,11 @@
  */
 package me.zane.fairy.api;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.concurrent.TimeUnit;
 
-import me.zane.fairy.NullIpAddressException;
 import me.zane.fairy.ZLog;
-import me.zane.fairy.resource.ApiResponse;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
