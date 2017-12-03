@@ -52,5 +52,8 @@ public class LogcatData {
         this.timeLine = timeLine;
     }
 
-
+    @Override
+    public String toString() {
+        return "timeline: " + timeLine + " data: " + data;
+    }
 }

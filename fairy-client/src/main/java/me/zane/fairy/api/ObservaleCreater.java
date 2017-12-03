@@ -52,26 +52,27 @@ public class ObservaleCreater {
      * 2. 服务端给了正常数据，所以上面的等式不成立，${lastTimeLine}肯定会大于${startTimeLine}
      * @param options
      * @param filter
+     * @param grep
      * @return
      */
-    public Observable<LogcatData> creatObservable(String options, String filter) {
+    public Observable<LogcatData> creatObservable(String options, String filter, String grep) {
         //需要timeline的feed流
         Observable<LogcatData> observable;
         //这种情况是可能是初始的第一次正常请求数据
         ZLog.d(startTimeLine + " " + lastTimeLine + " " + isPoll);
         if (startTimeLine.equals(lastTimeLine)) {
-            observable = pollObCreater.creat(options, filter);
+            observable = pollObCreater.creat(options, filter, grep);
         } else {
             //表示第一次向服务器拿数据就已经是空，所以应该继续请求数据
             if (lastTimeLine.equals(DEFAULT_TIMELINE)) {
-                observable = pollObCreater.creat(options, filter);
+                observable = pollObCreater.creat(options, filter, grep);
             } else {
                 //${startTimeLine} == ${lastTimeLine} + 1 millseconds等式成立，但是没有轮询标志，应该去重
                 if (startTimeLine.equals(Utils.addOneMillsecond(lastTimeLine)) && !isPoll) {
                     observable = nullObCreater.creat();
                 } else {
                     //正常轮询
-                    observable = pollObCreater.creat(options, filter);
+                    observable = pollObCreater.creat(options, filter, grep);
                 }
             }
         }

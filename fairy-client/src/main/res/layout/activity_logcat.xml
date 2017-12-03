@@ -11,87 +11,102 @@
             type="me.zane.fairy.view.content.LogcatContentViewModel"/>
     </data>
 
-    <LinearLayout android:orientation="vertical"
-                  android:padding="8dp"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+    <android.support.design.widget.CoordinatorLayout
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
 
-            <TextView
-                android:text="logcat"
-                android:gravity="center"
-                android:textSize="14sp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
 
-            <EditText
-                android:id="@+id/edit_options_logcat"
-                android:onTextChanged="@{(s, start, before, count) -> model.onOptionsChanged(s)}"
-                app:judgehint="@{model.options}"
-                style="@style/MyEditStyle"/>
+                <TextView
+                    android:text="logcat"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
 
-            <EditText
-                android:id="@+id/edit_filter_logcat"
-                android:onTextChanged="@{(s, start, before, count) -> model.onFilterChanged(s)}"
-                app:judgehint="@{model.filter}"
-                style="@style/MyEditStyle"/>
+                <EditText
+                    android:id="@+id/edit_options_logcat"
+                    android:onTextChanged="@{(s, start, before, count) -> model.onOptionsChanged(s)}"
+                    app:judgehint="@{model.options}"
+                    style="@style/MyEditStyle"/>
 
-            <EditText
-                android:id="@+id/edit_grep_logcat"
-                android:onTextChanged="@{(s, start, before, count) -> model.onGrepChanged(s)}"
-                app:judgehint="@{model.grep}"
-                style="@style/MyEditStyle"/>
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/edit_filter_logcat"
+                    android:onTextChanged="@{(s, start, before, count) -> model.onFilterChanged(s)}"
+                    app:judgehint="@{model.filter}"
+                    style="@style/MyEditStyle"/>
 
-        <LinearLayout
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-            <Button
-                android:id="@+id/btn_start_logcat"
-                android:text="开始刷新"
-                android:enabled="@{!model.isStartFetch}"
-                android:onClick="@{() -> model.onStartFetch()}"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
+                <EditText
+                    android:id="@+id/edit_grep_logcat"
+                    android:onTextChanged="@{(s, start, before, count) -> model.onGrepChanged(s)}"
+                    app:judgehint="@{model.grep}"
+                    style="@style/MyEditStyle"/>
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_stop_logcat"
-                android:text="停止刷新"
-                android:onClick="@{() -> model.onStopFetch()}"
-                android:enabled="@{model.isStartFetch}"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <Button
+                    android:id="@+id/btn_start_logcat"
+                    android:text="开始刷新"
+                    android:enabled="@{!model.isStartFetch}"
+                    android:onClick="@{() -> model.onStartFetch()}"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
 
-        <me.zane.fairy.custom.TouchStopScrollView
-            android:id="@+id/scrollview_logcat"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <FrameLayout
+                <Button
+                    android:id="@+id/btn_stop_logcat"
+                    android:text="停止刷新"
+                    android:onClick="@{() -> model.onStopFetch()}"
+                    android:enabled="@{model.isStartFetch}"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+
+            <me.zane.fairy.custom.TouchStopScrollView
+                android:id="@+id/scrollview_logcat"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
-                    android:id="@+id/text_data_logcat"
-                    app:render="@{logcatContent}"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/text_data_logcat"
+                        app:render="@{logcatContent}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
 
-                <ProgressBar
-                    android:id="@+id/progressbar_logcat"
-                    android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-            </FrameLayout>
-        </me.zane.fairy.custom.TouchStopScrollView>
-    </LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/progressbar_logcat"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+            </me.zane.fairy.custom.TouchStopScrollView>
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_logcat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            app:fab_click="@{logcatContent.contentId}"
+            android:src="@drawable/down"/>
+
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

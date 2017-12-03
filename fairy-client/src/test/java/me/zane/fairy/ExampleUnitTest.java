@@ -9,6 +9,7 @@ import android.os.Looper;
 
 import org.junit.Test;
 
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +23,7 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+        //assertEquals(4, 2 + 2);
 //        String timeLine = "10-26 16:40:35.584";
 //        String options = "-t \"10-26 16:40:35.666\" -d";
 //        String oldTime = options.substring(options.indexOf("-t \""), options.indexOf("-t \"") + 23);
@@ -31,11 +32,11 @@ public class ExampleUnitTest {
 //        assertEquals("-t \"10-26 16:40:35.584\" -d", newOptions);
         //assertEquals("10-26 16:40:36.000", LiveNetService.getInstance().currentTimeLine("10-26 16:40:35.999"));
 
-        assertEquals("-v threadtime", extractOptions("-v threadtime -t \"11-5 8:2:21.121\""));
-
-        String rawString = "<p>sss</p><p>bbb</p>";
-        String[] strs = rawString.split("<p>");
-        assertEquals("sss", strs[2]);
+//        assertEquals("-v threadtime", extractOptions("-v threadtime -t \"11-5 8:2:21.121\""));
+//
+//        String rawString = "<p>sss</p><p>bbb</p>";
+//        String[] strs = rawString.split("<p>");
+//        assertEquals("sss", strs[2]);
 
 //        Holder holder = new Holder();
 //        holder.start();
@@ -43,6 +44,36 @@ public class ExampleUnitTest {
 //            ZLog.i(str);
 //        });
 
+        //assertEquals("12-01 15:52:05.667", getStartTimeLine());
+
+        assertEquals("12", addOneMillsecond("-01 15:52:05.667"));
+    }
+
+    public String addOneMillsecond(String timeLine) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, Integer.valueOf(timeLine.substring(0, timeLine.indexOf("-"))));
+//        calendar.set(Calendar.DATE, Integer.valueOf(timeLine.substring(timeLine.indexOf("-") + 1, timeLine.indexOf(" "))));
+//        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeLine.substring(timeLine.indexOf(" ") + 1, timeLine.indexOf(":"))));
+//        calendar.set(Calendar.MINUTE, Integer.valueOf(timeLine.substring(timeLine.indexOf(":") + 1, timeLine.lastIndexOf(":"))));
+//        calendar.set(Calendar.SECOND, Integer.valueOf(timeLine.substring(timeLine.lastIndexOf(":") + 1, timeLine.indexOf("."))));
+//        calendar.set(Calendar.MILLISECOND, Integer.valueOf(timeLine.substring(timeLine.indexOf(".") + 1, timeLine.length())));
+//        calendar.add(Calendar.MILLISECOND, 1);
+
+        return calendar.get(Calendar.MONTH)+"";
+//        return String.format("%d-%d %d:%d:%d.%d",
+//                calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DATE),
+//                calendar.get(Calendar.HOUR_OF_DAY),
+//                calendar.get(Calendar.MINUTE),
+//                calendar.get(Calendar.SECOND),
+//                calendar.get(Calendar.MILLISECOND));
+    }
+
+    private String getStartTimeLine() {
+        String timeLine;
+        timeLine = Utils.addOneMillsecond("12-01 15:52:05.666");
+
+        return timeLine;
     }
 
     class Holder{

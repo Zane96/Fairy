@@ -55,10 +55,10 @@ public class CallbackNetService {
      * @param options
      * @param filter
      */
-    public void enqueue(final String options, final String filter, @NonNull Callback callback) {
+    public void enqueue(final String options, final String filter, final String grep, @NonNull Callback callback) {
         if (options.contains("-m") || options.contains("--max-count")) {
             //不需要轮训，也不需要timeline的feed流
-            subscription = LogcatModel.getInstance().logcat(options, filter).subscribe(new Subscriber<LogcatData>() {
+            subscription = LogcatModel.getInstance().logcat(options, filter, grep).subscribe(new Subscriber<LogcatData>() {
                 @Override
                 public void onCompleted() {
                 }
@@ -77,7 +77,7 @@ public class CallbackNetService {
             });
         } else {
             //需要轮训
-            subscription = timer.flatMap((Long aLong) -> observaleCreater.creatObservable(options, filter)).subscribe(new Subscriber<LogcatData>() {
+            subscription = timer.flatMap((Long aLong) -> observaleCreater.creatObservable(options, filter, grep)).subscribe(new Subscriber<LogcatData>() {
                 @Override
                 public void onCompleted() {
                 }

@@ -43,10 +43,11 @@ class LogcatExec {
      * the dataline with date eg.10-17 11:54:47.550
      * @param source
      * @param format 开发者定义的format
+     * @param grep
      * @return
      * @throws IOException
      */
-    Response execWithTime(BufferedSource source, String format) throws IOException{
+    Response execWithTime(BufferedSource source, String format, String grep) throws IOException{
         int lineNum = 0;
         String lastTimeLine = "";
         String currentTimeLine = "";
@@ -69,7 +70,7 @@ class LogcatExec {
                 }
             }
 
-            sb.append(formatLine(format, rawLine));
+            sb.append(formatLine(format, grep, rawLine));
 
             if (!currentTimeLine.startsWith("-")) {
                 lastTimeLine = currentTimeLine;
@@ -97,9 +98,10 @@ class LogcatExec {
      *
      * @param format
      * @param rawLine
+     * @param grep
      * @return
      */
-    private String formatLine(String format, String rawLine) {
+    private String formatLine(String format, String grep, String rawLine) {
         //-----begin情况直接返回
         if (rawLine.startsWith("--")) {
             return String.format("%s\n", rawLine);
@@ -125,6 +127,11 @@ class LogcatExec {
         tid = rawLine.substring(26, 30);
         priority = rawLine.substring(31, 32);
         mark = rawLine.substring(33, rawLine.indexOf(": "));
+
+        //grep颜色包装
+        if (!grep.equals("")) {
+            raw = raw.replace(grep, String.format("<font color=\"#6200ea\">%s</font>", grep));
+        }
 
         //包装颜色
         String color;

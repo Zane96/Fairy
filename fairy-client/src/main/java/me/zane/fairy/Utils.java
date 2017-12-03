@@ -65,8 +65,9 @@ public class Utils {
         calendar.set(Calendar.MILLISECOND, Integer.valueOf(timeLine.substring(timeLine.indexOf(".") + 1, timeLine.length())));
         calendar.add(Calendar.MILLISECOND, 1);
 
+        int month = calendar.get(Calendar.MONTH) == 0 ? 12 : calendar.get(Calendar.MONTH);
         return String.format("%d-%d %d:%d:%d.%d",
-                calendar.get(Calendar.MONTH),
+                month,
                 calendar.get(Calendar.DATE),
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),

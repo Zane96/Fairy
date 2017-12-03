@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
@@ -42,7 +43,7 @@ public class LogcatActivity extends AppCompatActivity{
     public static final String INDEX_KEY = "index_key";
     public static final String OPTIONS = "options";
     public static final String FILTER = "filter";
-    public static final String GREP = "grrp";
+    public static final String GREP = "grep";
 
     private ActivityLogcatBinding binding;
     private LogcatContentViewModel viewModel;

@@ -38,6 +38,8 @@ public class LiveNetService {
     private ObservaleCreater observaleCreater;
     private boolean isClose = false;
 
+    private String grep = "";
+
     private MutableLiveData<ApiResponse<String>> data;
 
     LiveNetService() {
@@ -50,6 +52,10 @@ public class LiveNetService {
         return data;
     }
 
+    public void setGrep(String grep) {
+        this.grep = grep;
+    }
+
     /**
      * 按模式进行分发
      * @param options
@@ -58,7 +64,7 @@ public class LiveNetService {
     public void enqueue(final String options, final String filter) {
         if (options.contains("-m") || options.contains("--max-count")) {
             //不需要轮训，也不需要timeline的feed流
-            subscription = LogcatModel.getInstance().logcat(options, filter).subscribe(new Subscriber<LogcatData>() {
+            subscription = LogcatModel.getInstance().logcat(options, filter, grep).subscribe(new Subscriber<LogcatData>() {
                 @Override
                 public void onCompleted() {
                 }
@@ -77,20 +83,22 @@ public class LiveNetService {
             });
         } else {
             //需要轮训
-            subscription = timer.flatMap((Long aLong) -> observaleCreater.creatObservable(options, filter)).subscribe(new Subscriber<LogcatData>() {
+            subscription = timer.flatMap((Long aLong) -> observaleCreater.creatObservable(options, filter, grep)).subscribe(new Subscriber<LogcatData>() {
                 @Override
                 public void onCompleted() {
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    ZLog.e(String.valueOf(e) + " " + Thread.currentThread().getName());
+                    e.printStackTrace();
+                    ZLog.e(String.valueOf(e));
                     data.setValue(new ApiResponse<>(e));
                     awaitToStop();
                 }
 
                 @Override
                 public void onNext(LogcatData logcatData) {
+                    ZLog.i("logcat: " + logcatData.toString());
                     observaleCreater.onNext(logcatData);
                     data.setValue(new ApiResponse<>(logcatData.getData()));
                     awaitToStop();

@@ -45,22 +45,24 @@ public class LogcatContentViewModel extends AndroidViewModel{
     public final ObservableField<String> grep = new ObservableField<>();
     public final ObservableField<Boolean> isStartFetch = new ObservableField<>();
 
-    private final MutableLiveData<String> isStartLiveData = new MutableLiveData<>();
-    private LiveData<LogcatContent> contentLiveData;
+    private final MutableLiveData<Boolean> isStartFirstLoad = new MutableLiveData<>();
+    private final LiveData<LogcatContent> contentLiveData;
 
     public LogcatContentViewModel(@NonNull Application application, LogcatContentRepository repository) {
         super(application);
         this.repository = repository;
+        contentLiveData = Transformations.switchMap(isStartFirstLoad, isStart -> repository.getLogcatContent());
     }
 
     //---------------------------------action binding---------------------------------
     void init(int id, String grep, ActivityLogcatBinding binding) {
         this.binding = binding;
         this.id = id;
+
         insertIfNotExits(new LogcatContent(id, "init fairy"));
-        contentLiveData = Transformations.switchMap(isStartLiveData, grepData -> repository.getLogcatContent(id, grepData));
+        repository.setGrep(grep);
         repository.fetchFromData(id);
-        isStartLiveData.setValue(grep);
+        isStartFirstLoad.setValue(true);
     }
 
     public void onOptionsChanged(CharSequence s) {
@@ -73,8 +75,7 @@ public class LogcatContentViewModel extends AndroidViewModel{
 
     public void onGrepChanged(CharSequence s) {
         grep.set(s.toString());
-        //replace the data from repository (grep or not grep)
-        isStartLiveData.setValue(s.toString());
+        repository.setGrep(s.toString());
     }
 
     public void onStartFetch() {
@@ -119,4 +120,5 @@ public class LogcatContentViewModel extends AndroidViewModel{
         repository.stopFetch();
         MySharedPre.getInstance().putIsStartFetch(id, false);
     }
+
 }
