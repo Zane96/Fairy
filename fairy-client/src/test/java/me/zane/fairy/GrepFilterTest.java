@@ -4,6 +4,8 @@ package me.zane.fairy;
 import org.junit.Assert;
 import org.junit.Test;
 
+import me.zane.fairy.repository.GrepFilter;
+
 /**
  * Created by Helldefender on 2017/12/1 for Fairy.
  * Function:单元测试验证过滤方法过滤效果以及时间效率

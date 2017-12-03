@@ -32,6 +32,7 @@ class NullObCreater extends ObservaleCreater{
         observable = Observable.create(emitter -> {
             LogcatData data = new LogcatData();
             data.setTimeLine(DEFAULT_TIMELINE);
+            data.setData("");
             emitter.onNext(data);
         }, Emitter.BackpressureMode.LATEST).observeOn(AndroidSchedulers.mainThread()).share();
     }

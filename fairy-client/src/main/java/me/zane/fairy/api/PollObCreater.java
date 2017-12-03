@@ -25,7 +25,7 @@ import rx.Observable;
 
 public class PollObCreater extends ObservaleCreater{
 
-    public Observable<LogcatData> creat(String options, String filter) {
+    public Observable<LogcatData> creat(String options, String filter, String grep) {
         String newOptions = options;
         if (!lastTimeLine.equals(DEFAULT_TIMELINE)) {
             if (!newOptions.contains("-t")) {
@@ -37,7 +37,7 @@ public class PollObCreater extends ObservaleCreater{
                 newOptions = options.replace(oldTime, String.format("-t \"%s\"", timeLine));
             }
         }
-        return LogcatModel.getInstance().logcat(newOptions, filter);
+        return LogcatModel.getInstance().logcat(newOptions, filter, grep);
     }
 
     private String getStartTimeLine() {

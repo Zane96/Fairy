@@ -1,5 +1,19 @@
+/*
+ * Copyright (C) 2017 Zane.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package me.zane.fairy.repository;
-
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
@@ -17,7 +31,7 @@ import retrofit2.http.PUT;
  * Email: zanebot96@gmail.com
  */
 
-class GrepFilter {
+public class GrepFilter {
     static final String RAW_SIGNAL = "raw content--------------\n";
     static final String GREP_SIGNAL = "grep content--------------\n";
 
@@ -31,12 +45,23 @@ class GrepFilter {
 
 
             if (content != null) {
-                logcatData.setContent(parseHtml(content,grep));
+                logcatData.setContent(parseHtml2(content,grep));
             }
 
             return logcatData;
 
         });
+    }
+
+    private static String parseHtml2(String rawContent, String grep) {
+        StringBuilder stringBuilder = new StringBuilder();
+        String[] data = rawContent.split("<p>");
+        for (String str : data) {
+            if (str.contains(grep)) {
+                stringBuilder.append("<p>").append(str);
+            }
+        }
+        return stringBuilder.toString();
     }
 
     private static String parseHtml(String rawContent, String grep) {

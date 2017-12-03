@@ -18,6 +18,7 @@ package me.zane.fairy.resource;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import me.zane.fairy.ZLog;
 import me.zane.fairy.api.LiveNetService;
 import me.zane.fairy.db.LogcatDao;
 import me.zane.fairy.vo.LogcatContent;
@@ -46,6 +47,7 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     }
 
     public void replaceDbData() {
+        ZLog.i("replace: " + sb.toString());
         logcatDao.updateLogcatContent(new LogcatContent(id, sb.toString()));
     }
 

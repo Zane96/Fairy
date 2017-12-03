@@ -38,7 +38,7 @@ public class LogcatCall implements Runnable{
      * 强制退出，强制使用threadtime格式的数据，来支持feed流
      * threadtime — 显示日期、调用时间、优先级、标记以及发出消息的线程的 PID 和 TID。
      */
-    private static final String LOGCAT_BASE = "logcat -d -v threadtime %s %s";
+    private static final String LOGCAT_BASE = "logcat -d -v threadtime %s %s | grep \"%s\"";
 
     private LogcatExec exec;
 
@@ -70,18 +70,19 @@ public class LogcatCall implements Runnable{
 
             //wirte (logcat [options] [filterspecs]) command
             String rawOptions = postBody.getValue(PostBody.OPTIONES_KEY);
+            String grep = postBody.getValue(PostBody.GREP_KEY);
             String format = extractFormat(rawOptions);
-
             String options = rawOptions.replace(format, "");
             ZLog.d("rawOptions: " + rawOptions + " format: " + format + " options: " + options);
 
             sink.write(String.format((LOGCAT_BASE),
                     options,
-                    postBody.getValue(PostBody.FILTER_KEY)).getBytes());
+                    postBody.getValue(PostBody.FILTER_KEY),
+                    grep).getBytes());
             sink.close();
-            ZLog.d("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY)));
+            ZLog.d("exec logcat command: " + String.format((LOGCAT_BASE), options, postBody.getValue(PostBody.FILTER_KEY), postBody.getValue(PostBody.GREP_KEY)));
 
-            response = exec.execWithTime(source, format);
+            response = exec.execWithTime(source, format, grep);
 //            if (!options.contains("-v")
 //                        || options.contains("-v time")
 //                        || options.contains("-v threadtime")) {

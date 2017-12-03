@@ -32,6 +32,7 @@ import me.zane.fairy_server.ZLog;
 public class PostBody {
     public static final String OPTIONES_KEY = "options";
     public static final String FILTER_KEY = "filter";
+    public static final String GREP_KEY = "grep";
     public static final String TIMELINE_KEY = "timeline";
 
     private HashMap<String, String> map;

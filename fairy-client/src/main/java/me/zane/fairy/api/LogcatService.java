@@ -30,5 +30,6 @@ public interface LogcatService {
     @POST("/")
     @FormUrlEncoded
     Observable<LogcatData> logcat(@Field("options") String options,
-                                  @Field("filter") String filter);
+                                  @Field("filter") String filter,
+                                  @Field("grep") String grep);
 }

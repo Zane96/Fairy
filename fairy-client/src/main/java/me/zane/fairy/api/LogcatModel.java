@@ -81,8 +81,8 @@ public class LogcatModel {
         return instance;
     }
 
-    public Observable<LogcatData> logcat(String options, String filter) {
-        return service.logcat(options, filter)
+    public Observable<LogcatData> logcat(String options, String filter, String grep) {
+        return service.logcat(options, filter, grep)
                        .subscribeOn(Schedulers.io())
                        .observeOn(AndroidSchedulers.mainThread());
     }

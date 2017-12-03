@@ -48,9 +48,11 @@ public abstract class MergeResource<LocalType, NetType> {
             executors.getMainExecutor().execute(() -> {
                 result.addSource(dbSource, dbData -> {
                     result.removeSource(dbSource);
-                    ZLog.d("db------" + dbData.toString());
-                    setValue(dbData);
-                    appendResult(castLocalToNet(dbData));
+                    if (dbData != null) {
+                        ZLog.d("db------" + dbData.toString());
+                        setValue(dbData);
+                        appendResult(castLocalToNet(dbData));
+                    }
                 });
             });
         });

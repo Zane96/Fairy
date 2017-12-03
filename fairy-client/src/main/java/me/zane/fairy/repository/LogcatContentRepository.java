@@ -63,12 +63,11 @@ public class LogcatContentRepository {
 
     /**
      * 向上层抛出LiveData
-     * 根据grep来决策是否过滤数据
-     * @param grep
      * @return
      */
-    public LiveData<LogcatContent> getLogcatContent(int id, String grep) {
-        return DataCreator.creat(id, source.asLiveData(), grep);
+    public LiveData<LogcatContent> getLogcatContent() {
+        //return DataCreator.creat(id, source.asLiveData(), grep);
+        return source.asLiveData();
     }
 
     public void fetchFromData(int id) {
@@ -85,6 +84,10 @@ public class LogcatContentRepository {
         service.stop();
         source.stopFetchFromNet();
         executors.getDiskIO().execute(source::replaceDbData);
+    }
+
+    public void setGrep(String grep) {
+        service.setGrep(grep);
     }
 
     public void insertContent(LogcatContent content) {
