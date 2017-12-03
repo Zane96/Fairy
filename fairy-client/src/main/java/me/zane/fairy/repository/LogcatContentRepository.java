@@ -18,7 +18,6 @@ package me.zane.fairy.repository;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.support.annotation.NonNull;
-import android.util.ArrayMap;
 
 import me.zane.fairy.api.LiveNetService;
 import me.zane.fairy.api.ServiceProvider;

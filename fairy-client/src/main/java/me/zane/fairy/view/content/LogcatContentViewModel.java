@@ -16,7 +16,6 @@
 package me.zane.fairy.view.content;
 
 import android.app.Application;
-import android.arch.core.util.Function;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -25,7 +24,6 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
 import me.zane.fairy.MySharedPre;
-import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.repository.LogcatContentRepository;
 import me.zane.fairy.vo.LogcatContent;

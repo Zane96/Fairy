@@ -20,7 +20,6 @@ import android.arch.lifecycle.MutableLiveData;
 
 import java.util.concurrent.TimeUnit;
 
-import me.zane.fairy.NullIpAddressException;
 import me.zane.fairy.ZLog;
 import me.zane.fairy.resource.ApiResponse;
 import rx.Observable;

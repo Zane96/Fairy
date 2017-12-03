@@ -22,11 +22,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
-import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.view.item.LogcatItemViewModel;
 import me.zane.fairy.viewmodel.ViewModelFactory;
