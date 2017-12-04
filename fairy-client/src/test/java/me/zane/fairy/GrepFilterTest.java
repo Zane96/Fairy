@@ -3,7 +3,6 @@ package me.zane.fairy;
 
 import org.junit.Assert;
 import org.junit.Test;
-import me.zane.fairy.repository.GrepFilter;
 
 import me.zane.fairy.repository.GrepFilter;
 
