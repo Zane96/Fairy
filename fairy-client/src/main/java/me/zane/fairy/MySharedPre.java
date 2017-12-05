@@ -60,6 +60,15 @@ public class MySharedPre {
         return preferences.getBoolean(String.valueOf(id), false);
     }
 
+    public void putLastId(int id) {
+        editor.putInt("lastid", id);
+        editor.commit();
+    }
+
+    public int getLastId() {
+        return preferences.getInt("lastid", 0);
+    }
+
 //    public void putOptions(int index, String options) {
 //        editor.putString(String.format("%d_options", index), options);
 //        editor.commit();

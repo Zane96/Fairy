@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import me.zane.fairy.MySharedPre;
 import me.zane.fairy.repository.LogcatItemRepository;
 import me.zane.fairy.vo.LogcatItem;
 
@@ -32,6 +33,7 @@ import me.zane.fairy.vo.LogcatItem;
 
 public class LogcatItemViewModel extends AndroidViewModel{
     private final LogcatItemRepository repository;
+    private int tempPosition;
 
     public LogcatItemViewModel(@NonNull Application application, LogcatItemRepository repository) {
         super(application);
@@ -53,4 +55,21 @@ public class LogcatItemViewModel extends AndroidViewModel{
     public void deleteItem(LogcatItem item) {
         repository.deleteLogcatItem(item);
     }
+
+    public int getTempPosition() {
+        return tempPosition;
+    }
+
+    public void setTempPosition(int tempPosition) {
+        this.tempPosition = tempPosition;
+    }
+
+    public void putLastId(int id) {
+        MySharedPre.getInstance().putLastId(id);
+    }
+
+    public int getLastId() {
+        return MySharedPre.getInstance().getLastId();
+    }
+
 }

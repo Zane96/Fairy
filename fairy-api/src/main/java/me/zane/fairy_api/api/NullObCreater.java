@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.api;
+package me.zane.fairy_api.api;
 
 import rx.Emitter;
 import rx.Observable;
@@ -24,7 +24,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Email: zanebot96@gmail.com
  */
 
-class NullObCreater extends ObservaleCreater {
+class NullObCreater extends ObservaleCreater{
 
     private Observable observable;
 

@@ -106,6 +106,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="8dp"
             app:fab_click="@{logcatContent.contentId}"
+            android:background="@color/black_1"
             android:src="@drawable/down"/>
 
     </android.support.design.widget.CoordinatorLayout>

@@ -41,6 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     private LayoutInflater inflater;
     private Context context;
     private OnClickListener listener;
+    private int lastId;
 
     public interface OnClickListener {
         void onClick(int position);
@@ -76,31 +77,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         return datas.size();
     }
 
-    void swap(int from, int to) {
-        Collections.swap(datas, from, to);
-    }
-
     LogcatItem get(int position) {
         return datas.get(position);
     }
 
+    void addAll(List<LogcatItem> items) {
+        datas.addAll(items);
+        notifyDataSetChanged();
+    }
+
+    void replace(int position, LogcatItem item) {
+        datas.remove(position);
+        datas.add(position, item);
+        notifyItemChanged(position);
+    }
+
+    void add(LogcatItem item) {
+        datas.add(item);
+        notifyItemChanged(datas.size() - 1);
+    }
+
     void remove(int position) {
         datas.remove(position);
-    }
-
-    void add(LogcatItem bean) {
-        datas.add(bean);
-        notifyItemInserted(datas.size());
-    }
-
-    void add(int position, LogcatItem bean) {
-        datas.add(position, bean);
-    }
-
-    void addAll(List<LogcatItem> beans) {
-        datas.clear();
-        datas.addAll(datas.size(), beans);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, datas.size());
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{

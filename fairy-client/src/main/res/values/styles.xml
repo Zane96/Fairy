@@ -3,7 +3,6 @@
     <style name="MyCustomTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/black_1</item>
         <item name="colorPrimaryDark">@color/black_1</item>
-        <item name="colorAccent">@color/black_1</item>
         <item name="android:textColorPrimary">@color/textcolor</item>
         <item name="android:textColorSecondary">@color/textcolor</item>
         <item name="android:textColor">@color/textcolor</item>
