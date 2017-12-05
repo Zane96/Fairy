@@ -16,6 +16,7 @@
 package me.zane.fairy.view.content;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import android.view.MenuItem;
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
+import me.zane.fairy.view.item.ItemActivity;
 import me.zane.fairy.view.item.LogcatItemViewModel;
 import me.zane.fairy.viewmodel.ViewModelFactory;
 import me.zane.fairy.vo.LogcatContent;
@@ -38,10 +40,8 @@ import me.zane.fairy.vo.LogcatItem;
  */
 
 public class LogcatActivity extends AppCompatActivity{
-    public static final String INDEX_KEY = "index_key";
-    public static final String OPTIONS = "options";
-    public static final String FILTER = "filter";
-    public static final String GREP = "grep";
+    public static final int ITEM_REQUEST_CODE = 123;
+    public static final String LOGCAT_ITEM = "logcat_item";
 
     private ActivityLogcatBinding binding;
     private LogcatContentViewModel viewModel;
@@ -58,10 +58,11 @@ public class LogcatActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_logcat);
 
-        id = getIntent().getIntExtra(INDEX_KEY, -1);
-        options = getIntent().getStringExtra(OPTIONS);
-        filter = getIntent().getStringExtra(FILTER);
-        grep = getIntent().getStringExtra(GREP);
+        LogcatItem item = getIntent().getParcelableExtra(LOGCAT_ITEM);
+        id = item.getId();
+        options = item.getOptions();
+        filter = item.getFilter();
+        grep = item.getGrep();
 
         init();
     }
@@ -107,5 +108,14 @@ public class LogcatActivity extends AppCompatActivity{
         super.onStop();
         LogcatItemViewModel itemViewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(LogcatItemViewModel.class);
         itemViewModel.updateItem(new LogcatItem(id, binding.getModel().options.get(), binding.getModel().filter.get(), binding.getModel().grep.get()));
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        LogcatItem item = new LogcatItem(id, viewModel.options.get(), viewModel.filter.get(), viewModel.grep.get());
+        intent.putExtra(LOGCAT_ITEM, item);
+        setResult(ItemActivity.CONTENT_RESULT_CODE, intent);
+        finish();
     }
 }

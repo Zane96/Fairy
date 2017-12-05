@@ -13,32 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy;
+package me.zane.fairy_api.api;
 
-import android.app.Application;
-import android.content.Context;
-
-import com.facebook.stetho.Stetho;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
+import rx.Observable;
 
 /**
  * Created by Zane on 2017/10/24.
  * Email: zanebot96@gmail.com
  */
 
-public class App extends Application{
-    private static App instance;
+public interface LogcatService {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
-        ZLog.setDebug(false);
-        ZLog.d("ip: " + Utils.getIpAddress());
-        MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
-        Stetho.initializeWithDefaults(this);
-    }
-
-    public static Application getInstance() {
-        return instance;
-    }
+    @POST("/")
+    @FormUrlEncoded
+    Observable<LogcatData> logcat(@Field("options") String options,
+                                  @Field("filter") String filter,
+                                  @Field("grep") String grep);
 }

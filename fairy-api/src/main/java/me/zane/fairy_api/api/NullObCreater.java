@@ -13,32 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy;
+package me.zane.fairy_api.api;
 
-import android.app.Application;
-import android.content.Context;
-
-import com.facebook.stetho.Stetho;
+import rx.Emitter;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
- * Created by Zane on 2017/10/24.
+ * Created by Zane on 2017/10/30.
  * Email: zanebot96@gmail.com
  */
 
-public class App extends Application{
-    private static App instance;
+class NullObCreater extends ObservaleCreater{
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
-        ZLog.setDebug(false);
-        ZLog.d("ip: " + Utils.getIpAddress());
-        MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
-        Stetho.initializeWithDefaults(this);
+    private Observable observable;
+
+    public NullObCreater() {
+        observable = Observable.create(emitter -> {
+            LogcatData data = new LogcatData();
+            data.setTimeLine(DEFAULT_TIMELINE);
+            data.setData("");
+            emitter.onNext(data);
+        }, Emitter.BackpressureMode.LATEST).observeOn(AndroidSchedulers.mainThread()).share();
     }
 
-    public static Application getInstance() {
-        return instance;
+    Observable<LogcatData> creat() {
+        return observable;
     }
 }

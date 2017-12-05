@@ -24,7 +24,7 @@ import android.util.Log;
 
 public final class ZLog {
 
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
     private static String TAG = "Fairy";
 
     private ZLog(){}

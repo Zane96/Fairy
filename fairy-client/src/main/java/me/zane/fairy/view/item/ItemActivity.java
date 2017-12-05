@@ -31,17 +31,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.zane.fairy.R;
+import me.zane.fairy.ZLog;
 import me.zane.fairy.view.content.LogcatActivity;
 import me.zane.fairy.viewmodel.ViewModelFactory;
 import me.zane.fairy.vo.LogcatItem;
 
 
 public class ItemActivity extends AppCompatActivity {
+    public static final int CONTENT_RESULT_CODE = 321;
     private MyAdapter adapter;
     private LiveData<List<LogcatItem>> observer;
     private LogcatItemViewModel viewModel;
     private MyItemTouchCallback itemTouchCallback;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +53,13 @@ public class ItemActivity extends AppCompatActivity {
 
         observer.observe(this, items -> {
             adapter.addAll(items);
+            observer.removeObservers(ItemActivity.this);
         });
 
-        itemTouchCallback.getRemoveObservable().subscribe(position -> viewModel.deleteItem(adapter.get(position)));
+        itemTouchCallback.getRemoveObservable().subscribe(position -> {
+            viewModel.deleteItem(adapter.get(position));
+            adapter.remove(position);
+        });
     }
 
     private void init() {
@@ -77,14 +83,23 @@ public class ItemActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recycleView);
 
         adapter.setOnClickListener(position -> {
+            ZLog.i("position: " + position);
+            viewModel.setTempPosition(position);
             Intent intent = new Intent(ItemActivity.this, LogcatActivity.class);
             LogcatItem item = adapter.get(position);
-            intent.putExtra(LogcatActivity.OPTIONS, item.getOptions());
-            intent.putExtra(LogcatActivity.INDEX_KEY, item.getId());
-            intent.putExtra(LogcatActivity.FILTER, item.getFilter());
-            intent.putExtra(LogcatActivity.GREP, item.getGrep());
-            startActivity(intent);
+            intent.putExtra(LogcatActivity.LOGCAT_ITEM, item);
+            startActivityForResult(intent, LogcatActivity.ITEM_REQUEST_CODE);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) {
+            case ItemActivity.CONTENT_RESULT_CODE:
+                LogcatItem item = data.getParcelableExtra(LogcatActivity.LOGCAT_ITEM);
+                adapter.replace(viewModel.getTempPosition(), item);
+                break;
+        }
     }
 
     @Override
@@ -94,12 +109,16 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
             case R.id.add_main_bar:
-                viewModel.insertItem(new LogcatItem(0, "", "", ""));
+                int lastId = viewModel.getLastId() + 1;
+                LogcatItem item = LogcatItem.creatEmpty(lastId);
+                viewModel.insertItem(item);
+                viewModel.putLastId(lastId);
+                adapter.add(item);
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(menuItem);
     }
 }

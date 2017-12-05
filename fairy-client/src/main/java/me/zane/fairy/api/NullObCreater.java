@@ -24,7 +24,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Email: zanebot96@gmail.com
  */
 
-class NullObCreater extends ObservaleCreater{
+class NullObCreater extends ObservaleCreater {
 
     private Observable observable;
 

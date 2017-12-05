@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy.api;
+package me.zane.fairy_api.api;
 
 import me.zane.fairy.Utils;
 import rx.Observable;
@@ -23,7 +23,7 @@ import rx.Observable;
  * Email: zanebot96@gmail.com
  */
 
-public class PollObCreater extends ObservaleCreater {
+public class PollObCreater extends ObservaleCreater{
 
     public Observable<LogcatData> creat(String options, String filter, String grep) {
         String newOptions = options;

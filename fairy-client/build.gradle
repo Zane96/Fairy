@@ -34,10 +34,12 @@ dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     // Architecture Components
     implementation 'android.arch.lifecycle:runtime:1.0.3'
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
@@ -45,6 +47,7 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.0.0'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+
     compile 'com.squareup.okio:okio:1.13.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'

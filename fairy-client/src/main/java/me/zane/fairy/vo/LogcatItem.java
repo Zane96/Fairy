@@ -18,6 +18,8 @@ package me.zane.fairy.vo;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Zane on 2017/11/16.
@@ -25,7 +27,7 @@ import android.arch.persistence.room.PrimaryKey;
  */
 
 @Entity(tableName = "logcat_item")
-public class LogcatItem {
+public class LogcatItem implements Parcelable{
     public static final String TABLE_NAME = "logcat_item";
 
     @PrimaryKey(autoGenerate = true)
@@ -79,6 +81,10 @@ public class LogcatItem {
         this.grep = grep;
     }
 
+    public static LogcatItem creatEmpty(int id) {
+        return new LogcatItem(id, "", "", "");
+    }
+
     @Override
     public String toString() {
         return "id: " + id +
@@ -86,4 +92,36 @@ public class LogcatItem {
                        " filter: " + filter +
                        " grep: " + grep;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.options);
+        dest.writeString(this.filter);
+        dest.writeString(this.grep);
+    }
+
+    protected LogcatItem(Parcel in) {
+        this.id = in.readInt();
+        this.options = in.readString();
+        this.filter = in.readString();
+        this.grep = in.readString();
+    }
+
+    public static final Creator<LogcatItem> CREATOR = new Creator<LogcatItem>() {
+        @Override
+        public LogcatItem createFromParcel(Parcel source) {
+            return new LogcatItem(source);
+        }
+
+        @Override
+        public LogcatItem[] newArray(int size) {
+            return new LogcatItem[size];
+        }
+    };
 }
