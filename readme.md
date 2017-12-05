@@ -29,9 +29,9 @@ Fairy default use armeabi .so
 ## TODO
 
 - Fit Android low-end mobile phone.Some low-end mobile phone like MI2 and MI3 may kill the Fairy-Server when USB is break up or may can't support `logcat -t "[time]"`command. So these phones may not use Fairy because Fairy uses feed-stream which is based on timeline.
-- Add log grep feature.
+- ~Add log grep feature.~
 - ~Optimize the view to display log.~
-- Extract an access layer to provide the `logcat` ability.
+- ~Optimize the view to display item~
 - ~Data persistence by SQL.~
 - Add floating window to display data.
 
