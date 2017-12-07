@@ -83,7 +83,6 @@ public class ItemActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recycleView);
 
         adapter.setOnClickListener(position -> {
-            ZLog.i("position: " + position);
             viewModel.setTempPosition(position);
             Intent intent = new Intent(ItemActivity.this, LogcatActivity.class);
             LogcatItem item = adapter.get(position);

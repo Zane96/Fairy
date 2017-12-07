@@ -83,8 +83,6 @@ public class LogcatActivity extends AppCompatActivity{
             isFirstLoad = false;
             binding.setLogcatContent(content);
         });
-
-        viewModel.setStartFetch(viewModel.isStartFetch());
     }
 
     @Override

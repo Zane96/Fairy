@@ -29,15 +29,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyCustomTheme">
-        <activity android:name=".view.item.ItemActivity">
+        <activity android:name=".view.item.ItemActivity"
+                  android:launchMode="singleTask" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.content.LogcatActivity"/>
+        <activity android:name=".view.content.LogcatActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"/>
 
         <receiver android:name=".WifiStateReceiver">
             <intent-filter>

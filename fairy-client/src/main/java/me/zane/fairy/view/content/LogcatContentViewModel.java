@@ -78,25 +78,15 @@ public class LogcatContentViewModel extends AndroidViewModel{
 
     public void onStartFetch() {
         isStartFetch.set(true);
-        MySharedPre.getInstance().putIsStartFetch(id, true);
         repository.fetchData(options.get(), filter.get());
     }
 
     public void onStopFetch() {
         isStartFetch.set(false);
-        MySharedPre.getInstance().putIsStartFetch(id, false);
         repository.stopFetch();
     }
 
     //---------------------------------toView------------------------------------
-    boolean isStartFetch() {
-        return MySharedPre.getInstance().getIsStartFetch(id);
-    }
-
-    void setStartFetch(boolean startFetch) {
-        isStartFetch.set(startFetch);
-        MySharedPre.getInstance().putIsStartFetch(id, startFetch);
-    }
 
     LiveData<LogcatContent> getData() {
         return contentLiveData;
@@ -116,7 +106,5 @@ public class LogcatContentViewModel extends AndroidViewModel{
     @Override
     protected void onCleared() {
         repository.stopFetch();
-        MySharedPre.getInstance().putIsStartFetch(id, false);
     }
-
 }

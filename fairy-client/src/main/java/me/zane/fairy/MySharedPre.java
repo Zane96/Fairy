@@ -51,15 +51,6 @@ public class MySharedPre {
         return preferences.getString("ipaddress", defaultValue);
     }
 
-    public void putIsStartFetch(int id, boolean isStart) {
-        editor.putBoolean(String.valueOf(id), isStart);
-        editor.commit();
-    }
-
-    public Boolean getIsStartFetch(int id) {
-        return preferences.getBoolean(String.valueOf(id), false);
-    }
-
     public void putLastId(int id) {
         editor.putInt("lastid", id);
         editor.commit();
