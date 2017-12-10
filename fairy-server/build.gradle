@@ -75,3 +75,16 @@ task runService(type: Exec,dependsOn: moveSo){
     environment 'PATH', System.getenv('PATH') + ":" + sdkLocation+"/platform-tools/"
     executable "../pc/pusher.sh"
 }
+
+task moveFile(type: Copy, dependsOn: moveSo) {
+    def apkFile = new File(rootDir.absolutePath + "/pc/fairy-client.apk")
+    if (!apkFile.delete()) {
+        apkFile.delete()
+    }
+
+    from rootDir.absolutePath + "/fairy-client/build/outputs/apk/debug/fairy-client-debug.apk"
+    into "../pc"
+    rename {String fileName ->
+        fileName = "fairy-client.apk"
+    }
+}
