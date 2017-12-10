@@ -1,8 +1,6 @@
 # Fairy
 
-## Purpose
-
-Fairy is an easy debug tool which will allow user to use [adb logcat](https://developer.android.com/studio/command-line/logcat.html?hl=zh-cn#outputFormat) command to view Android system log on your Android phone instead of on your PC.You can scan the system log information anywhere with your Android phone.
+Fairy is an easy debug tool which will allow developer to use [adb logcat](https://developer.android.com/studio/command-line/logcat.html?hl=zh-cn#outputFormat) command to view Android system log on your Android phone instead of on your PC.You can scan the system log information anywhere with your Android phone.
 
 ​                          ![](/screenshot/Screenshot_1.png)              ![](/screenshot/Screenshot_2.png)
 
