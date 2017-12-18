@@ -4,6 +4,8 @@ Fairy is an easy debug tool which will allow developer to use [adb logcat](https
 
 ​                          ![](/screenshot/Screenshot_1.png)              ![](/screenshot/Screenshot_2.png)
 
+​                          ![](/screentshot/Screenshot_3.png)              ![](/screenshot/Screenshot_4.png)
+
 ## Getting Start
 
 Fairy support Android API `21+`. There are two ways to choose.
@@ -31,7 +33,7 @@ Fairy default use armeabi .so
 - ~Optimize the view to display log.~
 - ~Optimize the view to display item~
 - ~Data persistence by SQL.~
-- Add floating window to display data.
+- ~Add floating window to display data.~
 
 ## About More
 
