@@ -4,7 +4,7 @@ Fairy is an easy debug tool which will allow developer to use [adb logcat](https
 
 ​                          ![](/screenshot/Screenshot_1.png)              ![](/screenshot/Screenshot_2.png)
 
-​                          ![](/screentshot/Screenshot_3.png)              ![](/screenshot/Screenshot_4.png)
+​                         ![](/screenshot/Screenshot_3.png)              ![](/screenshot/Screenshot_4.png)
 
 ## Getting Start
 
