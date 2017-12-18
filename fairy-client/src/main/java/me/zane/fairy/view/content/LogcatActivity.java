@@ -15,6 +15,7 @@
  */
 package me.zane.fairy.view.content;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -23,9 +24,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
+import me.zane.fairy.ZLog;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
 import me.zane.fairy.view.item.ItemActivity;
 import me.zane.fairy.view.item.LogcatItemViewModel;
@@ -40,11 +44,12 @@ import me.zane.fairy.vo.LogcatItem;
  */
 
 public class LogcatActivity extends AppCompatActivity{
-    public static final int ITEM_REQUEST_CODE = 123;
+    public static final int CONTENT_RESULT_CODE = 321;
     public static final String LOGCAT_ITEM = "logcat_item";
 
     private ActivityLogcatBinding binding;
     private LogcatContentViewModel viewModel;
+    private IWindowControl windowControl;
 
     private String options;
     private String filter;
@@ -77,7 +82,27 @@ public class LogcatActivity extends AppCompatActivity{
         viewModel.onOptionsChanged(options);
         viewModel.onGrepChanged(grep);
 
+        windowControl = new WindowControl(this);
+        windowControl.initData(viewModel.getData());
+
         binding.scrollviewLogcat.setSmoothScrollingEnabled(true);
+        registerData();
+    }
+
+    public void gloablWindowReact(View view) {
+        Button btnGloab = binding.btnGloba;
+        if (btnGloab.getText().equals(getResources().getString(R.string.open_globa_window))) {
+            btnGloab.setText(getResources().getText(R.string.close_globa_window));
+            viewModel.getData().removeObservers(this);
+            windowControl.open();
+        } else {
+            btnGloab.setText(getResources().getText(R.string.open_globa_window));
+            registerData();
+            windowControl.close();
+        }
+    }
+
+    private void registerData() {
         viewModel.getData().observe(this, content -> {
             content.setFirst(isFirstLoad);
             isFirstLoad = false;
@@ -113,7 +138,13 @@ public class LogcatActivity extends AppCompatActivity{
         Intent intent = new Intent();
         LogcatItem item = new LogcatItem(id, viewModel.options.get(), viewModel.filter.get(), viewModel.grep.get());
         intent.putExtra(LOGCAT_ITEM, item);
-        setResult(ItemActivity.CONTENT_RESULT_CODE, intent);
+        setResult(CONTENT_RESULT_CODE, intent);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        windowControl.close();
     }
 }

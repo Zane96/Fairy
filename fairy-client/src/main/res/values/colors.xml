@@ -6,6 +6,7 @@
     <color name="black_3">#323232</color>
     <color name="black_4">#474747</color>
     <color name="black_5">#969696</color>
+    <color name="window_back">#212121</color>
     <color name="textcolor">#eeeeee</color>
     <color name="hintcolor">#9e9e9e</color>
 </resources>

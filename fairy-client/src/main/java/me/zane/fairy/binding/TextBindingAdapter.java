@@ -28,6 +28,7 @@ import java.util.concurrent.Executor;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
+import me.zane.fairy.TextRender;
 import me.zane.fairy.resource.AppExecutors;
 import me.zane.fairy.vo.LogcatContent;
 import me.zane.fairy.vo.LogcatItem;
@@ -45,7 +46,7 @@ public class TextBindingAdapter {
             if (s.equals(Config.CLEAR_SIGNAL)) {
                 view.setText("clear data");
             } else if (!s.equals("")) {
-                TextRender.renderText(view, s, content.isFirst());
+                TextRender.renderText(view, view.getRootView().findViewById(R.id.scrollview_logcat), s, content.isFirst());
             }
         }
     }
@@ -60,50 +61,5 @@ public class TextBindingAdapter {
             itemGrep = String.format(resource.getString(R.string.logcat_grep), item.getOptions(), item.getFilter(), item.getGrep());
         }
         view.setText(itemGrep);
-    }
-
-    /**
-     * 多线程渲染
-     * Created by Zane on 2017/11/29.
-     * Email: zanebot96@gmail.com
-     */
-
-    public static class TextRender {
-        private static final Executor renderExecutors;
-        private static final Executor mainEecutors;
-        private static final Handler handler;
-
-        private TextRender() {}
-
-        static {
-            renderExecutors = AppExecutors.getInstance().getFastTask();
-            mainEecutors = AppExecutors.getInstance().getMainExecutor();
-            handler = new Handler();
-        }
-
-        static void renderText(TextView textView, CharSequence rawText, boolean isFirst) {
-            View rootView = textView.getRootView();
-            ProgressBar progressBar = rootView.findViewById(R.id.progressbar_logcat);
-            ScrollView scrollView = rootView.findViewById(R.id.scrollview_logcat);
-            progressBar.setVisibility(View.VISIBLE);
-
-            renderExecutors.execute(() -> {
-                CharSequence text = Html.fromHtml(rawText.toString());
-                mainEecutors.execute(() -> {
-                    if (isFirst) {
-                        textView.setText(text);
-                    } else {
-                        textView.append(text);
-                    }
-                    progressBar.setVisibility(View.GONE);
-
-                    handler.postDelayed(() -> {
-                        if (scrollView.isSmoothScrollingEnabled()) {
-                            scrollView.smoothScrollTo(0, textView.getHeight());
-                        }
-                    }, 200);
-                });
-            });
-        }
     }
 }

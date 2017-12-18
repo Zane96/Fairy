@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:name=".App"
@@ -37,7 +38,8 @@
         </activity>
 
         <activity android:name=".view.content.LogcatActivity"
-            android:configChanges="keyboardHidden|screenSize|orientation"/>
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".WifiStateReceiver">
             <intent-filter>

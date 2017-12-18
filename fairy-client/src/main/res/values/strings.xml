@@ -2,4 +2,11 @@
     <string name="app_name">Fairy</string>
     <string name="logcat_grep">logcat %s %s | grep %s</string>
     <string name="logcat">logcat %s %s</string>
+    <string name="start">开始刷新</string>
+    <string name="stop">停止刷新</string>
+    <string name="open_globa_window">全局窗口</string>
+    <string name="close_globa_window">关闭窗口</string>
+    <string name="grand_window_permission">请授予浮动窗口的权限！～</string>
+    <string name="grand_success">授予成功</string>
+    <string name="grand_failed">授予失败</string>
 </resources>

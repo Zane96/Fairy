@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.zane.fairy;
+package me.zane.fairy.view.content;
 
-import android.app.Application;
+import android.arch.lifecycle.LiveData;
+
+import me.zane.fairy.vo.LogcatContent;
 
 /**
- * Created by Zane on 2017/10/24.
+ * Created by Zane on 2017/12/17.
  * Email: zanebot96@gmail.com
  */
 
-public class App extends Application{
-    private static App instance;
+public interface IWindowControl {
+    void initData(LiveData<LogcatContent> data);
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        instance = this;
-        ZLog.setDebug(false);
-        ZLog.d("ip: " + Utils.getIpAddress());
-        MySharedPre.getInstance().putIpAddress(Utils.getIpAddress());
-        //Stetho.initializeWithDefaults(this);
-    }
+    void open();
 
-    public static Application getInstance() {
-        return instance;
-    }
+    void close();
 }

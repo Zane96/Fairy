@@ -15,10 +15,20 @@
  */
 package me.zane.fairy.view.item;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +36,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +49,8 @@ import me.zane.fairy.vo.LogcatItem;
 
 
 public class ItemActivity extends AppCompatActivity {
-    public static final int CONTENT_RESULT_CODE = 321;
+    public static final int ITEM_REQUEST_CODE = 312;
+    private static final int PERMISSION_RESULT_CODE = 123;
     private MyAdapter adapter;
     private LiveData<List<LogcatItem>> observer;
     private LogcatItemViewModel viewModel;
@@ -48,6 +60,8 @@ public class ItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestPermission();
         init();
         initView();
 
@@ -60,6 +74,16 @@ public class ItemActivity extends AppCompatActivity {
             viewModel.deleteItem(adapter.get(position));
             adapter.remove(position);
         });
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Toast.makeText(this, getResources().getString(R.string.grand_window_permission), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse(String.format("package:%s", getPackageName())));
+                startActivityForResult(intent, PERMISSION_RESULT_CODE);
+            }
+        }
     }
 
     private void init() {
@@ -87,16 +111,23 @@ public class ItemActivity extends AppCompatActivity {
             Intent intent = new Intent(ItemActivity.this, LogcatActivity.class);
             LogcatItem item = adapter.get(position);
             intent.putExtra(LogcatActivity.LOGCAT_ITEM, item);
-            startActivityForResult(intent, LogcatActivity.ITEM_REQUEST_CODE);
+            startActivityForResult(intent, ITEM_REQUEST_CODE);
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode) {
-            case ItemActivity.CONTENT_RESULT_CODE:
+        switch (requestCode) {
+            case ITEM_REQUEST_CODE:
                 LogcatItem item = data.getParcelableExtra(LogcatActivity.LOGCAT_ITEM);
                 adapter.replace(viewModel.getTempPosition(), item);
+                break;
+            case PERMISSION_RESULT_CODE:
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                    Resources resource = getResources();
+                    String result = Settings.canDrawOverlays(this) ? resource.getString(R.string.grand_success) : resource.getString(R.string.grand_failed);
+                    Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
