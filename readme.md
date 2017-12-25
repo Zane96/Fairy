@@ -13,15 +13,41 @@ Fairy support Android API `21+`. There are two ways to choose.
 + Download
 
 1. Download the `project`.
+
 2. Cd [project path]/pc in the terminal.
+
 3. Configured adb environment In the terminal.
-4. Run pusher.sh with `sh pusher.sh`command in terminal.
+
+4. + MacOS/Linux: Run pusher.sh with `sh pusher.sh`command in terminal.
+
+   + Windows: Run these commands
+
+     ```shell
+     //change the ${dir} to the real path
+     adb push ${dir}/server.dex  /data/local/tmp
+     adb push ${dir}/launcher.sh  /data/local/tmp
+     adb push ${dir}/libfairy.so  /data/local/tmp
+     adb shell /data/local/tmp/launcher.sh
+     ```
+
 5. Install the APK in the [project path]/pc
 
 + Import
 
 1. Import project in AndroidStudio.
-2. Run `./gradlew -p fairy-server runService`.
+
+2. + MacOS/Linux: Run `./gradlew -p fairy-server runService`.
+
+   + Windows: First Run `gradlew -p fairy-server moveSo`. Then run these commands: 
+
+     ```shell
+     //change the ${dir} to the real path
+     adb push ${dir}/server.dex  /data/local/tmp
+     adb push ${dir}/launcher.sh  /data/local/tmp
+     adb push ${dir}/libfairy.so  /data/local/tmp
+     adb shell /data/local/tmp/launcher.sh
+     ```
+
 3. Run fairy-client module or install APK directly.
 
 Fairy default use armeabi .so
@@ -35,6 +61,11 @@ Fairy default use armeabi .so
 - ~Data persistence by SQL.~
 - ~Add floating window to display data.~
 
+## Fix
+
++ Fit Android8.0+ of the Window Type permission limit.
++ Update readme to notice the Windows Programmer how to use it.
+
 ## About More
 
 I have completed the code refactoring in this release (`v2.0.0-alpha`) with [Android Architecture Components](https://developer.android.google.cn/topic/libraries/architecture/guide.html)
@@ -44,6 +75,8 @@ I have completed the code refactoring in this release (`v2.0.0-alpha`) with [And
 ## FAQ
 
 zanebot96@gmail.com
+
+You can submit an issue for me too !~
 
 ​​                                                                     ![](/screenshot/icon.png)
 
