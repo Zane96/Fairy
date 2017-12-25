@@ -50,6 +50,9 @@ Fairy support Android API `21+`. There are two ways to choose.
 
 3. Run fairy-client module or install APK directly.
 
++ Question
+  1. If you have this `can't execute: Permission denied` when run shell script. You should use `chmod` command to enhance file's executive power (r-w-x).
+
 Fairy default use armeabi .so
 
 ## TODO
