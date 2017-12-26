@@ -1,5 +1,7 @@
 # Fairy
 
+[中文版](https://github.com/Zane96/Fairy/blob/master/readme-zh.md)
+
 Fairy is an easy debug tool which will allow developer to use [adb logcat](https://developer.android.com/studio/command-line/logcat.html?hl=zh-cn#outputFormat) command to view Android system log on your Android phone instead of on your PC.You can scan the system log information anywhere with your Android phone which is no need to root.
 
 ​                          ![](/screenshot/Screenshot_1.png)              ![](/screenshot/Screenshot_2.png)
@@ -27,10 +29,10 @@ Fairy support Android API `21+`. There are two ways to choose.
      adb push ${dir}/server.dex  /data/local/tmp
      adb push ${dir}/launcher.sh  /data/local/tmp
      adb push ${dir}/libfairy.so  /data/local/tmp
-     adb shell /data/local/tmp/launcher.sh
+     adb shell sh /data/local/tmp/launcher.sh
      ```
 
-5. Install the APK in the [project path]/pc
+5. Install the apk in the `[project path]/pc`
 
 + Import
 
@@ -45,15 +47,18 @@ Fairy support Android API `21+`. There are two ways to choose.
      adb push ${dir}/server.dex  /data/local/tmp
      adb push ${dir}/launcher.sh  /data/local/tmp
      adb push ${dir}/libfairy.so  /data/local/tmp
-     adb shell /data/local/tmp/launcher.sh
+     adb shell sh /data/local/tmp/launcher.sh
      ```
 
 3. Run fairy-client module or install APK directly.
 
-+ Question
-  1. If you have this `can't execute: Permission denied` when run shell script. You should use `chmod` command to enhance file's executive power (r-w-x).
+It means that the server is working successfully if there is log information `exec~~~` in terminal, and there is a server process named `fairy` in your phone (you can use this command to check it: `adb shell ps | grep fairy`).
 
-Fairy default use armeabi .so
+Fairy default use `armeabi` .so. You can change the file path in task named `moveSo` which is in `fairy-server's build.gradle` if you need to change the type of .so.
+
+## Questions
+
+1. You can use `chmod` command to enhance file's executive power (r-w-x) if you have this error `can't execute: Permission denied` when run shell script. 
 
 ## TODO
 
@@ -79,27 +84,27 @@ I have completed the code refactoring in this release (`v2.0.0-alpha`) with [And
 
 zanebot96@gmail.com
 
-You can submit an issue for me too !~
++ Welcome our qq group: 577953847
++ You can submit an issue for me too if you have some error when use it.
++ And welcome everybody to help me together optimize this project.Just fork and request.
 
-​​                                                                     ![](/screenshot/icon.png)
+​                                                                     ![](/screenshot/icon.png)
 
 ## License
 
 ```
-/*
- * Copyright (C) 2017 Zane.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2017 Zane
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 ```
 
