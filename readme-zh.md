@@ -57,6 +57,7 @@ Fairy默认使用armeabi类型的so库，如有需要更改的话，可以在`fa
 ## 问题
 
 1. 如果在运行shell脚本的过程中遇到`can't execute: Permission denied`这个问题的话，您可以使用`chmod`这个命令去提升文件的执行权限。
+2. 如果您是在Windows环境下开发，并且遇到脚本执行出现大量`not found`的日志信息，请使用[Dos2Unix](http://www.gnss.help/2017/07/24/dos2unix-install-usage/)工具将`launcher.sh`文件的编辑格式进行转换。
 
 ## TODO
 

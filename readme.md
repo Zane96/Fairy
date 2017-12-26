@@ -59,6 +59,7 @@ Fairy default use `armeabi` .so. You can change the file path in task named `mov
 ## Questions
 
 1. You can use `chmod` command to enhance file's executive power (r-w-x) if you have this error `can't execute: Permission denied` when run shell script. 
+2. You can use [Dos2Unix](https://sourceforge.net/projects/dos2unix/) tool to convert the edit format if you are developing with Windows env and have too many logs which is `not found` when run the `launcher.sh` script.
 
 ## TODO
 
