@@ -82,9 +82,11 @@ task moveFile(type: Copy, dependsOn: moveSo) {
         apkFile.delete()
     }
 
-    from rootDir.absolutePath + "/fairy-client/build/outputs/apk/debug/fairy-client-debug.apk"
+    from rootDir.absolutePath + "/fairy-client/release/fairy-client-release.apk"
     into "../pc"
     rename {String fileName ->
         fileName = "fairy-client.apk"
     }
+    File file = new File("/fairy-client/release")
+    file.delete()
 }
