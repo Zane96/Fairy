@@ -22,7 +22,7 @@ package me.zane.fairy.resource;
 
 public class ApiResponse<T> {
     private final boolean isSuccess;
-    private final T body;
+    private T body;
 
     public ApiResponse(Throwable e) {
         isSuccess = false;
@@ -40,5 +40,14 @@ public class ApiResponse<T> {
 
     public T getBody() {
         return body;
+    }
+
+    public void setBody(T body) {
+        this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(body);
     }
 }

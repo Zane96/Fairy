@@ -71,6 +71,7 @@ class LogcatExec {
             }
 
             sb.append(formatLine(format, grep, rawLine));
+            ZLog.d("add------");
 
             if (!currentTimeLine.startsWith("-")) {
                 lastTimeLine = currentTimeLine;

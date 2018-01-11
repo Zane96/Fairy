@@ -18,6 +18,8 @@ package me.zane.fairy.api;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import me.zane.fairy.ZLog;
@@ -36,15 +38,16 @@ public class LiveNetService {
     private Subscription subscription;
     private ObservaleCreater observaleCreater;
     private boolean isClose = false;
-
     private String grep = "";
 
     private MutableLiveData<ApiResponse<String>> data;
+    private ApiResponse<String> cacheData;
 
     LiveNetService() {
         timer = Observable.interval(500, TimeUnit.MILLISECONDS);
         observaleCreater = new ObservaleCreater();
         data = new MutableLiveData<>();
+        cacheData = new ApiResponse<>("");
     }
 
     public LiveData<ApiResponse<String>> getData() {
@@ -97,9 +100,18 @@ public class LiveNetService {
 
                 @Override
                 public void onNext(LogcatData logcatData) {
-                    ZLog.i("logcat: " + logcatData.toString());
+                    ZLog.d("logcat: " + logcatData.toString());
                     observaleCreater.onNext(logcatData);
-                    data.setValue(new ApiResponse<>(logcatData.getData()));
+
+                    if (!data.hasActiveObservers()) {
+                        String newCacheBody = cacheData.getBody() + logcatData.getData();
+                        cacheData.setBody(newCacheBody);
+                    } else {
+                        cacheData.setBody(logcatData.getData());
+                    }
+
+                    ZLog.d(cacheData.toString());
+                    data.setValue(cacheData);
                     awaitToStop();
                 }
             });

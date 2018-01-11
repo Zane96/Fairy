@@ -47,7 +47,7 @@ public class ContentMergeSource extends MergeResource<LogcatContent, String>{
     }
 
     public void replaceDbData() {
-        ZLog.i("replace: " + sb.toString());
+        //ZLog.i("replace: " + sb.toString());
         logcatDao.updateLogcatContent(new LogcatContent(id, sb.toString()));
     }
 
