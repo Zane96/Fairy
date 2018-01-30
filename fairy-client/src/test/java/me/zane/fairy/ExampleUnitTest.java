@@ -46,12 +46,36 @@ public class ExampleUnitTest {
 
         //assertEquals("12-01 15:52:05.667", getStartTimeLine());
 
-        assertEquals("12", addOneMillsecond("-01 15:52:05.667"));
+        assertEquals("12", addOneMillsecond("01-29 14:13:03.066"));
     }
 
     public String addOneMillsecond(String timeLine) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, Integer.valueOf(timeLine.substring(0, timeLine.indexOf("-"))));
+        calendar.set(Calendar.YEAR, 2018);
+        calendar.set(Calendar.MONTH, Integer.valueOf(timeLine.substring(0, timeLine.indexOf("-"))) + 1);
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(timeLine.substring(timeLine.indexOf("-") + 1, timeLine.indexOf(" "))));
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeLine.substring(timeLine.indexOf(" ") + 1, timeLine.indexOf(":"))));
+        calendar.set(Calendar.MINUTE, Integer.valueOf(timeLine.substring(timeLine.indexOf(":") + 1, timeLine.lastIndexOf(":"))));
+        calendar.set(Calendar.SECOND, Integer.valueOf(timeLine.substring(timeLine.lastIndexOf(":") + 1, timeLine.indexOf("."))));
+        calendar.set(Calendar.MILLISECOND, Integer.valueOf(timeLine.substring(timeLine.indexOf(".") + 1, timeLine.length())));
+        calendar.add(Calendar.MILLISECOND, 1);
+
+        int month = calendar.get(Calendar.MONTH) == 0 ? 12 : calendar.get(Calendar.MONTH) - 1;
+        return String.format("%d-%d %d:%d:%d.%d",
+                month,
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                calendar.get(Calendar.SECOND),
+                calendar.get(Calendar.MILLISECOND));
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.MONTH, 12);12
+
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.DAY_OF_MONTH, 29);  //设置日期
+//        calendar.set(Calendar.MONTH, 0);
+//        calendar.set(Calendar.YEAR, 2018);
+//        return calendar.get(Calendar.MONTH) + 1 +" " + calendar.get(Calendar.DAY_OF_MONTH);
 //        calendar.set(Calendar.DATE, Integer.valueOf(timeLine.substring(timeLine.indexOf("-") + 1, timeLine.indexOf(" "))));
 //        calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(timeLine.substring(timeLine.indexOf(" ") + 1, timeLine.indexOf(":"))));
 //        calendar.set(Calendar.MINUTE, Integer.valueOf(timeLine.substring(timeLine.indexOf(":") + 1, timeLine.lastIndexOf(":"))));
@@ -59,7 +83,7 @@ public class ExampleUnitTest {
 //        calendar.set(Calendar.MILLISECOND, Integer.valueOf(timeLine.substring(timeLine.indexOf(".") + 1, timeLine.length())));
 //        calendar.add(Calendar.MILLISECOND, 1);
 
-        return calendar.get(Calendar.MONTH)+"";
+        //return calendar.get(Calendar.MONTH)+"";
 //        return String.format("%d-%d %d:%d:%d.%d",
 //                calendar.get(Calendar.MONTH),
 //                calendar.get(Calendar.DATE),
