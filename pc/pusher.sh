@@ -9,5 +9,5 @@ adb push $dir/launcher.sh  /data/local/tmp
 adb push $dir/libfairy.so  /data/local/tmp
 
 # 不输出 后台执行
-adb shell /data/local/tmp/launcher.sh
+nohup adb shell "nohup /data/local/tmp/launcher.sh > /dev/null 2>&1" &>/dev/null &
 echo 'finish'
