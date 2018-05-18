@@ -46,7 +46,7 @@ public class TextBindingAdapter {
             if (s.equals(Config.CLEAR_SIGNAL)) {
                 view.setText("clear data");
             } else if (!s.equals("")) {
-                TextRender.renderText(view, view.getRootView().findViewById(R.id.scrollview_logcat), s, content.isFirst());
+                TextRender.renderText(view, s, content.isFirst());
             }
         }
     }

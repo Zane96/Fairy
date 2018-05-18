@@ -46,7 +46,9 @@ public final class ZLog {
     }
 
     public static void i(String message) {
-        Log.i(TAG, message);
+        if (DEBUG) {
+            Log.i(TAG, message);
+        }
     }
 
     public static void w(String message) {

@@ -61,7 +61,6 @@
                     android:id="@+id/btn_globa"
                     android:onClick="gloablWindowReact"
                     android:text="@string/open_globa_window"
-                    android:enabled="false"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"/>
@@ -85,28 +84,23 @@
                     android:layout_height="match_parent"/>
             </LinearLayout>
 
-            <me.zane.fairy.custom.TouchStopScrollView
-                android:id="@+id/scrollview_logcat"
+            <FrameLayout
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:id="@+id/text_data_logcat"
-                        app:render="@{logcatContent}"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
 
-                    <ProgressBar
-                        android:id="@+id/progressbar_logcat"
-                        android:layout_gravity="center"
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </FrameLayout>
-            </me.zane.fairy.custom.TouchStopScrollView>
+                <me.zane.fairy.custom.TouchStopRecycleView
+                    android:id="@+id/recycleview_data_logcat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <ProgressBar
+                    android:id="@+id/progressbar_logcat"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"/>
+            </FrameLayout>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -115,7 +109,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="8dp"
-            app:fab_click="@{logcatContent.contentId}"
             android:background="@color/black_1"
             android:src="@drawable/down"/>
 

@@ -17,6 +17,7 @@ package me.zane.fairy.binding;
 
 import android.databinding.BindingAdapter;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -33,9 +34,7 @@ public class BtnBindingAdapter {
     @BindingAdapter("fab_click")
     public static void onFabClick(FloatingActionButton btn, int id) {
         btn.setOnClickListener(v -> {
-            TextView textView = btn.getRootView().findViewById(R.id.text_data_logcat);
-            ScrollView scrollView = btn.getRootView().findViewById(R.id.scrollview_logcat);
-            scrollView.smoothScrollTo(0, textView.getHeight());
+            RecyclerView recyclerView = btn.getRootView().findViewById(R.id.recycleview_data_logcat);
         });
     }
 }

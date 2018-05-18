@@ -72,7 +72,7 @@ public class WindowControl implements IWindowControl{
             if (!isFirst) {
                 logcatStr = content.getContent();
             }
-            TextRender.renderText(mText, (ScrollView) rootView, logcatStr, false);
+            //TextRender.renderText(mText, (ScrollView) rootView, logcatStr, false);
             isFirst = false;
         };
     }

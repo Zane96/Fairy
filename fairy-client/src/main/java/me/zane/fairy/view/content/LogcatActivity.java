@@ -15,23 +15,27 @@
  */
 package me.zane.fairy.view.content;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import me.zane.fairy.Config;
 import me.zane.fairy.R;
-import me.zane.fairy.ZLog;
+import me.zane.fairy.custom.TouchStopRecycleView;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
-import me.zane.fairy.view.item.ItemActivity;
 import me.zane.fairy.view.item.LogcatItemViewModel;
 import me.zane.fairy.viewmodel.ViewModelFactory;
 import me.zane.fairy.vo.LogcatContent;
@@ -55,6 +59,10 @@ public class LogcatActivity extends AppCompatActivity{
     private String filter;
     private String grep;
     private int id;
+
+    private TouchStopRecycleView mRecycleView;
+    private ProgressBar mProgressbar;
+    private LogcatAdapter mAdapter;
 
     private boolean isFirstLoad = true;
 
@@ -85,7 +93,14 @@ public class LogcatActivity extends AppCompatActivity{
         windowControl = new WindowControl(this);
         windowControl.initData(viewModel.getData());
 
-        binding.scrollviewLogcat.setSmoothScrollingEnabled(true);
+        mRecycleView = findViewById(R.id.recycleview_data_logcat);
+        mAdapter = new LogcatAdapter(this);
+        mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        mRecycleView.setAdapter(mAdapter);
+
+        findViewById(R.id.fab_logcat).setOnClickListener((View v) -> mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1));
+        mProgressbar = findViewById(R.id.progressbar_logcat);
+
         registerData();
     }
 
@@ -104,9 +119,31 @@ public class LogcatActivity extends AppCompatActivity{
 
     private void registerData() {
         viewModel.getData().observe(this, content -> {
-            content.setFirst(isFirstLoad);
-            isFirstLoad = false;
-            binding.setLogcatContent(content);
+            if (content != null) {
+                content.setFirst(isFirstLoad);
+                if (!TextUtils.isEmpty(content.getContent())) {
+                    mAdapter.addData(content);
+                }
+
+                if (isFirstLoad) {
+                    if (!"init fairy".equals(content.getContent()) && !TextUtils.isEmpty(content.getContent())) {
+                        mProgressbar.setVisibility(View.VISIBLE);
+                    }
+
+                    mAdapter.setOnLoadListsner((data) -> {
+                        if (data.isFirst()) {
+                            mProgressbar.setVisibility(View.GONE);
+                            findViewById(R.id.btn_start_logcat).setEnabled(true);
+                        }
+
+                        if (mRecycleView.isCanSmoothScrolling()) {
+                            mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+                        }
+                    });
+                }
+
+                isFirstLoad = false;
+            }
         });
     }
 
@@ -121,6 +158,7 @@ public class LogcatActivity extends AppCompatActivity{
         switch (item.getItemId()) {
             case R.id.clear_logcat_bar:
                 viewModel.clearContent(new LogcatContent(id, Config.CLEAR_SIGNAL));
+                mAdapter.clear();
                 break;
         }
         return super.onOptionsItemSelected(item);

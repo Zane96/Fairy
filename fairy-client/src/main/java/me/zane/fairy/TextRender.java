@@ -30,7 +30,9 @@ import android.widget.TextView;
 
 import java.util.concurrent.Executor;
 
+import me.zane.fairy.custom.TouchStopRecycleView;
 import me.zane.fairy.resource.AppExecutors;
+import me.zane.fairy.view.content.LogcatAdapter;
 
 /**
  * 多线程渲染
@@ -51,31 +53,27 @@ public class TextRender {
         handler = new Handler();
     }
 
-    public static void renderText(TextView textView, ScrollView scrollView, CharSequence rawText, boolean isFirst) {
-        View rootView = textView.getRootView();
-        ProgressBar progressBar = rootView.findViewById(R.id.progressbar_logcat);
-
-        if (isFirst) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
+    public static void renderText(TextView textView, CharSequence rawText, boolean isFirst) {
+//        ProgressBar progressBar = rootView.findViewById(R.id.progressbar_logcat);
+//
+//        if (isFirst) {
+//            progressBar.setVisibility(View.VISIBLE);
+//        }
 
         renderExecutors.execute(() -> {
             CharSequence text = Html.fromHtml(rawText.toString());
             mainEecutors.execute(() -> {
-                if (isFirst) {
-                    textView.setText(text);
-                    rootView.findViewById(R.id.btn_globa).setEnabled(true);
-                    rootView.findViewById(R.id.btn_start_logcat).setEnabled(true);
-                    progressBar.setVisibility(View.GONE);
-                } else {
-                    textView.append(text);
-                }
+                textView.setText(text);
+//                if (isFirst) {
+//                    textView.setText(text);
+//                    rootView.findViewById(R.id.btn_globa).setEnabled(true);
+//                    rootView.findViewById(R.id.btn_start_logcat).setEnabled(true);
+//                    //progressBar.setVisibility(View.GONE);
+//                } else {
+//                    textView.append(text);
+//                }
 
-                handler.postDelayed(() -> {
-                    if (scrollView.isSmoothScrollingEnabled()) {
-                        scrollView.smoothScrollTo(0, textView.getHeight());
-                    }
-                }, 200);
+
             });
         });
     }
