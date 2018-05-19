@@ -20,6 +20,10 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -45,6 +49,9 @@ public class WindowControl implements IWindowControl{
     private LiveData<LogcatContent> data;
     private boolean isFirst = true;
 
+    private RecyclerView mRecycleView;
+    private LogcatAdapter mAdapter;
+
     static {
         params = new WindowManager.LayoutParams();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -66,14 +73,24 @@ public class WindowControl implements IWindowControl{
         this.context = context;
         wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         rootView = LayoutInflater.from(context).inflate(R.layout.window_display, null);
-        TextView mText = rootView.findViewById(R.id.text_window_logcat);
+        mRecycleView = (RecyclerView) rootView;
+        mRecycleView.setLayoutManager(new LinearLayoutManager(context));
+        mAdapter = new LogcatAdapter(context);
+        mRecycleView.setAdapter(mAdapter);
+
         observer = content -> {
-            String logcatStr = "init window";
-            if (!isFirst) {
-                logcatStr = content.getContent();
+            if (content != null) {
+                if (isFirst) {
+                    content.setContent("init window");
+                }
+
+                if (!TextUtils.isEmpty(content.getContent())) {
+                    mAdapter.addData(content);
+                    mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+                }
+
+                isFirst = false;
             }
-            //TextRender.renderText(mText, (ScrollView) rootView, logcatStr, false);
-            isFirst = false;
         };
     }
 

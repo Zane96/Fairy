@@ -135,15 +135,14 @@ public class LogcatActivity extends AppCompatActivity{
                             binding.btnStartLogcat.setEnabled(true);
                             binding.btnGloba.setEnabled(true);
                         }
-
-                        if (mRecycleView.isCanSmoothScrolling()) {
-                            mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
-                        }
                     });
                 }
 
                 if (!TextUtils.isEmpty(content.getContent())) {
                     mAdapter.addData(content);
+                    if (mRecycleView.isCanSmoothScrolling()) {
+                        mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+                    }
                 }
 
                 isFirstLoad = false;

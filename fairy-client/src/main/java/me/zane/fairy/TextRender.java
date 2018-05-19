@@ -60,13 +60,11 @@ public class TextRender {
             if (s.equals(Config.CLEAR_SIGNAL)) {
                 textView.setText("clear data");
             } else if (!s.equals("")) {
-                renderExecutors.execute(() -> {
-                    CharSequence text = Html.fromHtml(content.getContent());
-                    mainEecutors.execute(() -> {
-                        textView.setText(text);
-                        listener.finish(content.isFirst());
-                    });
-                });
+                CharSequence text = Html.fromHtml(content.getContent());
+                textView.setText(text);
+                if (listener != null) {
+                    listener.finish(content.isFirst());
+                }
             }
         }
     }

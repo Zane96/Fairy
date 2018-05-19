@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:background="@color/window_back"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/text_window_logcat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <ProgressBar
-            android:id="@+id/progressbar_logcat"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </FrameLayout>
-
-</ScrollView>
+<android.support.v7.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycleview_window"
+    android:background="@color/window_back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>

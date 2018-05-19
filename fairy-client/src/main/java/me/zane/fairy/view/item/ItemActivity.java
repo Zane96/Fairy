@@ -125,7 +125,7 @@ public class ItemActivity extends AppCompatActivity {
                 adapter.replace(viewModel.getTempPosition(), item);
                 break;
             case PERMISSION_RESULT_CODE:
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     Resources resource = getResources();
                     String result = Settings.canDrawOverlays(this) ? resource.getString(R.string.grand_success) : resource.getString(R.string.grand_failed);
                     Toast.makeText(this, result, Toast.LENGTH_SHORT).show();

@@ -22,6 +22,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import me.zane.fairy.MySharedPre;
 import me.zane.fairy.databinding.ActivityLogcatBinding;
@@ -77,6 +78,19 @@ public class LogcatContentViewModel extends AndroidViewModel{
     }
 
     public void onStartFetch() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    Log.i("test", "haha1111`````");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
         isStartFetch.set(true);
         repository.fetchData(options.get(), filter.get());
     }
