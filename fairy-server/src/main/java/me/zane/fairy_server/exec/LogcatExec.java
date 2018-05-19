@@ -32,7 +32,7 @@ import okio.BufferedSource;
  */
 
 class LogcatExec {
-    private static final int LINE_THRESHOLD = 100;//如果读取数量超过了阀值，准备开始结束数据的读取
+    private static final int LINE_THRESHOLD = 250;//如果读取数量超过了阀值，准备开始结束数据的读取
     private Gson gson;
 
     LogcatExec() {

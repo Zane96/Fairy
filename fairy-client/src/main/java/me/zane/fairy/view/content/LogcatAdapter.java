@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.zane.fairy.R;
+import me.zane.fairy.TextRender;
+import me.zane.fairy.binding.TextBindingAdapter;
 import me.zane.fairy.databinding.ItemContentBinding;
 import me.zane.fairy.vo.LogcatContent;
 
@@ -26,7 +28,7 @@ public class LogcatAdapter extends RecyclerView.Adapter<LogcatAdapter.LogcatView
     private OnLoadListener listener;
 
     public interface OnLoadListener {
-        void finish(LogcatContent data);
+        void finish(boolean isFirst);
     }
 
     public void setOnLoadListsner(OnLoadListener listsner) {
@@ -74,12 +76,7 @@ public class LogcatAdapter extends RecyclerView.Adapter<LogcatAdapter.LogcatView
         }
 
         public void bindData(LogcatContent data) {
-            binding.setLogcatContent(data);
-            binding.executePendingBindings();
-
-            if (listener != null) {
-                listener.finish(data);
-            }
+            TextRender.renderText(binding.textContent, data, listener);
         }
     }
 }

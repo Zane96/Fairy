@@ -26,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,12 +94,12 @@ public class LogcatActivity extends AppCompatActivity{
         windowControl = new WindowControl(this);
         windowControl.initData(viewModel.getData());
 
-        mRecycleView = findViewById(R.id.recycleview_data_logcat);
+        mRecycleView = binding.recycleviewDataLogcat;
         mAdapter = new LogcatAdapter(this);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setAdapter(mAdapter);
 
-        findViewById(R.id.fab_logcat).setOnClickListener((View v) -> mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1));
+        binding.fabLogcat.setOnClickListener((View v) -> mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1));
         mProgressbar = findViewById(R.id.progressbar_logcat);
 
         registerData();
@@ -121,25 +122,28 @@ public class LogcatActivity extends AppCompatActivity{
         viewModel.getData().observe(this, content -> {
             if (content != null) {
                 content.setFirst(isFirstLoad);
-                if (!TextUtils.isEmpty(content.getContent())) {
-                    mAdapter.addData(content);
-                }
-
                 if (isFirstLoad) {
                     if (!"init fairy".equals(content.getContent()) && !TextUtils.isEmpty(content.getContent())) {
                         mProgressbar.setVisibility(View.VISIBLE);
+                        binding.btnStartLogcat.setEnabled(false);
+                        binding.btnGloba.setEnabled(false);
                     }
 
-                    mAdapter.setOnLoadListsner((data) -> {
-                        if (data.isFirst()) {
+                    mAdapter.setOnLoadListsner((isFirst) -> {
+                        if (isFirst) {
                             mProgressbar.setVisibility(View.GONE);
-                            findViewById(R.id.btn_start_logcat).setEnabled(true);
+                            binding.btnStartLogcat.setEnabled(true);
+                            binding.btnGloba.setEnabled(true);
                         }
 
                         if (mRecycleView.isCanSmoothScrolling()) {
                             mRecycleView.smoothScrollToPosition(mAdapter.getItemCount() - 1);
                         }
                     });
+                }
+
+                if (!TextUtils.isEmpty(content.getContent())) {
+                    mAdapter.addData(content);
                 }
 
                 isFirstLoad = false;

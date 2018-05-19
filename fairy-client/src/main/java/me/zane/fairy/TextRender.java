@@ -33,6 +33,7 @@ import java.util.concurrent.Executor;
 import me.zane.fairy.custom.TouchStopRecycleView;
 import me.zane.fairy.resource.AppExecutors;
 import me.zane.fairy.view.content.LogcatAdapter;
+import me.zane.fairy.vo.LogcatContent;
 
 /**
  * 多线程渲染
@@ -53,28 +54,20 @@ public class TextRender {
         handler = new Handler();
     }
 
-    public static void renderText(TextView textView, CharSequence rawText, boolean isFirst) {
-//        ProgressBar progressBar = rootView.findViewById(R.id.progressbar_logcat);
-//
-//        if (isFirst) {
-//            progressBar.setVisibility(View.VISIBLE);
-//        }
-
-        renderExecutors.execute(() -> {
-            CharSequence text = Html.fromHtml(rawText.toString());
-            mainEecutors.execute(() -> {
-                textView.setText(text);
-//                if (isFirst) {
-//                    textView.setText(text);
-//                    rootView.findViewById(R.id.btn_globa).setEnabled(true);
-//                    rootView.findViewById(R.id.btn_start_logcat).setEnabled(true);
-//                    //progressBar.setVisibility(View.GONE);
-//                } else {
-//                    textView.append(text);
-//                }
-
-
-            });
-        });
+    public static void renderText(TextView textView, LogcatContent content, LogcatAdapter.OnLoadListener listener) {
+        if (content != null) {
+            CharSequence s = content.getContent();
+            if (s.equals(Config.CLEAR_SIGNAL)) {
+                textView.setText("clear data");
+            } else if (!s.equals("")) {
+                renderExecutors.execute(() -> {
+                    CharSequence text = Html.fromHtml(content.getContent());
+                    mainEecutors.execute(() -> {
+                        textView.setText(text);
+                        listener.finish(content.isFirst());
+                    });
+                });
+            }
+        }
     }
 }

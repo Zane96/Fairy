@@ -2,12 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="logcatContent"
-            type="me.zane.fairy.vo.LogcatContent"/>
-    </data>
-
     <LinearLayout android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content">
@@ -15,7 +9,6 @@
 
         <TextView
             android:id="@+id/text_content"
-            app:render="@{logcatContent}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

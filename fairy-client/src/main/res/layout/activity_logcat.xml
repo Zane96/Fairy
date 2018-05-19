@@ -98,8 +98,8 @@
                     android:id="@+id/progressbar_logcat"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"/>
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"/>
             </FrameLayout>
         </LinearLayout>
 

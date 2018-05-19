@@ -30,6 +30,7 @@ import me.zane.fairy.Config;
 import me.zane.fairy.R;
 import me.zane.fairy.TextRender;
 import me.zane.fairy.resource.AppExecutors;
+import me.zane.fairy.view.content.LogcatAdapter;
 import me.zane.fairy.vo.LogcatContent;
 import me.zane.fairy.vo.LogcatItem;
 
@@ -39,17 +40,16 @@ import me.zane.fairy.vo.LogcatItem;
  */
 
 public class TextBindingAdapter {
-    @BindingAdapter("render")
-    public static void append(TextView view, LogcatContent content) {
-        if (content != null) {
-            CharSequence s = content.getContent();
-            if (s.equals(Config.CLEAR_SIGNAL)) {
-                view.setText("clear data");
-            } else if (!s.equals("")) {
-                TextRender.renderText(view, s, content.isFirst());
-            }
-        }
-    }
+//    public static void append(TextView view, LogcatContent content, LogcatAdapter.OnLoadListener listener) {
+//        if (content != null) {
+//            CharSequence s = content.getContent();
+//            if (s.equals(Config.CLEAR_SIGNAL)) {
+//                view.setText("clear data");
+//            } else if (!s.equals("")) {
+//                TextRender.renderText(view, s, content.isFirst(), listener);
+//            }
+//        }
+//    }
 
     @BindingAdapter("item_grep")
     public static void itemGrep(TextView view, LogcatItem item) {
