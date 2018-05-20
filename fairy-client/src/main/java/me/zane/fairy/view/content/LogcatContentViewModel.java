@@ -78,19 +78,6 @@ public class LogcatContentViewModel extends AndroidViewModel{
     }
 
     public void onStartFetch() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Log.i("test", "haha1111`````");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
         isStartFetch.set(true);
         repository.fetchData(options.get(), filter.get());
     }
